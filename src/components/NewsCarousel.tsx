@@ -47,7 +47,7 @@ export default function NewsCarousel({ newsArticles, onNewsClick, isDesktopSideb
     return (
       <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
         <div className="bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 px-4 py-3">
-          <h3 className="text-white dark:text-gray-900 font-bold text-sm uppercase tracking-wider">Aktuelle News</h3>
+          <h3 className="text-white dark:text-gray-900 font-bold text-sm uppercase tracking-wider text-center">Aktuelle News</h3>
         </div>
         {articles.length === 0 ? (
           <EmptyState />

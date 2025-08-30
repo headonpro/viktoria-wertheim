@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import PageLayout from '@/components/PageLayout'
 import AnimatedSection from '@/components/AnimatedSection'
 import NewsModal from '@/components/NewsModal'
-import { IconCalendar, IconEye, IconUser, IconFilter, IconSearch } from '@tabler/icons-react'
+import { IconCalendar, IconEye, IconUser, IconSearch } from '@tabler/icons-react'
 
 interface NewsArticle {
   id: string | number

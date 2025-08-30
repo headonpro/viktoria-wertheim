@@ -25,10 +25,7 @@ export default function GameCards({ lastMatch, nextMatch }: GameCardsProps) {
       {lastMatch && (
         <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group">
           <div className="bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 px-4 py-3">
-            <div className="flex items-center justify-between">
-              <h3 className="text-white dark:text-gray-900 font-bold text-sm uppercase tracking-wider">Letztes Spiel</h3>
-              <IconTrophy size={18} className="text-white/80 dark:text-gray-900/80" />
-            </div>
+            <h3 className="text-white dark:text-gray-900 font-bold text-sm uppercase tracking-wider text-center">Letztes Spiel</h3>
           </div>
           
           <div className="p-4 sm:p-5 space-y-4">
@@ -102,10 +99,7 @@ export default function GameCards({ lastMatch, nextMatch }: GameCardsProps) {
       {nextMatch && (
         <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group">
           <div className="bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 px-4 py-3">
-            <div className="flex items-center justify-between">
-              <h3 className="text-white dark:text-gray-900 font-bold text-sm uppercase tracking-wider">Nächstes Spiel</h3>
-              <IconSoccerField size={18} className="text-white/80 dark:text-gray-900/80" />
-            </div>
+            <h3 className="text-white dark:text-gray-900 font-bold text-sm uppercase tracking-wider text-center">Nächstes Spiel</h3>
           </div>
           
           <div className="p-4 sm:p-5 space-y-4">

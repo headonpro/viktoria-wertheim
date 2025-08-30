@@ -21,17 +21,14 @@ export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorSh
     <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
       {/* Header */}
       <div className="bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 px-4 py-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-white dark:text-gray-900 font-bold text-sm uppercase tracking-wider">Unsere Partner & Sponsoren</h3>
-          <IconUsers size={18} className="text-white/80 dark:text-gray-900/80" />
-        </div>
+        <h3 className="text-white dark:text-gray-900 font-bold text-sm uppercase tracking-wider text-center">Partner & Sponsoren</h3>
       </div>
 
       {/* Sponsors Grid */}
       <div className="p-4 sm:p-5">
         {/* Premium Sponsors */}
         <div className="mb-6">
-          <div className="flex items-center space-x-2 mb-4">
+          <div className="flex items-center justify-center space-x-2 mb-4">
             <IconStar size={20} className="text-viktoria-yellow" />
             <h3 className="font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wide">Premium Partner</h3>
           </div>
@@ -58,7 +55,7 @@ export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorSh
         {/* Gold Sponsors */}
         {sponsors.gold.length > 0 && (
           <div className="mb-5">
-            <div className="flex items-center space-x-2 mb-3">
+            <div className="flex items-center justify-center space-x-2 mb-3">
               <div className="w-5 h-5 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full shadow-sm" />
               <h3 className="font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wide">Gold Partner</h3>
             </div>
@@ -83,7 +80,7 @@ export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorSh
         {/* Silver Sponsors */}
         {sponsors.silver.length > 0 && (
           <div className="mb-6">
-            <div className="flex items-center space-x-2 mb-3">
+            <div className="flex items-center justify-center space-x-2 mb-3">
               <div className="w-5 h-5 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full shadow-sm" />
               <h3 className="font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wide">Silber Partner</h3>
             </div>

@@ -230,7 +230,7 @@ export default function TeamsPageClient({ teams, youthTeams }: TeamsPageClientPr
                             </tr>
                           </thead>
                           <tbody>
-                            {currentTeam.players.map((player, index) => (
+                            {currentTeam.players.map((player) => (
                               <tr key={player.id} className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-viktoria-dark-lighter/50 transition-colors">
                                 <td className="py-3 px-2 text-gray-900 dark:text-white font-bold">
                                   {player.number || '-'}

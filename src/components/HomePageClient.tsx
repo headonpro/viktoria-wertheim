@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect, useRef } from 'react'
 import TeamStatus from '@/components/TeamStatus'
 import GameCards from '@/components/GameCards'
 import SimpleLeagueTable from '@/components/SimpleLeagueTable'
@@ -8,6 +8,7 @@ import TopScorers from '@/components/TopScorers'
 import NewsCarousel from '@/components/NewsCarousel'
 import NewsTicker from '@/components/NewsTicker'
 import SponsorShowcase from '@/components/SponsorShowcase'
+import VereinsAssistent from '@/components/VereinsAssistent'
 import NewsModal from '@/components/NewsModal'
 import LeagueTableModal from '@/components/LeagueTableModal'
 import SponsorModal from '@/components/SponsorModal'
@@ -48,6 +49,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
   const [isNewsModalOpen, setIsNewsModalOpen] = useState(false)
   const [isLeagueTableModalOpen, setIsLeagueTableModalOpen] = useState(false)
   const [isSponsorModalOpen, setIsSponsorModalOpen] = useState(false)
+  const gameCardsRef = useRef<HTMLDivElement>(null)
 
   // Map team selection to actual team IDs
   const teamIdMap = useMemo(() => ({
@@ -90,6 +92,20 @@ export default function HomePageClient({ data }: HomePageClientProps) {
     setSelectedNewsArticle(null)
   }
 
+  // Update VereinsAssistent height to match GameCards
+  useEffect(() => {
+    const updateHeight = () => {
+      if (gameCardsRef.current) {
+        const height = gameCardsRef.current.offsetHeight
+        document.documentElement.style.setProperty('--game-cards-height', `${height}px`)
+      }
+    }
+
+    updateHeight()
+    window.addEventListener('resize', updateHeight)
+    return () => window.removeEventListener('resize', updateHeight)
+  }, [filteredData.lastMatch, filteredData.nextMatch])
+
   // Transform news article for modal
   const transformedNewsArticle = selectedNewsArticle ? {
     id: selectedNewsArticle.id,
@@ -128,10 +144,12 @@ export default function HomePageClient({ data }: HomePageClientProps) {
           <div className="lg:col-span-2 space-y-6">
             {/* Game Cards */}
             <AnimatedSection animation="slideUp" delay={0.1} immediate={true}>
-              <GameCards 
-                lastMatch={filteredData.lastMatch}
-                nextMatch={filteredData.nextMatch}
-              />
+              <div ref={gameCardsRef}>
+                <GameCards 
+                  lastMatch={filteredData.lastMatch}
+                  nextMatch={filteredData.nextMatch}
+                />
+              </div>
             </AnimatedSection>
 
             {/* League Table - Desktop Only (in left column) */}
@@ -165,6 +183,13 @@ export default function HomePageClient({ data }: HomePageClientProps) {
               <TopScorers scorers={data.scorers} />
             </AnimatedSection>
 
+            {/* Vereins Assistent - Mobile/Tablet Only */}
+            <AnimatedSection animation="slideUp" delay={0.35} className="lg:hidden" immediate={true}>
+              <div className="h-[400px]">
+                <VereinsAssistent />
+              </div>
+            </AnimatedSection>
+
             {/* News Carousel - Mobile/Tablet Only */}
             <AnimatedSection animation="slideUp" delay={0.4} className="lg:hidden" immediate={true}>
               <NewsCarousel 
@@ -176,6 +201,13 @@ export default function HomePageClient({ data }: HomePageClientProps) {
 
           {/* Right Column - Sidebar */}
           <div className="hidden lg:block space-y-6">
+            {/* Vereins Assistent - Desktop Only */}
+            <AnimatedSection animation="slideUp" delay={0.15} immediate={true}>
+              <div className="h-full" style={{ height: 'var(--game-cards-height, 400px)' }}>
+                <VereinsAssistent />
+              </div>
+            </AnimatedSection>
+
             {/* News - Desktop Only */}
             <AnimatedSection animation="slideUp" delay={0.2} immediate={true}>
               <NewsCarousel 

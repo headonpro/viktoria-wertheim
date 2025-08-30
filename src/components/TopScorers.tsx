@@ -11,18 +11,6 @@ interface TopScorersProps {
 }
 
 export default function TopScorers({ scorers }: TopScorersProps) {
-  const getMedalColor = (position: number) => {
-    switch (position) {
-      case 1:
-        return 'text-yellow-500'
-      case 2:
-        return 'text-gray-400'
-      case 3:
-        return 'text-orange-600'
-      default:
-        return 'text-gray-600'
-    }
-  }
 
   if (!scorers || scorers.length === 0) {
     return (
@@ -35,10 +23,7 @@ export default function TopScorers({ scorers }: TopScorersProps) {
   return (
     <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
       <div className="bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 px-4 py-3">
-        <div className="flex items-center justify-between">
-          <h3 className="text-white dark:text-gray-900 font-bold text-sm uppercase tracking-wider">Torschützenliste</h3>
-          <IconTrophy size={18} className="text-white/80 dark:text-gray-900/80" />
-        </div>
+        <h3 className="text-white dark:text-gray-900 font-bold text-sm uppercase tracking-wider text-center">Torschützenliste</h3>
       </div>
       
       <div className="p-4 sm:p-5">

@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { IconChartBar, IconTrendingUp, IconTrendingDown, IconMinus, IconSoccerField, IconTargetArrow } from '@tabler/icons-react'
+import { IconChartBar, IconTrendingUp, IconTrendingDown, IconMinus, IconSoccerField } from '@tabler/icons-react'
 
 interface TeamStatisticsProps {
   teamId: string
@@ -17,16 +17,13 @@ interface TeamStatisticsProps {
 }
 
 export default function TeamStatistics({
-  teamId,
-  teamName,
   played = 0,
   won = 0,
   drawn = 0,
   lost = 0,
   goalsFor = 0,
   goalsAgainst = 0,
-  points = 0,
-  position = 0
+  points = 0
 }: TeamStatisticsProps) {
   // Calculate statistics
   const winRate = played > 0 ? Math.round((won / played) * 100) : 0

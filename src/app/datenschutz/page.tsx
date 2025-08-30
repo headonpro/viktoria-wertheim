@@ -266,7 +266,7 @@ export default function DatenschutzPage() {
                       </summary>
                       <div className="mt-2 p-4 text-sm text-gray-600 dark:text-gray-400 leading-relaxed space-y-2">
                         <p>Unsere Website verwendet Cookies - kleine Textdateien, die Ihr Browser speichert.</p>
-                        <p>Einige Cookies sind "Session-Cookies", die nach Ende Ihrer Browser-Sitzung automatisch gelöscht werden.</p>
+                        <p>Einige Cookies sind &quot;Session-Cookies&quot;, die nach Ende Ihrer Browser-Sitzung automatisch gelöscht werden.</p>
                         <p>Sie können Ihren Browser entsprechend konfigurieren, um Cookies zu kontrollieren.</p>
                       </div>
                     </details>

@@ -13,7 +13,6 @@ import {
   IconMapPin,
   IconPhone,
   IconStar,
-  IconTrophy,
   IconHeart
 } from '@tabler/icons-react'
 
@@ -116,7 +115,7 @@ export default function ShopPage() {
                       {comingProducts.map((product, index) => (
                         <AnimatedSection
                           key={index}
-                          animation="scaleUp"
+                          animation="fadeIn"
                           delay={0.1 * (index + 3)}
                         >
                           <div className="group bg-white dark:bg-viktoria-dark-lighter rounded-2xl p-6 hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-800 hover:border-viktoria-blue/30 dark:hover:border-viktoria-yellow/30">

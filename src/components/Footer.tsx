@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { IconBallFootball, IconMail, IconPhone, IconMapPin, IconBrandFacebook, IconBrandInstagram, IconBrandYoutube } from '@tabler/icons-react'
+import { IconMail, IconPhone, IconMapPin, IconBrandFacebook, IconBrandInstagram, IconBrandYoutube } from '@tabler/icons-react'
 
 export default function Footer() {
   return (
@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           
           {/* Club Info */}
-          <div>
+          <div className="flex flex-col items-center text-center">
             <div className="flex items-center space-x-2 mb-4">
               <Image 
                 src="/viktorialogo.png"
@@ -32,7 +32,7 @@ export default function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div className="flex flex-col items-center text-center">
             <h4 className="font-semibold text-lg mb-4 text-viktoria-yellow">Schnellzugriff</h4>
             <ul className="space-y-2">
               <li><Link href="/news" className="text-sm hover:text-viktoria-yellow transition-colors">Aktuelles</Link></li>
@@ -44,21 +44,21 @@ export default function Footer() {
           </div>
 
           {/* Contact Info */}
-          <div>
+          <div className="flex flex-col items-center text-center">
             <h4 className="font-semibold text-lg mb-4 text-viktoria-yellow">Kontakt</h4>
             <ul className="space-y-3">
-              <li className="flex items-start space-x-2">
+              <li className="flex items-start space-x-2 justify-center">
                 <IconMapPin size={16} className="text-viktoria-yellow mt-0.5 flex-shrink-0" />
-                <span className="text-sm">
+                <span className="text-sm text-left">
                   Sportplatz Wertheim<br />
                   97877 Wertheim
                 </span>
               </li>
-              <li className="flex items-center space-x-2">
+              <li className="flex items-center space-x-2 justify-center">
                 <IconPhone size={16} className="text-viktoria-yellow flex-shrink-0" />
                 <span className="text-sm">09342 / 12345</span>
               </li>
-              <li className="flex items-center space-x-2">
+              <li className="flex items-center space-x-2 justify-center">
                 <IconMail size={16} className="text-viktoria-yellow flex-shrink-0" />
                 <span className="text-sm">info@viktoria-wertheim.de</span>
               </li>
@@ -66,9 +66,9 @@ export default function Footer() {
           </div>
 
           {/* Social Media */}
-          <div>
+          <div className="flex flex-col items-center text-center">
             <h4 className="font-semibold text-lg mb-4 text-viktoria-yellow">Folge uns</h4>
-            <div className="flex space-x-3">
+            <div className="flex space-x-3 justify-center">
               <a href="#" className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors">
                 <IconBrandFacebook size={20} />
               </a>
