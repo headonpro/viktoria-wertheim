@@ -26,7 +26,7 @@ export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorSh
             <IconUsers size={16} className="text-viktoria-blue dark:text-viktoria-yellow" />
             <h3 className="text-gray-900 dark:text-white font-semibold text-sm">Unsere Partner & Sponsoren</h3>
           </div>
-          <p className="text-gray-600 dark:text-gray-400 text-xs">Gemeinsam stark!</p>
+
         </div>
       </div>
 

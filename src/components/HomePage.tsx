@@ -27,7 +27,7 @@ export default async function HomePage() {
       supabase.from('matches').select('*').order('match_date', { ascending: false }),
       supabase.from('news').select('*').order('published_at', { ascending: false }).limit(5),
       supabase.from('scorers').select('*').order('goals', { ascending: false }).limit(5),
-      supabase.from('sponsors').select('*').order('level', { ascending: true }),
+      supabase.from('sponsors').select('*').order('category', { ascending: true }),
       supabase.from('league_standings').select('*').order('position')
     ])
     
@@ -63,9 +63,9 @@ export default async function HomePage() {
     news: news || [],
     scorers: scorers || [],
     sponsors: {
-      premium: sponsors?.filter(s => 'level' in s && s.level === 'premium') || [],
-      gold: sponsors?.filter(s => 'level' in s && s.level === 'gold') || [],
-      silver: sponsors?.filter(s => 'level' in s && s.level === 'silver') || sponsors || []
+      premium: sponsors?.filter(s => s.category === 'Hauptsponsor' || s.category === 'Premium Partner') || [],
+      gold: sponsors?.filter(s => s.category === 'Partner') || [],
+      silver: sponsors?.filter(s => s.category === 'Förderer') || []
     },
     leagueStandings: {
       'Kreisliga A': leagueStandings?.filter(s => s.league === 'Kreisliga A') || [],

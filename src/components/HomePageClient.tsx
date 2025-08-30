@@ -134,12 +134,29 @@ export default function HomePageClient({ data }: HomePageClientProps) {
               />
             </AnimatedSection>
 
+            {/* League Table - Desktop Only (in left column) */}
+            <AnimatedSection animation="slideUp" delay={0.2} className="hidden lg:block" immediate={true}>
+              <SimpleLeagueTable 
+                standings={filteredData.leagueStandings}
+                selectedTeamId={teamIdMap[selectedTeam]}
+                onShowFullTable={() => setIsLeagueTableModalOpen(true)}
+              />
+            </AnimatedSection>
+
             {/* League Table - Mobile/Tablet Only */}
             <AnimatedSection animation="slideUp" delay={0.2} className="lg:hidden" immediate={true}>
               <SimpleLeagueTable 
                 standings={filteredData.leagueStandings}
                 selectedTeamId={teamIdMap[selectedTeam]}
                 onShowFullTable={() => setIsLeagueTableModalOpen(true)}
+              />
+            </AnimatedSection>
+
+            {/* Sponsors Section - Desktop Only (in left column) */}
+            <AnimatedSection animation="slideUp" delay={0.3} className="hidden lg:block" immediate={true}>
+              <SponsorShowcase 
+                sponsors={data.sponsors}
+                onBecomeSponsor={() => setIsSponsorModalOpen(true)}
               />
             </AnimatedSection>
 
@@ -168,24 +185,17 @@ export default function HomePageClient({ data }: HomePageClientProps) {
               />
             </AnimatedSection>
 
-            {/* League Table - Desktop Only */}
-            <AnimatedSection animation="slideUp" delay={0.3} immediate={true}>
-              <SimpleLeagueTable 
-                standings={filteredData.leagueStandings}
-                selectedTeamId={teamIdMap[selectedTeam]}
-                onShowFullTable={() => setIsLeagueTableModalOpen(true)}
-              />
-            </AnimatedSection>
+
 
             {/* Top Scorers - Desktop Only */}
-            <AnimatedSection animation="slideUp" delay={0.4} immediate={true}>
+            <AnimatedSection animation="slideUp" delay={0.3} immediate={true}>
               <TopScorers scorers={data.scorers} />
             </AnimatedSection>
           </div>
         </div>
 
-        {/* Sponsors Section */}
-        <AnimatedSection animation="slideUp" delay={0.5} className="mt-8" immediate={true}>
+        {/* Sponsors Section - Mobile/Tablet Only */}
+        <AnimatedSection animation="slideUp" delay={0.5} className="mt-8 lg:hidden" immediate={true}>
           <SponsorShowcase 
             sponsors={data.sponsors}
             onBecomeSponsor={() => setIsSponsorModalOpen(true)}
