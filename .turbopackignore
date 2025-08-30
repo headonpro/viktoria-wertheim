@@ -1,0 +1,6 @@
+# Ignore Docker volumes to prevent permission errors
+docker/volumes/
+supabase-docker/volumes/
+*.log
+.git/
+node_modules/
