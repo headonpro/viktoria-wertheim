@@ -33,62 +33,90 @@ export default function SimpleLeagueTable({ standings, selectedTeamId, onShowFul
   }
 
   return (
-    <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden">
-      <div className="border-b-2 border-viktoria-blue dark:border-viktoria-yellow px-4 py-2 text-center">
-        <h3 className="text-gray-900 dark:text-white font-semibold text-sm">Tabelle</h3>
+    <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+      <div className="bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 px-4 py-3">
+        <h3 className="text-white dark:text-gray-900 font-bold text-sm uppercase tracking-wider">Tabelle</h3>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
-          <thead className="bg-gray-50 dark:bg-viktoria-dark-lighter">
+          <thead className="bg-gradient-to-b from-gray-50 to-white dark:from-viktoria-dark-lighter dark:to-viktoria-dark-light border-b border-gray-200 dark:border-gray-700">
             <tr>
-              <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Pl.</th>
-              <th className="px-2 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400">Team</th>
-              <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400">Sp.</th>
-              <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400">S</th>
-              <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400">U</th>
-              <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400">N</th>
-              <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400">Tore</th>
-              <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400">Pkt.</th>
-              <th className="px-2 py-2 text-center text-xs font-medium text-gray-500 dark:text-gray-400"></th>
+              <th className="px-2 sm:px-3 py-3 text-left text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Pl.</th>
+              <th className="px-2 sm:px-3 py-3 text-left text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Team</th>
+              <th className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider hidden sm:table-cell">Sp.</th>
+              <th className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">S</th>
+              <th className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">U</th>
+              <th className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">N</th>
+              <th className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider hidden sm:table-cell">Tore</th>
+              <th className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Pkt.</th>
+              <th className="px-1 py-3 text-center"></th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-viktoria-dark-lighter">
-            {standings.slice(0, 5).map((team) => (
+          <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
+            {standings.slice(0, 5).map((team, index) => (
               <tr 
                 key={team.id}
-                className={`hover:bg-gray-50 dark:hover:bg-viktoria-dark-lighter transition-colors ${
-                  team.team_id === selectedTeamId ? 'bg-viktoria-blue/10 dark:bg-viktoria-yellow/10' : ''
+                className={`hover:bg-gray-50 dark:hover:bg-viktoria-dark-lighter/50 transition-all duration-200 ${
+                  team.team_id === selectedTeamId 
+                    ? 'bg-gradient-to-r from-viktoria-blue/10 to-viktoria-blue-light/10 dark:from-viktoria-yellow/15 dark:to-yellow-600/15 shadow-sm' 
+                    : ''
                 }`}
               >
-                <td className="px-2 py-2 text-left text-sm font-medium text-gray-900 dark:text-white">
-                  {team.position}
+                <td className="px-2 sm:px-3 py-3 text-left">
+                  <div className={`text-sm sm:text-base font-bold ${
+                    index === 0 ? 'text-viktoria-yellow' :
+                    index < 3 ? 'text-viktoria-blue dark:text-viktoria-yellow' :
+                    'text-gray-600 dark:text-gray-400'
+                  }`}>
+                    {team.position}
+                  </div>
                 </td>
-                <td className="px-2 py-2 text-left">
-                  <span className={`text-sm ${team.team_id === selectedTeamId ? 'font-bold text-viktoria-blue dark:text-viktoria-yellow' : 'text-gray-700 dark:text-gray-300'}`}>
-                    {team.team_name}
+                <td className="px-2 sm:px-3 py-3 text-left">
+                  <span className={`text-xs sm:text-sm font-medium ${
+                    team.team_id === selectedTeamId 
+                      ? 'font-bold text-viktoria-blue dark:text-viktoria-yellow' 
+                      : 'text-gray-700 dark:text-gray-300'
+                  }`}>
+                    <span className="hidden sm:inline">{team.team_name}</span>
+                    <span className="sm:hidden">{team.team_name?.split(' ')[0]}</span>
                   </span>
                 </td>
-                <td className="px-2 py-2 text-center text-sm text-gray-600 dark:text-gray-400">{team.played}</td>
-                <td className="px-2 py-2 text-center text-sm text-gray-600 dark:text-gray-400">{team.won}</td>
-                <td className="px-2 py-2 text-center text-sm text-gray-600 dark:text-gray-400">{team.drawn}</td>
-                <td className="px-2 py-2 text-center text-sm text-gray-600 dark:text-gray-400">{team.lost}</td>
-                <td className="px-2 py-2 text-center text-sm text-gray-600 dark:text-gray-400">
-                  {team.goals_for}:{team.goals_against}
+                <td className="px-2 sm:px-3 py-3 text-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 hidden sm:table-cell">{team.played}</td>
+                <td className="px-2 sm:px-3 py-3 text-center">
+                  <span className="text-xs sm:text-sm font-medium text-viktoria-blue dark:text-viktoria-yellow">{team.won}</span>
                 </td>
-                <td className="px-2 py-2 text-center text-sm font-bold text-gray-900 dark:text-white">{team.points}</td>
-                <td className="px-2 py-2 text-center">{getTrendIcon(team.trend)}</td>
+                <td className="px-2 sm:px-3 py-3 text-center">
+                  <span className="text-xs sm:text-sm font-medium text-gray-600 dark:text-gray-400">{team.drawn}</span>
+                </td>
+                <td className="px-2 sm:px-3 py-3 text-center">
+                  <span className="text-xs sm:text-sm font-medium text-gray-500 dark:text-gray-500">{team.lost}</span>
+                </td>
+                <td className="px-2 sm:px-3 py-3 text-center text-xs sm:text-sm text-gray-600 dark:text-gray-400 hidden sm:table-cell">
+                  <span className="font-mono">{team.goals_for}:{team.goals_against}</span>
+                </td>
+                <td className="px-2 sm:px-3 py-3 text-center">
+                  <span className={`text-sm sm:text-base font-bold ${
+                    team.team_id === selectedTeamId 
+                      ? 'text-viktoria-blue dark:text-viktoria-yellow' 
+                      : 'text-gray-900 dark:text-white'
+                  }`}>
+                    {team.points}
+                  </span>
+                </td>
+                <td className="px-1 py-3 text-center">{getTrendIcon(team.trend)}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
       {onShowFullTable && (
-        <div className="px-4 py-3 bg-gray-50 dark:bg-viktoria-dark-lighter">
+        <div className="px-4 py-3 bg-gradient-to-b from-gray-50 to-white dark:from-viktoria-dark-lighter dark:to-viktoria-dark-light border-t border-gray-100 dark:border-gray-700">
           <button 
             onClick={onShowFullTable}
-            className="text-sm text-viktoria-blue dark:text-viktoria-yellow hover:underline"
+            className="w-full text-sm font-semibold text-viktoria-blue dark:text-viktoria-yellow hover:text-viktoria-blue-light dark:hover:text-yellow-500 transition-colors flex items-center justify-center gap-2 py-1"
           >
-            Vollständige Tabelle anzeigen →
+            Vollständige Tabelle anzeigen
+            <span className="text-lg">→</span>
           </button>
         </div>
       )}

@@ -8,6 +8,7 @@ type Team = Database['public']['Tables']['teams']['Row']
 type Player = Database['public']['Tables']['players']['Row']
 type Match = Database['public']['Tables']['matches']['Row']
 type YouthTeam = Database['public']['Tables']['youth_teams']['Row']
+type LeagueStanding = Database['public']['Tables']['league_standings']['Row']
 
 // Define client types
 interface ClientPlayer {
@@ -45,6 +46,14 @@ interface ClientTeam {
   players: ClientPlayer[]
   lastResults?: ClientMatch[]
   nextMatch?: ClientNextMatch | null
+  leagueStats?: {
+    played: number
+    won: number
+    drawn: number
+    lost: number
+    goalsFor: number
+    goalsAgainst: number
+  } | null
 }
 
 export const metadata: Metadata = {
@@ -59,6 +68,7 @@ export default async function TeamsPage() {
   let players: Player[] = []
   let matches: Match[] = []
   let youthTeams: YouthTeam[] = []
+  let leagueStandings: LeagueStanding[] = []
   
   try {
     // Fetch all data in parallel
@@ -69,16 +79,18 @@ export default async function TeamsPage() {
         .select('*')
         .order('match_date', { ascending: false })
         .limit(20),
-      supabase.from('youth_teams').select('*').order('age_group')
+      supabase.from('youth_teams').select('*').order('age_group'),
+      supabase.from('league_standings').select('*').order('position')
     ])
     
     teams = results[0].data || []
     players = results[1].data || []
     matches = results[2].data || []
     youthTeams = results[3].data || []
+    leagueStandings = results[4].data || []
     
     // Log any errors from individual queries
-    const tableNames = ['teams', 'players', 'matches', 'youth_teams']
+    const tableNames = ['teams', 'players', 'matches', 'youth_teams', 'league_standings']
     results.forEach((result, index) => {
       if (result.error) {
         console.error(`Error fetching ${tableNames[index]}:`, result.error)
@@ -91,6 +103,7 @@ export default async function TeamsPage() {
     players = []
     matches = []
     youthTeams = []
+    leagueStandings = []
   }
   
   // Group players by team_id
@@ -153,20 +166,43 @@ export default async function TeamsPage() {
     })
   }
   
+  // Create league stats map
+  const leagueStatsByTeam: Record<string, LeagueStanding | null> = {}
+  if (leagueStandings) {
+    teams.forEach(team => {
+      const teamStats = leagueStandings.find(standing => 
+        standing.team_id === team.id || 
+        standing.team_name === team.name
+      )
+      leagueStatsByTeam[team.id] = teamStats || null
+    })
+  }
+  
   // Transform data to match client expectations
-  const teamsData: ClientTeam[] = (teams || []).map(team => ({
-    id: team.id,
-    name: team.name,
-    league: team.league || 'Liga nicht angegeben',
-    coach: team.coach || 'Trainer nicht angegeben',
-    captain: team.captain || 'Kapitän nicht angegeben',
-    training: team.training_schedule || 'Training nach Vereinbarung',
-    position: team.table_position || 0,
-    points: team.points || 0,
-    teamType: team.team_type || 'senior',
-    players: playersByTeam[team.id] || [],
-    ...matchesByTeam[team.id]
-  }))
+  const teamsData: ClientTeam[] = (teams || []).map(team => {
+    const leagueStats = leagueStatsByTeam[team.id]
+    return {
+      id: team.id,
+      name: team.name,
+      league: team.league || 'Liga nicht angegeben',
+      coach: team.coach || 'Trainer nicht angegeben',
+      captain: team.captain || 'Kapitän nicht angegeben',
+      training: team.training_schedule || 'Training nach Vereinbarung',
+      position: team.table_position || 0,
+      points: team.points || 0,
+      teamType: team.team_type || 'senior',
+      players: playersByTeam[team.id] || [],
+      ...matchesByTeam[team.id],
+      leagueStats: leagueStats ? {
+        played: leagueStats.played || 0,
+        won: leagueStats.won || 0,
+        drawn: leagueStats.drawn || 0,
+        lost: leagueStats.lost || 0,
+        goalsFor: leagueStats.goals_for || 0,
+        goalsAgainst: leagueStats.goals_against || 0
+      } : null
+    }
+  })
   
   return <TeamsPageClient 
     teams={teamsData}

@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { IconBallFootball, IconMail, IconPhone, IconMapPin, IconBrandFacebook, IconBrandInstagram, IconBrandYoutube } from '@tabler/icons-react'
 
 export default function Footer() {
@@ -12,18 +13,22 @@ export default function Footer() {
           {/* Club Info */}
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center">
-                <IconBallFootball size={20} className="text-viktoria-blue" />
-              </div>
-              <div>
-                <h3 className="font-bold text-lg">SV Viktoria</h3>
-                <p className="text-xs text-viktoria-yellow">Wertheim 1921 e.V.</p>
+              <Image 
+                src="/viktorialogo.png"
+                alt="SV Viktoria Wertheim Logo"
+                width={96}
+                height={96}
+                className="object-contain"
+              />
+              <div className="flex items-stretch gap-1.5">
+                <span className="font-bold text-viktoria-yellow text-[2.25rem] leading-none flex items-center font-[family-name:var(--font-goldman)]">SV</span>
+                <div className="flex flex-col justify-center">
+                  <span className="font-semibold text-white text-base leading-tight font-[family-name:var(--font-goldman)]">VIKTORIA</span>
+                  <span className="font-semibold text-white text-base leading-tight font-[family-name:var(--font-goldman)]">WERTHEIM</span>
+                </div>
               </div>
             </div>
-            <p className="text-sm text-gray-200 leading-relaxed">
-              Tradition, Leidenschaft und Gemeinschaft seit 1921. 
-              Wir sind mehr als nur ein Verein - wir sind eine Familie.
-            </p>
+
           </div>
 
           {/* Quick Links */}
@@ -84,7 +89,7 @@ export default function Footer() {
         <div className="border-t border-white/20 py-4">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
             <p className="text-xs text-gray-300">
-              © 2024 SV Viktoria Wertheim. Alle Rechte vorbehalten.
+              © 2025 SV Viktoria Wertheim. Alle Rechte vorbehalten.
             </p>
             <div className="flex space-x-4">
               <Link href="/impressum" className="text-xs hover:text-viktoria-yellow transition-colors">Impressum</Link>

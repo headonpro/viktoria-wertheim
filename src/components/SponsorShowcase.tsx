@@ -18,40 +18,37 @@ interface SponsorShowcaseProps {
 
 export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorShowcaseProps) {
   return (
-    <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden">
+    <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
       {/* Header */}
-      <div className="border-b-2 border-viktoria-blue dark:border-viktoria-yellow px-4 py-2">
-        <div className="flex flex-col items-center">
-          <div className="flex items-center space-x-2">
-            <IconUsers size={16} className="text-viktoria-blue dark:text-viktoria-yellow" />
-            <h3 className="text-gray-900 dark:text-white font-semibold text-sm">Unsere Partner & Sponsoren</h3>
-          </div>
-
+      <div className="bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 px-4 py-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-white dark:text-gray-900 font-bold text-sm uppercase tracking-wider">Unsere Partner & Sponsoren</h3>
+          <IconUsers size={18} className="text-white/80 dark:text-gray-900/80" />
         </div>
       </div>
 
       {/* Sponsors Grid */}
-      <div className="p-6">
+      <div className="p-4 sm:p-5">
         {/* Premium Sponsors */}
-        <div className="mb-5">
-          <div className="flex items-center space-x-2 mb-3">
-            <IconStar size={18} className="text-viktoria-yellow" />
-            <h3 className="font-semibold text-gray-900 dark:text-white text-sm">Premium Partner</h3>
+        <div className="mb-6">
+          <div className="flex items-center space-x-2 mb-4">
+            <IconStar size={20} className="text-viktoria-yellow" />
+            <h3 className="font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wide">Premium Partner</h3>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {sponsors.premium.map((sponsor) => (
               <a
                 key={sponsor.id}
                 href={sponsor.website || '#'}
-                className="group bg-gray-50 dark:bg-viktoria-dark-lighter rounded-lg p-3 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-viktoria-dark transition-colors"
+                className="group relative bg-gradient-to-br from-gray-50 to-white dark:from-viktoria-dark-lighter dark:to-viktoria-dark rounded-lg p-4 border border-gray-100 dark:border-gray-700 hover:border-viktoria-blue/30 dark:hover:border-viktoria-yellow/30 transition-all duration-300 hover:shadow-md"
               >
                 <div className="text-center">
-                  <div className="h-12 flex items-center justify-center">
-                    <div className="text-lg font-bold text-gray-700 dark:text-gray-300 group-hover:text-viktoria-blue dark:group-hover:text-viktoria-yellow transition-colors">
+                  <div className="h-12 sm:h-14 flex items-center justify-center mb-2">
+                    <div className="text-base sm:text-lg font-bold text-gray-800 dark:text-gray-200 group-hover:text-viktoria-blue dark:group-hover:text-viktoria-yellow transition-colors">
                       {sponsor.name}
                     </div>
                   </div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">Premium Partner</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">Premium Partner</p>
                 </div>
               </a>
             ))}
@@ -59,63 +56,63 @@ export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorSh
         </div>
 
         {/* Gold Sponsors */}
-        <div className="mb-5">
-          <div className="flex items-center space-x-2 mb-3">
-            <div className="w-4 h-4 bg-yellow-500 rounded-full" />
-            <h3 className="font-semibold text-gray-900 dark:text-white text-sm">Gold Partner</h3>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-            {sponsors.gold.map((sponsor) => (
-              <a
-                key={sponsor.id}
-                href={sponsor.website || '#'}
-                className="group bg-gray-50 dark:bg-viktoria-dark-lighter rounded-lg p-2 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-viktoria-dark transition-colors"
-              >
-                <div className="text-center">
-                  <div className="h-8 flex items-center justify-center">
-                    <div className="text-xs font-semibold text-gray-600 dark:text-gray-400 group-hover:text-viktoria-blue dark:group-hover:text-viktoria-yellow transition-colors">
+        {sponsors.gold.length > 0 && (
+          <div className="mb-5">
+            <div className="flex items-center space-x-2 mb-3">
+              <div className="w-5 h-5 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full shadow-sm" />
+              <h3 className="font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wide">Gold Partner</h3>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {sponsors.gold.map((sponsor) => (
+                <a
+                  key={sponsor.id}
+                  href={sponsor.website || '#'}
+                  className="group bg-gradient-to-br from-gray-50 to-white dark:from-viktoria-dark-lighter dark:to-viktoria-dark rounded-lg p-3 flex items-center justify-center border border-gray-100 dark:border-gray-700 hover:border-viktoria-blue/30 dark:hover:border-viktoria-yellow/30 transition-all duration-200 hover:shadow-sm"
+                >
+                  <div className="text-center">
+                    <div className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 group-hover:text-viktoria-blue dark:group-hover:text-viktoria-yellow transition-colors">
                       {sponsor.name}
                     </div>
                   </div>
-                </div>
-              </a>
-            ))}
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Silver Sponsors */}
-        <div>
-          <div className="flex items-center space-x-2 mb-3">
-            <div className="w-4 h-4 bg-gray-400 rounded-full" />
-            <h3 className="font-semibold text-gray-900 dark:text-white text-sm">Silber Partner</h3>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {sponsors.silver.map((sponsor) => (
-              <a
-                key={sponsor.id}
-                href={sponsor.website || '#'}
-                className="group bg-gray-50 dark:bg-viktoria-dark-lighter rounded-lg p-2 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-viktoria-dark transition-colors"
-              >
-                <div className="text-center">
-                  <div className="text-xs font-medium text-gray-600 dark:text-gray-400 group-hover:text-viktoria-blue dark:group-hover:text-viktoria-yellow transition-colors">
+        {sponsors.silver.length > 0 && (
+          <div className="mb-6">
+            <div className="flex items-center space-x-2 mb-3">
+              <div className="w-5 h-5 bg-gradient-to-br from-gray-300 to-gray-500 rounded-full shadow-sm" />
+              <h3 className="font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wide">Silber Partner</h3>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+              {sponsors.silver.map((sponsor) => (
+                <a
+                  key={sponsor.id}
+                  href={sponsor.website || '#'}
+                  className="group bg-gray-50 dark:bg-viktoria-dark-lighter/50 rounded-lg p-2 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-viktoria-dark-lighter transition-colors"
+                >
+                  <div className="text-xs font-medium text-gray-600 dark:text-gray-400 group-hover:text-viktoria-blue dark:group-hover:text-viktoria-yellow transition-colors text-center">
                     {sponsor.name}
                   </div>
-                </div>
-              </a>
-            ))}
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* CTA */}
-        <div className="mt-6 p-3 bg-gradient-to-r from-viktoria-blue/10 to-viktoria-blue-light/10 dark:from-viktoria-yellow/10 dark:to-yellow-600/10 rounded-lg">
+        <div className="mt-6 p-4 bg-gradient-to-r from-viktoria-blue/5 to-viktoria-blue-light/5 dark:from-viktoria-yellow/10 dark:to-yellow-600/10 rounded-lg border border-viktoria-blue/10 dark:border-viktoria-yellow/20">
           <div className="text-center">
-            <p className="text-xs text-gray-700 dark:text-gray-300 mb-2">
+            <p className="text-sm text-gray-700 dark:text-gray-300 font-medium mb-3">
               Werden Sie Teil unserer Erfolgsgeschichte!
             </p>
             <div className="flex justify-center">
               <button 
                 onClick={onBecomeSponsor}
-                className="px-6 py-2 bg-viktoria-yellow hover:bg-yellow-500 text-viktoria-blue rounded-lg transition-colors text-sm font-medium"
+                className="px-6 py-2.5 bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 hover:from-viktoria-blue-light hover:to-viktoria-blue dark:hover:from-yellow-600 dark:hover:to-viktoria-yellow text-white dark:text-gray-900 rounded-lg transition-all duration-300 text-sm font-bold uppercase tracking-wide shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
               >
                 Sponsor werden
               </button>

@@ -23,6 +23,7 @@ export default function DownloadsPage() {
     {
       title: 'Mitgliedschaft',
       icon: <IconUsers size={24} />,
+      color: 'from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600',
       documents: [
         {
           name: 'Mitgliedsantrag Erwachsene',
@@ -57,6 +58,7 @@ export default function DownloadsPage() {
     {
       title: 'Vereinsdokumente',
       icon: <IconFileCertificate size={24} />,
+      color: 'from-viktoria-blue-light to-viktoria-blue dark:from-yellow-600 dark:to-viktoria-yellow',
       documents: [
         {
           name: 'Vereinssatzung',
@@ -91,6 +93,7 @@ export default function DownloadsPage() {
     {
       title: 'Spielbetrieb',
       icon: <IconBallFootball size={24} />,
+      color: 'from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600',
       documents: [
         {
           name: 'Spielerpass-Antrag',
@@ -118,6 +121,7 @@ export default function DownloadsPage() {
     {
       title: 'Spielpläne & Termine',
       icon: <IconCalendar size={24} />,
+      color: 'from-viktoria-blue-light to-viktoria-blue dark:from-yellow-600 dark:to-viktoria-yellow',
       documents: [
         {
           name: 'Spielplan 1. Mannschaft',
@@ -152,6 +156,7 @@ export default function DownloadsPage() {
     {
       title: 'Jugend',
       icon: <IconShieldCheck size={24} />,
+      color: 'from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600',
       documents: [
         {
           name: 'Jugendschutzkonzept',
@@ -179,6 +184,7 @@ export default function DownloadsPage() {
     {
       title: 'Sonstiges',
       icon: <IconClipboard size={24} />,
+      color: 'from-viktoria-blue-light to-viktoria-blue dark:from-yellow-600 dark:to-viktoria-yellow',
       documents: [
         {
           name: 'Hallennutzungsordnung',
@@ -211,65 +217,71 @@ export default function DownloadsPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Page Header */}
           <AnimatedSection animation="fadeIn" className="mb-8" immediate={true}>
-            <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden">
-              <div className="border-b-2 border-viktoria-blue dark:border-viktoria-yellow px-4 py-2 text-center">
-                <h1 className="text-gray-900 dark:text-white font-semibold text-sm">
+            <div className="bg-gradient-to-br from-white to-gray-50 dark:from-viktoria-dark-light dark:to-viktoria-dark-lighter rounded-xl shadow-xl overflow-hidden">
+              <div className="bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 px-6 py-4">
+                <h1 className="text-2xl sm:text-3xl font-bold text-white dark:text-gray-900">
                   Downloads
                 </h1>
               </div>
               <div className="p-6">
-                <p className="text-gray-600 dark:text-gray-400 text-center">
-                  Hier finden Sie alle wichtigen Formulare und Dokumente zum Download
+                <p className="text-gray-600 dark:text-gray-400 text-center text-lg">
+                  Alle wichtigen Formulare und Dokumente zum Download
                 </p>
               </div>
             </div>
           </AnimatedSection>
 
           {/* Download Categories */}
-          <div className="space-y-6">
+          <div className="space-y-8">
             {downloadCategories.map((category, index) => (
               <AnimatedSection key={index} animation="slideUp" delay={index * 0.1} immediate={true}>
-                <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden">
-                  <div className="border-b-2 border-viktoria-blue dark:border-viktoria-yellow px-6 py-3">
+                <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300">
+                  <div className={`bg-gradient-to-r ${category.color} px-4 sm:px-6 py-4`}>
                     <div className="flex items-center space-x-3">
-                      <div className="text-viktoria-blue dark:text-viktoria-yellow">
+                      <div className="text-white dark:text-gray-900 opacity-90">
                         {category.icon}
                       </div>
-                      <h2 className="text-gray-900 dark:text-white font-semibold">
+                      <h2 className="text-lg sm:text-xl font-bold text-white dark:text-gray-900 uppercase tracking-wider">
                         {category.title}
                       </h2>
                     </div>
                   </div>
-                  <div className="p-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 sm:p-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
                       {category.documents.map((doc, docIndex) => (
                         <div 
                           key={docIndex}
-                          className="bg-gray-50 dark:bg-viktoria-dark rounded-lg p-4 hover:bg-gray-100 dark:hover:bg-viktoria-dark-lighter transition-colors"
+                          className="group bg-gradient-to-br from-gray-50 to-gray-100 dark:from-viktoria-dark dark:to-viktoria-dark-lighter rounded-lg overflow-hidden hover:from-gray-100 hover:to-gray-150 dark:hover:from-viktoria-dark-lighter dark:hover:to-viktoria-dark transition-all duration-300 shadow-sm hover:shadow-md"
                         >
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <div className="flex items-center space-x-2 mb-1">
-                                <IconFileText size={20} className="text-viktoria-blue dark:text-viktoria-yellow" />
-                                <h3 className="font-medium text-gray-900 dark:text-white">
-                                  {doc.name}
-                                </h3>
+                          <div className="p-4 sm:p-5">
+                            <div className="flex items-start justify-between gap-3">
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-start space-x-3 mb-2">
+                                  <IconFileText size={20} className="text-viktoria-blue dark:text-viktoria-yellow flex-shrink-0 mt-0.5" />
+                                  <h3 className="font-semibold text-gray-900 dark:text-white text-sm sm:text-base leading-tight">
+                                    {doc.name}
+                                  </h3>
+                                </div>
+                                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 pl-8">
+                                  {doc.description}
+                                </p>
+                                <div className="flex items-center space-x-2 text-xs text-gray-500 dark:text-gray-500 pl-8">
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-viktoria-blue/10 dark:bg-viktoria-yellow/20 text-viktoria-blue dark:text-viktoria-yellow font-medium">
+                                    {doc.format}
+                                  </span>
+                                  <span className="text-gray-400">•</span>
+                                  <span>{doc.size}</span>
+                                </div>
                               </div>
-                              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                                {doc.description}
-                              </p>
-                              <div className="flex items-center space-x-3 text-xs text-gray-500 dark:text-gray-500">
-                                <span>{doc.format}</span>
-                                <span>•</span>
-                                <span>{doc.size}</span>
-                              </div>
+                              <button 
+                                className="flex-shrink-0 p-2.5 sm:p-3 bg-gradient-to-br from-viktoria-yellow to-yellow-500 dark:from-viktoria-yellow dark:to-yellow-600 hover:from-yellow-500 hover:to-viktoria-yellow dark:hover:from-yellow-600 dark:hover:to-viktoria-yellow text-viktoria-blue dark:text-gray-900 rounded-lg transition-all duration-300 shadow-md hover:shadow-lg group-hover:scale-105 active:scale-95"
+                                title={`Download ${doc.name}`}
+                                aria-label={`Download ${doc.name}`}
+                              >
+                                <IconDownload size={18} className="sm:hidden" />
+                                <IconDownload size={20} className="hidden sm:block" />
+                              </button>
                             </div>
-                            <button 
-                              className="ml-4 p-2 bg-viktoria-yellow hover:bg-yellow-500 text-viktoria-blue rounded-lg transition-colors"
-                              title="Download"
-                            >
-                              <IconDownload size={20} />
-                            </button>
                           </div>
                         </div>
                       ))}
@@ -282,15 +294,26 @@ export default function DownloadsPage() {
 
           {/* Info Box */}
           <AnimatedSection animation="slideUp" delay={0.7} className="mt-8" immediate={true}>
-            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6">
-              <h3 className="font-semibold text-blue-900 dark:text-blue-300 mb-2">
-                Hinweis
-              </h3>
-              <p className="text-sm text-blue-800 dark:text-blue-200">
-                Alle Dokumente liegen im PDF-Format vor. Zum Öffnen benötigen Sie einen PDF-Reader 
-                wie Adobe Acrobat Reader. Bei Fragen zu den Dokumenten wenden Sie sich bitte an 
-                unsere Geschäftsstelle unter info@viktoria-wertheim.de
-              </p>
+            <div className="bg-gradient-to-br from-viktoria-blue/5 to-viktoria-blue/10 dark:from-viktoria-yellow/10 dark:to-viktoria-yellow/20 rounded-xl p-6 border border-viktoria-blue/20 dark:border-viktoria-yellow/30">
+              <div className="flex items-start space-x-3">
+                <IconFileText size={24} className="text-viktoria-blue dark:text-viktoria-yellow flex-shrink-0 mt-1" />
+                <div>
+                  <h3 className="font-bold text-viktoria-blue dark:text-viktoria-yellow mb-2 text-lg">
+                    Hinweis
+                  </h3>
+                  <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">
+                    Alle Dokumente liegen im PDF-Format vor. Zum Öffnen benötigen Sie einen PDF-Reader 
+                    wie Adobe Acrobat Reader. Bei Fragen zu den Dokumenten wenden Sie sich bitte an 
+                    unsere Geschäftsstelle unter{' '}
+                    <a 
+                      href="mailto:info@viktoria-wertheim.de" 
+                      className="font-medium text-viktoria-blue dark:text-viktoria-yellow hover:underline"
+                    >
+                      info@viktoria-wertheim.de
+                    </a>
+                  </p>
+                </div>
+              </div>
             </div>
           </AnimatedSection>
         </div>

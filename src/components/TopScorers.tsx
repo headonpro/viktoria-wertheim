@@ -33,45 +33,69 @@ export default function TopScorers({ scorers }: TopScorersProps) {
   }
 
   return (
-    <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden">
-      <div className="border-b-2 border-viktoria-blue dark:border-viktoria-yellow px-4 py-2">
-        <div className="flex items-center justify-center space-x-2">
-          <IconTrophy size={16} className="text-viktoria-blue dark:text-viktoria-yellow" />
-          <h3 className="text-gray-900 dark:text-white font-semibold text-sm">Torschützenliste</h3>
+    <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+      <div className="bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 px-4 py-3">
+        <div className="flex items-center justify-between">
+          <h3 className="text-white dark:text-gray-900 font-bold text-sm uppercase tracking-wider">Torschützenliste</h3>
+          <IconTrophy size={18} className="text-white/80 dark:text-gray-900/80" />
         </div>
       </div>
       
-      <div className="p-4">
-        <div className="space-y-3">
+      <div className="p-4 sm:p-5">
+        <div className="space-y-2">
           {scorers.map((scorer, index) => (
             <div 
               key={scorer.id}
-              className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-viktoria-dark-lighter/50 transition-colors"
+              className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 ${
+                index < 3 
+                  ? 'bg-gradient-to-r from-gray-50 to-white dark:from-viktoria-dark-lighter dark:to-viktoria-dark border border-gray-100 dark:border-gray-700 hover:border-viktoria-blue/30 dark:hover:border-viktoria-yellow/30' 
+                  : 'hover:bg-gray-50 dark:hover:bg-viktoria-dark-lighter/50'
+              }`}
             >
               {/* Position */}
-              <div className={`font-bold text-lg w-8 text-center ${getMedalColor(index + 1)}`}>
+              <div className={`font-bold text-lg sm:text-xl w-10 text-center flex-shrink-0 ${
+                index === 0 ? 'text-3xl' : index < 3 ? 'text-2xl' : ''
+              }`}>
                 {index === 0 && '🥇'}
                 {index === 1 && '🥈'}
                 {index === 2 && '🥉'}
-                {index > 2 && `${index + 1}.`}
+                {index > 2 && (
+                  <span className="text-gray-500 dark:text-gray-400 text-base">{index + 1}.</span>
+                )}
               </div>
               
               {/* Player Info */}
-              <div className="flex-1">
-                <p className="text-gray-900 dark:text-white font-medium text-sm">{scorer.player_name}</p>
-                <p className="text-gray-600 dark:text-gray-400 text-xs">{scorer.team_name || 'Unbekannt'}</p>
+              <div className="flex-1 min-w-0">
+                <p className={`font-semibold text-sm sm:text-base truncate ${
+                  index < 3 
+                    ? 'text-gray-900 dark:text-white' 
+                    : 'text-gray-700 dark:text-gray-300'
+                }`}>
+                  {scorer.player_name}
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                  {scorer.team_name || 'Team unbekannt'}
+                </p>
               </div>
               
               {/* Stats */}
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-1">
-                  <IconBallFootball size={14} className="text-viktoria-blue dark:text-viktoria-yellow" />
-                  <span className="text-gray-900 dark:text-white font-bold text-sm">{scorer.goals}</span>
+              <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
+                <div className="flex items-center gap-1.5">
+                  <IconBallFootball size={16} className="text-viktoria-blue dark:text-viktoria-yellow" />
+                  <span className={`font-bold ${
+                    index === 0 
+                      ? 'text-lg sm:text-xl text-viktoria-blue dark:text-viktoria-yellow' 
+                      : 'text-base sm:text-lg text-gray-900 dark:text-white'
+                  }`}>
+                    {scorer.goals}
+                  </span>
                 </div>
                 {scorer.assists && scorer.assists > 0 && (
-                  <div className="flex items-center space-x-1">
-                    <IconTarget size={14} className="text-gray-600 dark:text-gray-400" />
-                    <span className="text-gray-600 dark:text-gray-400 text-sm">{scorer.assists}</span>
+                  <div className="flex items-center gap-1.5">
+                    <IconTarget size={14} className="text-gray-400 dark:text-gray-500" />
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      {scorer.assists}
+                    </span>
                   </div>
                 )}
               </div>

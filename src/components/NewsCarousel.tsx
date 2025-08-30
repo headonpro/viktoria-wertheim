@@ -45,9 +45,9 @@ export default function NewsCarousel({ newsArticles, onNewsClick, isDesktopSideb
   if (isDesktopSidebar) {
     // Desktop Sidebar Version
     return (
-      <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden">
-        <div className="border-b-2 border-viktoria-blue dark:border-viktoria-yellow px-4 py-2 text-center">
-          <h3 className="text-gray-900 dark:text-white font-semibold text-sm">Aktuelle News</h3>
+      <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <div className="bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 px-4 py-3">
+          <h3 className="text-white dark:text-gray-900 font-bold text-sm uppercase tracking-wider">Aktuelle News</h3>
         </div>
         {articles.length === 0 ? (
           <EmptyState />
@@ -56,35 +56,35 @@ export default function NewsCarousel({ newsArticles, onNewsClick, isDesktopSideb
             {articles.slice(0, 3).map((article, index) => (
             <div
               key={article.id}
-              className={`${index === 0 ? '' : 'border-t border-gray-200 dark:border-viktoria-dark-lighter pt-4'} cursor-pointer hover:opacity-80 transition-opacity`}
+              className={`${index === 0 ? '' : 'border-t border-gray-100 dark:border-gray-700 pt-4'} cursor-pointer group`}
               onClick={() => onNewsClick && onNewsClick(article)}
             >
               {index === 0 ? (
                 // Erster Artikel mit Bild
                 <div className="space-y-3">
-                  <div className="relative h-32 bg-gray-200 dark:bg-viktoria-dark-lighter rounded-lg overflow-hidden">
+                  <div className="relative h-32 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-lg overflow-hidden group-hover:shadow-md transition-all duration-300">
                     <Image
                       src={article.image_url || '/api/placeholder/400/300'}
                       alt={article.title}
                       fill
-                      className="object-cover"
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                     <div className="absolute bottom-2 left-2 right-2">
                       <div className="flex items-center space-x-2 text-white/90 text-xs">
-                        <div className="flex items-center space-x-1">
+                        <div className="flex items-center space-x-1 bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded-full">
                           <IconCalendar size={12} />
-                          <span>{new Date(article.published_at || article.created_at || '').toLocaleDateString('de-DE')}</span>
+                          <span className="font-medium">{new Date(article.published_at || article.created_at || '').toLocaleDateString('de-DE')}</span>
                         </div>
-                        <div className="flex items-center space-x-1">
+                        <div className="flex items-center space-x-1 bg-black/30 backdrop-blur-sm px-2 py-0.5 rounded-full">
                           <IconEye size={12} />
-                          <span>{article.views || 0}</span>
+                          <span className="font-medium">{article.views || 0}</span>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-1">
+                    <h4 className="font-bold text-gray-900 dark:text-white text-sm mb-1 group-hover:text-viktoria-blue dark:group-hover:text-viktoria-yellow transition-colors">
                       {article.title}
                     </h4>
                     <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2">
@@ -95,7 +95,7 @@ export default function NewsCarousel({ newsArticles, onNewsClick, isDesktopSideb
               ) : (
                 // Folgende Artikel ohne Bild
                 <div>
-                  <h4 className="font-semibold text-gray-900 dark:text-white text-sm mb-2">
+                  <h4 className="font-bold text-gray-900 dark:text-white text-sm mb-2 group-hover:text-viktoria-blue dark:group-hover:text-viktoria-yellow transition-colors">
                     {article.title}
                   </h4>
                   <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 mb-2">
@@ -103,12 +103,12 @@ export default function NewsCarousel({ newsArticles, onNewsClick, isDesktopSideb
                   </p>
                   <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-500">
                     <div className="flex items-center space-x-1">
-                      <IconCalendar size={12} />
-                      <span>{new Date(article.published_at || article.created_at || '').toLocaleDateString('de-DE')}</span>
+                      <IconCalendar size={12} className="text-viktoria-blue/50 dark:text-viktoria-yellow/50" />
+                      <span className="font-medium">{new Date(article.published_at || article.created_at || '').toLocaleDateString('de-DE')}</span>
                     </div>
                     <div className="flex items-center space-x-1">
-                      <IconEye size={12} />
-                      <span>{article.views || 0}</span>
+                      <IconEye size={12} className="text-viktoria-blue/50 dark:text-viktoria-yellow/50" />
+                      <span className="font-medium">{article.views || 0}</span>
                     </div>
                   </div>
                 </div>
@@ -117,8 +117,8 @@ export default function NewsCarousel({ newsArticles, onNewsClick, isDesktopSideb
           ))}
           </div>
         )}
-        <div className="px-4 py-3 bg-gray-50 dark:bg-viktoria-dark-lighter">
-          <Link href="/news" className="text-sm text-viktoria-blue dark:text-viktoria-yellow hover:underline inline-block">
+        <div className="px-4 py-3 bg-gradient-to-b from-gray-50 to-white dark:from-viktoria-dark-lighter dark:to-viktoria-dark-light border-t border-gray-100 dark:border-gray-700">
+          <Link href="/news" className="w-full text-sm font-semibold text-viktoria-blue dark:text-viktoria-yellow hover:text-viktoria-blue-light dark:hover:text-yellow-500 transition-colors flex items-center justify-center gap-2 py-1">
             Alle News anzeigen →
           </Link>
         </div>

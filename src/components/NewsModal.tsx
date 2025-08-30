@@ -49,14 +49,14 @@ export default function NewsModal({ article, isOpen, onClose }: NewsModalProps) 
           >
             {/* Header */}
             <div className="bg-white dark:bg-viktoria-dark-light">
-              <div className="border-b-2 border-viktoria-blue dark:border-viktoria-yellow px-6 py-4 flex items-center justify-between">
-                <h2 className="text-gray-900 dark:text-white font-semibold text-lg">News Artikel</h2>
+              <div className="bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 px-6 py-4 flex items-center justify-between">
+                <h2 className="text-white dark:text-gray-900 font-bold text-lg uppercase tracking-wider">News Artikel</h2>
                 <button
                   onClick={onClose}
-                  className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+                  className="text-white/80 dark:text-gray-900/80 hover:text-white dark:hover:text-gray-900 transition-colors bg-white/10 dark:bg-black/10 hover:bg-white/20 dark:hover:bg-black/20 rounded-full p-1.5"
                   aria-label="Schließen"
                 >
-                  <IconX size={24} />
+                  <IconX size={20} />
                 </button>
               </div>
             </div>

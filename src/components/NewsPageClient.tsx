@@ -54,88 +54,67 @@ export default function NewsPageClient({ newsArticles }: NewsPageClientProps) {
     <PageLayout>
       <div className="min-h-screen bg-gray-50 dark:bg-viktoria-dark pt-20 pb-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Page Header */}
-          <AnimatedSection animation="fadeIn" className="mb-8" immediate={true}>
-            <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden">
-              <div className="border-b-2 border-viktoria-blue dark:border-viktoria-yellow px-4 py-2 text-center">
-                <h1 className="text-gray-900 dark:text-white font-semibold text-sm">
-                  News & Aktuelles
-                </h1>
-              </div>
-              <div className="p-6">
-                <p className="text-gray-600 dark:text-gray-400 text-center">
-                  Alle Neuigkeiten rund um den SV Viktoria Wertheim
-                </p>
-              </div>
-            </div>
-          </AnimatedSection>
-
-          {/* Search and Filter Bar */}
+{/* Categories and Search */}
           <AnimatedSection animation="slideUp" delay={0.1} className="mb-6" immediate={true}>
-            <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden">
-              <div className="border-b-2 border-viktoria-blue dark:border-viktoria-yellow px-4 py-2 text-center">
-                <h3 className="text-gray-900 dark:text-white font-semibold text-sm">
-                  Suche & Filter
-                </h3>
-              </div>
-              <div className="p-4">
-                <div className="flex flex-col md:flex-row gap-4">
-                {/* Search */}
-                <div className="flex-1">
-                  <div className="relative">
-                    <IconSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                    <input
-                      type="text"
-                      placeholder="News durchsuchen..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-viktoria-dark border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-viktoria-blue dark:focus:ring-viktoria-yellow text-gray-900 dark:text-white"
-                    />
-                  </div>
-                </div>
-
-                {/* Category Filter */}
-                <div className="flex items-center space-x-2">
-                  <IconFilter className="text-gray-400" size={20} />
-                  <select
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                    className="px-4 py-2 bg-gray-50 dark:bg-viktoria-dark border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-viktoria-blue dark:focus:ring-viktoria-yellow text-gray-900 dark:text-white"
+            {/* Desktop: Categories with integrated search */}
+            <div className="hidden sm:flex items-center justify-between gap-4">
+              <div className="flex flex-wrap gap-2">
+                {categories.map(cat => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`px-4 py-2 rounded-full transition-all duration-200 text-sm font-medium ${
+                      selectedCategory === cat.id
+                        ? 'bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 text-white dark:text-gray-900 shadow-md transform scale-105'
+                        : 'bg-white dark:bg-viktoria-dark-light text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-viktoria-dark-lighter border border-gray-200 dark:border-gray-700 hover:border-viktoria-blue/30 dark:hover:border-viktoria-yellow/30'
+                    }`}
                   >
-                    {categories.map(cat => (
-                      <option key={cat.id} value={cat.id}>
-                        {cat.icon} {cat.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                </div>
+                    <span className="mr-2">{cat.icon}</span>
+                    {cat.name}
+                  </button>
+                ))}
+              </div>
+              
+              {/* Compact Search */}
+              <div className="relative">
+                <IconSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                  type="text"
+                  placeholder="Suche..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-48 pl-9 pr-3 py-2 bg-white dark:bg-viktoria-dark-light border border-gray-200 dark:border-gray-700 rounded-full focus:outline-none focus:ring-2 focus:ring-viktoria-blue dark:focus:ring-viktoria-yellow text-gray-900 dark:text-white placeholder-gray-500 text-sm"
+                />
               </div>
             </div>
-          </AnimatedSection>
-
-          {/* Category Pills */}
-          <AnimatedSection animation="slideUp" delay={0.2} className="mb-6" immediate={true}>
-            <div className="flex flex-wrap gap-2">
-              {categories.map(cat => (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-4 py-2 rounded-full transition-colors ${
-                    selectedCategory === cat.id
-                      ? 'bg-viktoria-yellow text-viktoria-blue font-medium'
-                      : 'bg-white dark:bg-viktoria-dark-light text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-viktoria-dark-lighter'
-                  }`}
-                >
-                  <span className="mr-2">{cat.icon}</span>
-                  {cat.name}
-                </button>
-              ))}
+            
+            {/* Mobile: Only categories, no search */}
+            <div className="sm:hidden relative">
+              <div className="overflow-x-auto scrollbar-hide">
+                <div className="flex gap-2 pb-2">
+                  {categories.map(cat => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setSelectedCategory(cat.id)}
+                      className={`px-4 py-2 rounded-full transition-all duration-200 text-sm font-medium whitespace-nowrap flex-shrink-0 ${
+                        selectedCategory === cat.id
+                          ? 'bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 text-white dark:text-gray-900 shadow-md'
+                          : 'bg-white dark:bg-viktoria-dark-light text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700'
+                      }`}
+                    >
+                      <span className="mr-2">{cat.icon}</span>
+                      {cat.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              {/* Scroll indicator gradient */}
+              <div className="absolute right-0 top-0 bottom-2 w-8 bg-gradient-to-l from-gray-50 dark:from-viktoria-dark to-transparent pointer-events-none" />
             </div>
           </AnimatedSection>
 
-          {/* News Grid */}
-          <AnimatedSection animation="slideUp" delay={0.3} immediate={true}>
+{/* News Grid */}
+          <AnimatedSection animation="slideUp" delay={0.2} immediate={true}>
             {filteredArticles.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredArticles.map((article) => (
@@ -144,41 +123,53 @@ export default function NewsPageClient({ newsArticles }: NewsPageClientProps) {
                     className="cursor-pointer group"
                     onClick={() => handleArticleClick(article)}
                   >
-                    <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+                    <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                       {/* Image */}
-                      <div className="h-48 bg-gray-200 dark:bg-viktoria-dark relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                      <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                         <div className="absolute top-4 left-4">
-                          <span className="px-3 py-1 bg-viktoria-yellow text-viktoria-blue text-xs font-semibold rounded-full">
+                          <span className="px-3 py-1.5 bg-viktoria-blue/90 dark:bg-viktoria-yellow/90 backdrop-blur-sm text-white dark:text-gray-900 text-xs font-bold rounded-full uppercase tracking-wide">
                             {article.team}
                           </span>
+                        </div>
+                        <div className="absolute bottom-4 right-4">
+                          <div className="flex items-center space-x-2">
+                            <div className="flex items-center space-x-1 bg-black/50 backdrop-blur-sm px-2 py-1 rounded-full">
+                              <IconEye size={12} className="text-white/90" />
+                              <span className="text-white/90 text-xs font-medium">{article.views}</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
 
                       {/* Content */}
-                      <div className="p-4">
-                        <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2 group-hover:text-viktoria-blue dark:group-hover:text-viktoria-yellow transition-colors">
+                      <div className="p-4 sm:p-5">
+                        <h3 className="font-bold text-base sm:text-lg text-gray-900 dark:text-white mb-2 group-hover:text-viktoria-blue dark:group-hover:text-viktoria-yellow transition-colors line-clamp-2">
                           {article.title}
                         </h3>
-                        <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
-                          {article.excerpt}
-                        </p>
+                        <div className="h-[3.75rem] mb-4">
+                          <p className="text-gray-600 dark:text-gray-400 text-sm line-clamp-3">
+                            {article.excerpt}
+                          </p>
+                        </div>
 
                         {/* Meta Info */}
-                        <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-500">
-                          <div className="flex items-center space-x-3">
+                        <div className="pt-4 border-t border-gray-100 dark:border-gray-700">
+                          <div className="flex items-center justify-between text-xs">
                             <div className="flex items-center space-x-1">
-                              <IconCalendar size={14} />
-                              <span>{new Date(article.date).toLocaleDateString('de-DE')}</span>
+                              <IconCalendar size={14} className="text-viktoria-blue/50 dark:text-viktoria-yellow/50" />
+                              <span className="text-gray-600 dark:text-gray-400 font-medium">
+                                {new Date(article.date).toLocaleDateString('de-DE', { 
+                                  day: '2-digit', 
+                                  month: '2-digit', 
+                                  year: 'numeric' 
+                                })}
+                              </span>
                             </div>
                             <div className="flex items-center space-x-1">
-                              <IconEye size={14} />
-                              <span>{article.views}</span>
+                              <IconUser size={14} className="text-viktoria-blue/50 dark:text-viktoria-yellow/50" />
+                              <span className="text-gray-600 dark:text-gray-400 font-medium">{article.author}</span>
                             </div>
-                          </div>
-                          <div className="flex items-center space-x-1">
-                            <IconUser size={14} />
-                            <span>{article.author}</span>
                           </div>
                         </div>
                       </div>
@@ -198,7 +189,7 @@ export default function NewsPageClient({ newsArticles }: NewsPageClientProps) {
           {/* Load More Button - only show if there are articles */}
           {newsArticles.length > 0 && (
             <AnimatedSection animation="fadeIn" delay={0.5} className="mt-8 text-center">
-              <button className="px-6 py-2 bg-viktoria-yellow hover:bg-yellow-500 text-viktoria-blue rounded-lg transition-colors font-medium">
+              <button className="px-8 py-3 bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 hover:from-viktoria-blue-light hover:to-viktoria-blue dark:hover:from-yellow-600 dark:hover:to-viktoria-yellow text-white dark:text-gray-900 rounded-lg transition-all duration-300 font-bold uppercase tracking-wide shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
                 Weitere News laden
               </button>
             </AnimatedSection>
