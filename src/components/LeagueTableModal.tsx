@@ -1,8 +1,9 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { IconX, IconTrendingUp, IconTrendingDown, IconMinus } from '@tabler/icons-react'
+import { createClient } from '@/lib/supabase/client'
 
 interface LeagueTableModalProps {
   isOpen: boolean
@@ -28,60 +29,83 @@ interface TeamData {
 }
 
 export default function LeagueTableModal({ isOpen, onClose, selectedTeam }: LeagueTableModalProps) {
-  // Mock data for different teams
-  const getTableData = (team: string): TeamData[] => {
-    if (team === '1') {
-      return [
-        { position: 1, team: 'TSV Kreuzwertheim', matches: 18, wins: 13, draws: 3, losses: 2, goals: '41:15', diff: '+26', points: 42, trend: 'up', isPromoted: true },
-        { position: 2, team: 'FC Külsheim', matches: 18, wins: 12, draws: 4, losses: 2, goals: '38:18', diff: '+20', points: 40, trend: 'same', isPromoted: true },
-        { position: 3, team: 'SV Viktoria Wertheim', matches: 18, wins: 11, draws: 5, losses: 2, goals: '35:16', diff: '+19', points: 38, trend: 'up', isPlayoff: true, isOwnTeam: true },
-        { position: 4, team: 'SpVgg Hainstadt', matches: 18, wins: 10, draws: 4, losses: 4, goals: '32:20', diff: '+12', points: 34, trend: 'down', isPlayoff: true },
-        { position: 5, team: 'TSV Mudau', matches: 18, wins: 9, draws: 5, losses: 4, goals: '30:22', diff: '+8', points: 32, trend: 'up' },
-        { position: 6, team: 'SV Nassig', matches: 18, wins: 8, draws: 6, losses: 4, goals: '28:24', diff: '+4', points: 30, trend: 'same' },
-        { position: 7, team: 'TSV Höpfingen', matches: 18, wins: 7, draws: 5, losses: 6, goals: '25:26', diff: '-1', points: 26, trend: 'down' },
-        { position: 8, team: 'FV Mosbach', matches: 18, wins: 6, draws: 5, losses: 7, goals: '22:28', diff: '-6', points: 23, trend: 'same' },
-        { position: 9, team: 'TSV Oberwittstadt', matches: 18, wins: 5, draws: 6, losses: 7, goals: '20:30', diff: '-10', points: 21, trend: 'up' },
-        { position: 10, team: 'FC Grünsfeld', matches: 18, wins: 5, draws: 4, losses: 9, goals: '18:32', diff: '-14', points: 19, trend: 'down' },
-        { position: 11, team: 'SV Königshofen', matches: 18, wins: 4, draws: 5, losses: 9, goals: '16:35', diff: '-19', points: 17, trend: 'same' },
-        { position: 12, team: 'TSV Rosenberg', matches: 18, wins: 3, draws: 5, losses: 10, goals: '15:38', diff: '-23', points: 14, trend: 'down', isRelegation: true },
-        { position: 13, team: 'SpG Windischbuch/Schwabhausen', matches: 18, wins: 2, draws: 4, losses: 12, goals: '12:40', diff: '-28', points: 10, trend: 'same', isRelegation: true },
-        { position: 14, team: 'SG Unterschüpf/Kupprichhausen', matches: 18, wins: 1, draws: 3, losses: 14, goals: '10:42', diff: '-32', points: 6, trend: 'down', isRelegation: true }
-      ]
-    } else if (team === '2') {
-      return [
-        { position: 1, team: 'FC Hundheim/Steinbach', matches: 16, wins: 12, draws: 2, losses: 2, goals: '42:15', diff: '+27', points: 38, trend: 'up', isPromoted: true },
-        { position: 2, team: 'SV Viktoria Wertheim II', matches: 16, wins: 11, draws: 3, losses: 2, goals: '38:18', diff: '+20', points: 36, trend: 'same', isOwnTeam: true, isPromoted: true },
-        { position: 3, team: 'TSV Gerchsheim', matches: 16, wins: 10, draws: 3, losses: 3, goals: '35:20', diff: '+15', points: 33, trend: 'up' },
-        { position: 4, team: 'SV Schönfeld', matches: 16, wins: 9, draws: 3, losses: 4, goals: '30:22', diff: '+8', points: 30, trend: 'down' },
-        { position: 5, team: 'SpG Boxtal/Mondfeld', matches: 16, wins: 8, draws: 4, losses: 4, goals: '28:24', diff: '+4', points: 28, trend: 'up' },
-        { position: 6, team: 'TSV Werbach', matches: 16, wins: 7, draws: 4, losses: 5, goals: '26:25', diff: '+1', points: 25, trend: 'same' },
-        { position: 7, team: 'FC Freudenberg', matches: 16, wins: 6, draws: 4, losses: 6, goals: '24:28', diff: '-4', points: 22, trend: 'down' },
-        { position: 8, team: 'TSV Buchen II', matches: 16, wins: 5, draws: 4, losses: 7, goals: '20:30', diff: '-10', points: 19, trend: 'same' },
-        { position: 9, team: 'SG Rauenberg', matches: 16, wins: 4, draws: 5, losses: 7, goals: '18:32', diff: '-14', points: 17, trend: 'up' },
-        { position: 10, team: 'FV Reichenbuch', matches: 16, wins: 3, draws: 4, losses: 9, goals: '15:35', diff: '-20', points: 13, trend: 'down', isRelegation: true },
-        { position: 11, team: 'TSV Götzingen', matches: 16, wins: 2, draws: 3, losses: 11, goals: '12:38', diff: '-26', points: 9, trend: 'same', isRelegation: true },
-        { position: 12, team: 'FC Altheim', matches: 16, wins: 1, draws: 2, losses: 13, goals: '10:40', diff: '-30', points: 5, trend: 'down', isRelegation: true }
-      ]
-    } else {
-      return [
-        { position: 1, team: 'JFG Taubertal U19', matches: 14, wins: 11, draws: 2, losses: 1, goals: '45:12', diff: '+33', points: 35, trend: 'up', isPromoted: true },
-        { position: 2, team: 'TSG Hoffenheim U18', matches: 14, wins: 10, draws: 3, losses: 1, goals: '42:15', diff: '+27', points: 33, trend: 'same', isPromoted: true },
-        { position: 3, team: 'SV Viktoria Wertheim U19', matches: 14, wins: 9, draws: 3, losses: 2, goals: '38:18', diff: '+20', points: 30, trend: 'up', isOwnTeam: true },
-        { position: 4, team: 'FC Astoria Walldürn U19', matches: 14, wins: 8, draws: 2, losses: 4, goals: '32:22', diff: '+10', points: 26, trend: 'down' },
-        { position: 5, team: 'TSV Tauberbischofsheim U19', matches: 14, wins: 7, draws: 3, losses: 4, goals: '28:24', diff: '+4', points: 24, trend: 'up' },
-        { position: 6, team: 'SV Königheim U19', matches: 14, wins: 6, draws: 3, losses: 5, goals: '25:26', diff: '-1', points: 21, trend: 'same' },
-        { position: 7, team: 'SpG Krautheim/Westernhausen U19', matches: 14, wins: 5, draws: 3, losses: 6, goals: '22:28', diff: '-6', points: 18, trend: 'down' },
-        { position: 8, team: 'TSV Oberwittstadt U19', matches: 14, wins: 4, draws: 4, losses: 6, goals: '20:30', diff: '-10', points: 16, trend: 'same' },
-        { position: 9, team: 'FV Lauda U19', matches: 14, wins: 3, draws: 3, losses: 8, goals: '18:35', diff: '-17', points: 12, trend: 'up' },
-        { position: 10, team: 'TSV Mudau U19', matches: 14, wins: 2, draws: 2, losses: 10, goals: '15:40', diff: '-25', points: 8, trend: 'down', isRelegation: true },
-        { position: 11, team: 'SG Boxtal/Mondfeld U19', matches: 14, wins: 1, draws: 1, losses: 12, goals: '10:45', diff: '-35', points: 4, trend: 'same', isRelegation: true }
-      ]
+  const [tableData, setTableData] = useState<TeamData[]>([])
+  const [loading, setLoading] = useState(false)
+  const [teamInfo, setTeamInfo] = useState<{ name: string; league: string } | null>(null)
+
+  useEffect(() => {
+    if (isOpen && selectedTeam) {
+      fetchLeagueData()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen, selectedTeam])
+
+  const fetchLeagueData = async () => {
+    setLoading(true)
+    try {
+      const supabase = createClient()
+      
+      // First, get team info to find the league
+      const { data: teamData, error: teamError } = await supabase
+        .from('teams')
+        .select('name, league')
+        .eq('id', selectedTeam)
+        .single()
+
+      if (teamError) {
+        console.error('Error fetching team:', teamError)
+        // Fallback for team info
+        const fallbackTeamName = selectedTeam === '1' ? '1. Mannschaft' : selectedTeam === '2' ? '2. Mannschaft' : 'U19'
+        const fallbackLeagueName = selectedTeam === '1' ? 'Kreisliga Tauberbischofsheim' : selectedTeam === '2' ? 'Kreisklasse A' : 'Junioren Kreisliga'
+        setTeamInfo({ name: fallbackTeamName, league: fallbackLeagueName })
+      } else if (teamData) {
+        setTeamInfo({ name: teamData.name, league: teamData.league || 'Unbekannte Liga' })
+        
+        // Now fetch league standings for that league
+        if (teamData.league) {
+          const { data: standingsData, error: standingsError } = await supabase
+            .from('league_standings')
+            .select('*')
+            .eq('league', teamData.league)
+            .order('position', { ascending: true })
+
+        if (standingsError) {
+          console.error('Error fetching standings:', standingsError)
+          setTableData([])
+        } else if (standingsData) {
+          // Map database data to component interface
+          const mappedData: TeamData[] = standingsData.map(row => ({
+            position: row.position,
+            team: row.team_name,
+            matches: row.played || 0,
+            wins: row.won || 0,
+            draws: row.drawn || 0,
+            losses: row.lost || 0,
+            goals: `${row.goals_for || 0}:${row.goals_against || 0}`,
+            diff: row.goal_difference ? (row.goal_difference > 0 ? `+${row.goal_difference}` : `${row.goal_difference}`) : '0',
+            points: row.points || 0,
+            trend: (row.trend === 'up' || row.trend === 'down' || row.trend === 'same') ? row.trend : 'same',
+            // Check if this is our team
+            isOwnTeam: row.team_id === selectedTeam || row.team_name.includes('Viktoria Wertheim'),
+            // Mark promotion/relegation zones based on position
+            isPromoted: row.position <= 2,
+            isPlayoff: row.position === 3 || row.position === 4,
+            isRelegation: row.position >= (standingsData.length - 2)
+          }))
+          setTableData(mappedData)
+        }
+        }
+      }
+    } catch (error) {
+      console.error('Error in fetchLeagueData:', error)
+      setTableData([])
+    } finally {
+      setLoading(false)
     }
   }
 
-  const tableData = getTableData(selectedTeam)
-  const teamName = selectedTeam === '1' ? '1. Mannschaft' : selectedTeam === '2' ? '2. Mannschaft' : 'U19'
-  const leagueName = selectedTeam === '1' ? 'Kreisliga Tauberbischofsheim' : selectedTeam === '2' ? 'Kreisklasse A' : 'Junioren Kreisliga'
+  const teamName = teamInfo?.name || (selectedTeam === '1' ? '1. Mannschaft' : selectedTeam === '2' ? '2. Mannschaft' : 'U19')
+  const leagueName = teamInfo?.league || (selectedTeam === '1' ? 'Kreisliga Tauberbischofsheim' : selectedTeam === '2' ? 'Kreisklasse A' : 'Junioren Kreisliga')
 
   const getTrendIcon = (trend: string) => {
     switch(trend) {
@@ -131,6 +155,18 @@ export default function LeagueTableModal({ isOpen, onClose, selectedTeam }: Leag
 
             {/* Table Content */}
             <div className="overflow-auto max-h-[calc(90vh-80px)]">
+              {loading ? (
+                <div className="flex items-center justify-center p-12">
+                  <div className="text-gray-500 dark:text-gray-400">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-viktoria-blue dark:border-viktoria-yellow mx-auto mb-4"></div>
+                    <p className="text-sm">Lade Tabellendaten...</p>
+                  </div>
+                </div>
+              ) : tableData.length === 0 ? (
+                <div className="flex items-center justify-center p-12">
+                  <p className="text-gray-500 dark:text-gray-400">Keine Tabellendaten verfügbar</p>
+                </div>
+              ) : (
               <table className="w-full">
                 <thead className="bg-gray-50 dark:bg-viktoria-dark sticky top-0">
                   <tr>
@@ -199,6 +235,7 @@ export default function LeagueTableModal({ isOpen, onClose, selectedTeam }: Leag
                   ))}
                 </tbody>
               </table>
+              )}
 
               {/* Legend */}
               <div className="p-4 bg-gray-50 dark:bg-viktoria-dark border-t border-gray-200 dark:border-gray-700">

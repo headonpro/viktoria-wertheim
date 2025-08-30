@@ -1,0 +1,423 @@
+{
+  "teams": [
+    {
+      "id": "1",
+      "name": "SV Viktoria Wertheim",
+      "short_name": "SVW",
+      "league": "Kreisliga A",
+      "coach": "Thomas Müller",
+      "captain": "Max Schmidt",
+      "training_schedule": "Di & Do, 19:00 Uhr",
+      "table_position": 3,
+      "points": 28,
+      "season": "2023/24",
+      "team_type": "first"
+    },
+    {
+      "id": "2",
+      "name": "SV Viktoria Wertheim II",
+      "short_name": "SVW II",
+      "league": "Kreisklasse B",
+      "coach": "Andreas Schmidt",
+      "captain": "Peter Wagner",
+      "training_schedule": "Mo & Mi, 19:00 Uhr",
+      "table_position": 5,
+      "points": 22,
+      "season": "2023/24",
+      "team_type": "second"
+    },
+    {
+      "id": "3",
+      "name": "SV Viktoria Wertheim III",
+      "short_name": "SVW III",
+      "league": "Kreisklasse C",
+      "coach": "Jugendtrainer-Team",
+      "captain": "Verschiedene",
+      "training_schedule": "Nach Vereinbarung",
+      "table_position": 8,
+      "points": 15,
+      "season": "2023/24",
+      "team_type": "third"
+    }
+  ],
+  "players": [
+    {
+      "id": "p1",
+      "team_id": "1",
+      "name": "Jan Neuer",
+      "number": 1,
+      "position": "Torwart",
+      "age": 28,
+      "is_captain": false
+    },
+    {
+      "id": "p2",
+      "team_id": "1",
+      "name": "Felix Weber",
+      "number": 4,
+      "position": "Abwehr",
+      "age": 25,
+      "is_captain": false
+    },
+    {
+      "id": "p3",
+      "team_id": "1",
+      "name": "Max Schmidt",
+      "number": 10,
+      "position": "Mittelfeld",
+      "age": 29,
+      "is_captain": true
+    },
+    {
+      "id": "p4",
+      "team_id": "1",
+      "name": "Thomas Wagner",
+      "number": 11,
+      "position": "Mittelfeld",
+      "age": 23,
+      "is_captain": false
+    },
+    {
+      "id": "p5",
+      "team_id": "1",
+      "name": "Robert Mayer",
+      "number": 9,
+      "position": "Sturm",
+      "age": 25,
+      "is_captain": false
+    },
+    {
+      "id": "p6",
+      "team_id": "2",
+      "name": "Marco Hoffmann",
+      "number": 1,
+      "position": "Torwart",
+      "age": 24,
+      "is_captain": false
+    },
+    {
+      "id": "p7",
+      "team_id": "2",
+      "name": "Peter Wagner",
+      "number": 6,
+      "position": "Mittelfeld",
+      "age": 27,
+      "is_captain": true
+    },
+    {
+      "id": "p8",
+      "team_id": "2",
+      "name": "Niklas Frank",
+      "number": 8,
+      "position": "Sturm",
+      "age": 20,
+      "is_captain": false
+    }
+  ],
+  "matches": [
+    {
+      "id": "m1",
+      "home_team": "SV Viktoria Wertheim",
+      "away_team": "FC Mondfeld",
+      "home_team_id": "1",
+      "away_team_id": null,
+      "home_score": 3,
+      "away_score": 1,
+      "match_date": "2024-01-21",
+      "match_time": "15:00",
+      "location": "Sportplatz Wertheim",
+      "match_type": "league",
+      "status": "completed"
+    },
+    {
+      "id": "m2",
+      "home_team": "TSV Kreuzwertheim",
+      "away_team": "SV Viktoria Wertheim",
+      "home_team_id": null,
+      "away_team_id": "1",
+      "home_score": null,
+      "away_score": null,
+      "match_date": "2024-01-28",
+      "match_time": "14:30",
+      "location": "Sportplatz Kreuzwertheim",
+      "match_type": "league",
+      "status": "scheduled"
+    },
+    {
+      "id": "m3",
+      "home_team": "SV Viktoria Wertheim II",
+      "away_team": "SG Dertingen",
+      "home_team_id": "2",
+      "away_team_id": null,
+      "home_score": 2,
+      "away_score": 2,
+      "match_date": "2024-01-21",
+      "match_time": "13:00",
+      "location": "Sportplatz Wertheim",
+      "match_type": "league",
+      "status": "completed"
+    },
+    {
+      "id": "m4",
+      "home_team": "SV Viktoria Wertheim II",
+      "away_team": "FC Eichel",
+      "home_team_id": "2",
+      "away_team_id": null,
+      "home_score": null,
+      "away_score": null,
+      "match_date": "2024-01-28",
+      "match_time": "12:30",
+      "location": "Sportplatz Wertheim",
+      "match_type": "league",
+      "status": "scheduled"
+    },
+    {
+      "id": "m5",
+      "home_team": "FC Grünenwört",
+      "away_team": "SV Viktoria Wertheim III",
+      "home_team_id": null,
+      "away_team_id": "3",
+      "home_score": 1,
+      "away_score": 4,
+      "match_date": "2024-01-21",
+      "match_time": "11:00",
+      "location": "Sportplatz Grünenwört",
+      "match_type": "league",
+      "status": "completed"
+    },
+    {
+      "id": "m6",
+      "home_team": "SV Viktoria Wertheim III",
+      "away_team": "SV Nassig",
+      "home_team_id": "3",
+      "away_team_id": null,
+      "home_score": null,
+      "away_score": null,
+      "match_date": "2024-01-28",
+      "match_time": "10:30",
+      "location": "Sportplatz Wertheim",
+      "match_type": "league",
+      "status": "scheduled"
+    }
+  ],
+  "news": [
+    {
+      "id": "n1",
+      "title": "Großartiger Sieg gegen FC Mondfeld",
+      "excerpt": "Mit einer starken Mannschaftsleistung gewinnt unsere erste Mannschaft verdient mit 3:1 gegen den Tabellendritten.",
+      "content": "Die erste Mannschaft des SV Viktoria Wertheim hat am Sonntag einen beeindruckenden 3:1-Sieg gegen den FC Mondfeld eingefahren. Vor heimischer Kulisse zeigten die Spieler eine geschlossene Mannschaftsleistung und dominierten das Spiel über weite Strecken. Bereits in der ersten Halbzeit gingen die Hausherren durch einen Doppelschlag in Führung. Nach der Pause verwaltete das Team den Vorsprung souverän und erhöhte in der Schlussphase sogar noch auf 3:0, bevor der Gegner den Ehrentreffer erzielen konnte.",
+      "published_at": "2024-01-21T18:00:00",
+      "image_url": "/images/news/sieg-mondfeld.jpg",
+      "views": 234,
+      "category": "match_report"
+    },
+    {
+      "id": "n2",
+      "title": "Neue Verstärkungen für die Rückrunde",
+      "excerpt": "Der SV Viktoria Wertheim freut sich, drei neue Spieler für die zweite Mannschaft präsentieren zu dürfen.",
+      "content": "Zur Rückrunde kann der SV Viktoria Wertheim drei Neuzugänge präsentieren. Die Spieler verstärken die zweite Mannschaft und sollen helfen, die ambitionierten Ziele für die Restsaison zu erreichen. Alle drei Spieler bringen Erfahrung aus höheren Ligen mit und werden das Team sowohl spielerisch als auch charakterlich verstärken.",
+      "published_at": "2024-01-20T16:00:00",
+      "image_url": "/images/news/neue-spieler.jpg",
+      "views": 189,
+      "category": "transfers"
+    },
+    {
+      "id": "n3",
+      "title": "Jugend siegt im Pokalspiel",
+      "excerpt": "Unsere U19 zieht nach einem spannenden Elfmeterschießen in die nächste Runde des Kreispokals ein.",
+      "content": "Drama pur im Kreispokal! Die U19 des SV Viktoria Wertheim hat sich in einem packenden Pokalspiel durchgesetzt. Nach 90 Minuten stand es 2:2, sodass die Entscheidung im Elfmeterschießen fallen musste. Hier behielten unsere Jungs die Nerven und verwandelten alle fünf Elfmeter, während der Gegner einmal verschoss.",
+      "published_at": "2024-01-19T20:00:00",
+      "image_url": "/images/news/jugend-pokal.jpg",
+      "views": 156,
+      "category": "youth"
+    },
+    {
+      "id": "n4",
+      "title": "Trainingsauftakt für die Rückrunde",
+      "excerpt": "Nach der Winterpause startet die Mannschaft mit vollem Einsatz in die Vorbereitung auf die zweite Saisonhälfte.",
+      "content": "Am Montag startete die erste Mannschaft in die Vorbereitung auf die Rückrunde. Trainer Thomas Müller konnte dabei fast auf den kompletten Kader zurückgreifen. In den kommenden Wochen stehen intensive Trainingseinheiten und mehrere Testspiele auf dem Programm, um optimal auf die zweite Saisonhälfte vorbereitet zu sein.",
+      "published_at": "2024-01-18T17:00:00",
+      "image_url": "/images/news/training-start.jpg",
+      "views": 142,
+      "category": "training"
+    }
+  ],
+  "league_standings": [
+    {
+      "id": "ls1",
+      "team_id": "1",
+      "team_name": "SV Viktoria Wertheim",
+      "position": 3,
+      "played": 12,
+      "won": 9,
+      "drawn": 1,
+      "lost": 2,
+      "goals_for": 25,
+      "goals_against": 12,
+      "goal_difference": 13,
+      "points": 28,
+      "trend": "neutral",
+      "league": "Kreisliga A"
+    },
+    {
+      "id": "ls2",
+      "team_id": "2",
+      "team_name": "SV Viktoria Wertheim II",
+      "position": 5,
+      "played": 12,
+      "won": 7,
+      "drawn": 1,
+      "lost": 4,
+      "goals_for": 22,
+      "goals_against": 18,
+      "goal_difference": 4,
+      "points": 22,
+      "trend": "down",
+      "league": "Kreisklasse B"
+    },
+    {
+      "id": "ls3",
+      "team_id": "3",
+      "team_name": "SV Viktoria Wertheim III",
+      "position": 8,
+      "played": 12,
+      "won": 4,
+      "drawn": 3,
+      "lost": 5,
+      "goals_for": 16,
+      "goals_against": 19,
+      "goal_difference": -3,
+      "points": 15,
+      "trend": "up",
+      "league": "Kreisklasse C"
+    }
+  ],
+  "scorers": [
+    {
+      "id": "sc1",
+      "player_id": "p3",
+      "player_name": "Max Müller",
+      "team_id": "1",
+      "team_name": "1. Mannschaft",
+      "goals": 18,
+      "assists": 7,
+      "season": "2023/24"
+    },
+    {
+      "id": "sc2",
+      "player_id": "p4",
+      "player_name": "Thomas Schmidt",
+      "team_id": "1",
+      "team_name": "1. Mannschaft",
+      "goals": 14,
+      "assists": 5,
+      "season": "2023/24"
+    },
+    {
+      "id": "sc3",
+      "player_id": "p7",
+      "player_name": "Jan Weber",
+      "team_id": "2",
+      "team_name": "2. Mannschaft",
+      "goals": 12,
+      "assists": 9,
+      "season": "2023/24"
+    },
+    {
+      "id": "sc4",
+      "player_id": "p2",
+      "player_name": "Felix Wagner",
+      "team_id": "1",
+      "team_name": "1. Mannschaft",
+      "goals": 10,
+      "assists": 3,
+      "season": "2023/24"
+    },
+    {
+      "id": "sc5",
+      "player_name": "Lukas Becker",
+      "team_id": "3",
+      "team_name": "3. Mannschaft",
+      "goals": 8,
+      "assists": 4,
+      "season": "2023/24"
+    }
+  ],
+  "sponsors": [
+    {
+      "id": "sp1",
+      "name": "Sparkasse Tauberfranken",
+      "logo_url": "/images/sponsors/sparkasse.png",
+      "website": "https://www.sparkasse-tauberfranken.de",
+      "category": "Hauptsponsor",
+      "description": "Unser Hauptsponsor seit über 10 Jahren"
+    },
+    {
+      "id": "sp2",
+      "name": "Auto Müller GmbH",
+      "logo_url": "/images/sponsors/auto-mueller.png",
+      "website": "https://www.auto-mueller.de",
+      "category": "Premium Partner",
+      "description": "Ihr Autohaus in Wertheim"
+    },
+    {
+      "id": "sp3",
+      "name": "Bäckerei Schmidt",
+      "logo_url": "/images/sponsors/baeckerei-schmidt.png",
+      "website": null,
+      "category": "Partner",
+      "description": "Frische Backwaren für unsere Veranstaltungen"
+    }
+  ],
+  "youth_teams": [
+    {
+      "id": "yt1",
+      "name": "A-Jugend (U19)",
+      "league": "Kreisliga",
+      "coach": "Martin Schneider",
+      "player_count": 18
+    },
+    {
+      "id": "yt2",
+      "name": "B-Jugend (U17)",
+      "league": "Kreisklasse",
+      "coach": "Oliver Lang",
+      "player_count": 16
+    },
+    {
+      "id": "yt3",
+      "name": "C-Jugend (U15)",
+      "league": "Kreisklasse",
+      "coach": "Christian Beck",
+      "player_count": 20
+    },
+    {
+      "id": "yt4",
+      "name": "D-Jugend (U13)",
+      "league": "Kreisklasse",
+      "coach": "Sebastian Kraus",
+      "player_count": 22
+    },
+    {
+      "id": "yt5",
+      "name": "E-Jugend (U11)",
+      "league": "Fairplay-Liga",
+      "coach": "Michael Horn",
+      "player_count": 15
+    },
+    {
+      "id": "yt6",
+      "name": "F-Jugend (U9)",
+      "league": "Fairplay-Liga",
+      "coach": "Thomas Vogel",
+      "player_count": 12
+    },
+    {
+      "id": "yt7",
+      "name": "Bambini (U7)",
+      "league": "Spieltage",
+      "coach": "Stefan Roth",
+      "player_count": 10
+    }
+  ]
+}

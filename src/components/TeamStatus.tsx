@@ -2,28 +2,69 @@
 
 import React from 'react'
 import { IconTrophy, IconChartBar, IconUsers } from '@tabler/icons-react'
+import type { Database } from '@/lib/database.types'
+
+type Team = Database['public']['Tables']['teams']['Row']
 
 interface TeamStatusProps {
   selectedTeam: '1' | '2' | '3'
   onTeamChange: (team: '1' | '2' | '3') => void
+  teams?: Team[]
 }
 
-export default function TeamStatus({ selectedTeam, onTeamChange }: TeamStatusProps) {
-  const teams = {
-    '1': { name: '1. Mannschaft', league: 'Kreisliga A', color: 'from-viktoria-blue to-viktoria-blue-light' },
-    '2': { name: '2. Mannschaft', league: 'Kreisliga B', color: 'from-viktoria-green to-green-600' },
-    '3': { name: '3. Mannschaft', league: 'Kreisliga C', color: 'from-gray-600 to-gray-700' }
+export default function TeamStatus({ selectedTeam, onTeamChange, teams: teamsData }: TeamStatusProps) {
+  // Use data from props if available, otherwise use fallback
+  const getTeamInfo = () => {
+    if (teamsData && teamsData.length > 0) {
+      const team = teamsData.find(t => t.id === selectedTeam)
+      if (team) {
+        return {
+          name: team.name || team.short_name || `${selectedTeam}. Mannschaft`,
+          league: team.league || 'Unbekannte Liga',
+          position: team.table_position || 0,
+          points: team.points || 0
+        }
+      }
+    }
+    
+    // Fallback data if no teams data is provided
+    const fallbackTeams = {
+      '1': { name: '1. Mannschaft', league: 'Kreisliga A', position: 3, points: 28 },
+      '2': { name: '2. Mannschaft', league: 'Kreisliga B', position: 5, points: 22 },
+      '3': { name: '3. Mannschaft', league: 'Kreisliga C', position: 8, points: 15 }
+    }
+    return fallbackTeams[selectedTeam] || fallbackTeams['1']
   }
 
-  // Mock-Daten für Team-Statistiken
-  const teamStats = {
-    '1': { position: 3, points: 28, wins: 9, draws: 1, losses: 2 },
-    '2': { position: 5, points: 22, wins: 7, draws: 1, losses: 4 },
-    '3': { position: 8, points: 15, wins: 4, draws: 3, losses: 5 }
+  // Calculate wins, draws, losses from points and games played
+  // This is a simplified calculation - in a real app, you'd fetch this from matches table
+  const calculateStats = () => {
+    const teamInfo = getTeamInfo()
+    const gamesPlayed = 12 // Default value, could be calculated from matches
+    
+    // Rough calculation based on points (3 for win, 1 for draw)
+    const winEstimate = Math.floor(teamInfo.points / 3)
+    const remainingPoints = teamInfo.points % 3
+    const drawEstimate = remainingPoints
+    const lossEstimate = Math.max(0, gamesPlayed - winEstimate - drawEstimate)
+    
+    return {
+      position: teamInfo.position,
+      points: teamInfo.points,
+      wins: winEstimate,
+      draws: drawEstimate,
+      losses: lossEstimate
+    }
+  }
+
+  const teams = {
+    '1': { name: getTeamInfo().name, league: getTeamInfo().league, color: 'from-viktoria-blue to-viktoria-blue-light' },
+    '2': { name: teamsData?.find(t => t.id === '2')?.name || '2. Mannschaft', league: teamsData?.find(t => t.id === '2')?.league || 'Kreisliga B', color: 'from-viktoria-green to-green-600' },
+    '3': { name: teamsData?.find(t => t.id === '3')?.name || '3. Mannschaft', league: teamsData?.find(t => t.id === '3')?.league || 'Kreisliga C', color: 'from-gray-600 to-gray-700' }
   }
 
   const currentTeam = teams[selectedTeam]
-  const currentStats = teamStats[selectedTeam]
+  const currentStats = calculateStats()
 
   return (
     <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden">

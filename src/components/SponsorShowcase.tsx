@@ -2,32 +2,21 @@
 
 import React from 'react'
 import { IconUsers, IconStar } from '@tabler/icons-react'
-import Image from 'next/image'
+
+import type { Database } from '@/lib/database.types'
+
+type Sponsor = Database['public']['Tables']['sponsors']['Row']
 
 interface SponsorShowcaseProps {
+  sponsors: {
+    premium: Sponsor[]
+    gold: Sponsor[]
+    silver: Sponsor[]
+  }
   onBecomeSponsor?: () => void
 }
 
-export default function SponsorShowcase({ onBecomeSponsor }: SponsorShowcaseProps) {
-  // Mock-Daten für Sponsoren
-  const sponsors = {
-    premium: [
-      { id: 1, name: 'Sparkasse Tauberfranken', logo: '/api/placeholder/200/100', level: 'premium', website: '#' },
-      { id: 2, name: 'Autohaus Müller', logo: '/api/placeholder/200/100', level: 'premium', website: '#' },
-    ],
-    gold: [
-      { id: 3, name: 'Bäckerei Schmidt', logo: '/api/placeholder/150/75', level: 'gold', website: '#' },
-      { id: 4, name: 'Getränke Wagner', logo: '/api/placeholder/150/75', level: 'gold', website: '#' },
-      { id: 5, name: 'Elektro Weber', logo: '/api/placeholder/150/75', level: 'gold', website: '#' },
-    ],
-    silver: [
-      { id: 6, name: 'Restaurant Adler', logo: '/api/placeholder/120/60', level: 'silver', website: '#' },
-      { id: 7, name: 'Friseur Style', logo: '/api/placeholder/120/60', level: 'silver', website: '#' },
-      { id: 8, name: 'Apotheke am Markt', logo: '/api/placeholder/120/60', level: 'silver', website: '#' },
-      { id: 9, name: 'Fitness Center', logo: '/api/placeholder/120/60', level: 'silver', website: '#' },
-    ]
-  }
-
+export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorShowcaseProps) {
   return (
     <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden">
       {/* Header */}
@@ -53,7 +42,7 @@ export default function SponsorShowcase({ onBecomeSponsor }: SponsorShowcaseProp
             {sponsors.premium.map((sponsor) => (
               <a
                 key={sponsor.id}
-                href={sponsor.website}
+                href={sponsor.website || '#'}
                 className="group bg-gray-50 dark:bg-viktoria-dark-lighter rounded-lg p-3 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-viktoria-dark transition-colors"
               >
                 <div className="text-center">
@@ -79,7 +68,7 @@ export default function SponsorShowcase({ onBecomeSponsor }: SponsorShowcaseProp
             {sponsors.gold.map((sponsor) => (
               <a
                 key={sponsor.id}
-                href={sponsor.website}
+                href={sponsor.website || '#'}
                 className="group bg-gray-50 dark:bg-viktoria-dark-lighter rounded-lg p-2 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-viktoria-dark transition-colors"
               >
                 <div className="text-center">
@@ -104,7 +93,7 @@ export default function SponsorShowcase({ onBecomeSponsor }: SponsorShowcaseProp
             {sponsors.silver.map((sponsor) => (
               <a
                 key={sponsor.id}
-                href={sponsor.website}
+                href={sponsor.website || '#'}
                 className="group bg-gray-50 dark:bg-viktoria-dark-lighter rounded-lg p-2 flex items-center justify-center hover:bg-gray-100 dark:hover:bg-viktoria-dark transition-colors"
               >
                 <div className="text-center">

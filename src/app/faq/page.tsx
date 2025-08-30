@@ -3,19 +3,7 @@
 import React, { useState } from 'react'
 import PageLayout from '@/components/PageLayout'
 import AnimatedSection from '@/components/AnimatedSection'
-import { Metadata } from 'next'
 import { IconChevronDown, IconChevronUp, IconQuestionMark } from '@tabler/icons-react'
-
-const metadata: Metadata = {
-  title: 'FAQ - SV Viktoria Wertheim',
-  description: 'Häufig gestellte Fragen zum SV Viktoria Wertheim'
-}
-
-interface FAQItem {
-  question: string
-  answer: string
-  category: string
-}
 
 export default function FAQPage() {
   const [openItems, setOpenItems] = useState<number[]>([])

@@ -2,20 +2,25 @@
 
 import React from 'react'
 import { IconNews } from '@tabler/icons-react'
+import type { Database } from '@/lib/database.types'
+
+type News = Database['public']['Tables']['news']['Row']
 
 interface NewsTickerProps {
-  onNewsClick?: (article: any) => void
+  news: News[]
+  onNewsClick?: (article: News) => void
 }
 
-export default function NewsTicker({ onNewsClick }: NewsTickerProps) {
-  // Mock-Daten für News-Ticker
-  const tickerNews = [
-    { id: 1, title: '⚽ Großer Sieg! Viktoria gewinnt 3:1 gegen FC Mondfeld' },
-    { id: 2, title: '📅 Nächstes Heimspiel: Sonntag, 28.01. um 14:30 Uhr' },
-    { id: 3, title: '🏆 Torschützenkönig Max Müller trifft erneut doppelt' },
-    { id: 4, title: '👥 Neue Spieler verstärken die 2. Mannschaft' },
-    { id: 5, title: '🎟️ Dauerkarten für die Rückrunde jetzt erhältlich' },
-  ]
+export default function NewsTicker({ news, onNewsClick }: NewsTickerProps) {
+  if (!news || news.length === 0) {
+    return null
+  }
+
+  // Format news for ticker
+  const tickerNews = news.map(item => ({
+    ...item,
+    displayTitle: `📰 ${item.title}`
+  }))
 
   return (
     <div className="bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-dark dark:to-viktoria-dark-light rounded-lg shadow-lg overflow-hidden">
@@ -35,7 +40,7 @@ export default function NewsTicker({ onNewsClick }: NewsTickerProps) {
                 className="text-white text-sm px-8 cursor-pointer hover:text-viktoria-yellow transition-colors"
                 onClick={() => onNewsClick && onNewsClick(item)}
               >
-                {item.title}
+                {item.displayTitle}
                 {index < tickerNews.length - 1 && <span className="mx-4">•</span>}
               </span>
             ))}
@@ -46,7 +51,7 @@ export default function NewsTicker({ onNewsClick }: NewsTickerProps) {
                 className="text-white text-sm px-8 cursor-pointer hover:text-viktoria-yellow transition-colors"
                 onClick={() => onNewsClick && onNewsClick(item)}
               >
-                {item.title}
+                {item.displayTitle}
                 {index < tickerNews.length - 1 && <span className="mx-4">•</span>}
               </span>
             ))}

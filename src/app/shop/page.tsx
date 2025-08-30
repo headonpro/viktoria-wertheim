@@ -18,7 +18,6 @@ export default function ShopPage() {
     }
   }
 
-  // Mock-Daten für kommende Produkte
   const comingProducts = [
     { icon: <IconShirt size={40} />, name: 'Trikots', description: 'Original Spielertrikots in allen Größen' },
     { icon: <IconBallFootball size={40} />, name: 'Fanartikel', description: 'Schals, Mützen, Fahnen und mehr' },

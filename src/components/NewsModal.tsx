@@ -4,8 +4,21 @@ import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { IconX, IconCalendar, IconUser, IconEye } from '@tabler/icons-react'
 
+interface NewsArticle {
+  id: string | number
+  title: string
+  excerpt: string
+  content: string
+  date: string
+  author: string
+  category: string
+  image: string
+  views: number
+  team: string
+}
+
 interface NewsModalProps {
-  article: any
+  article: NewsArticle | null
   isOpen: boolean
   onClose: () => void
 }
@@ -51,9 +64,10 @@ export default function NewsModal({ article, isOpen, onClose }: NewsModalProps) 
             {/* Content */}
             <div className="overflow-y-auto max-h-[calc(90vh-80px)] md:max-h-[calc(90vh-120px)]">
               {/* Image */}
-              {article.image && (
+              {article.image && article.image !== '/api/placeholder/800/400' && (
                 <div className="h-64 bg-gray-200 dark:bg-viktoria-dark-lighter relative">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                  {/* In a real implementation, you would add an img tag here */}
                 </div>
               )}
 
@@ -67,26 +81,31 @@ export default function NewsModal({ article, isOpen, onClose }: NewsModalProps) 
                 <div className="flex items-center space-x-4 text-sm text-gray-600 dark:text-gray-400 mb-6">
                   <div className="flex items-center space-x-1">
                     <IconCalendar size={16} />
-                    <span>{article.date ? new Date(article.date).toLocaleDateString('de-DE') : '21.01.2024'}</span>
+                    <span>{new Date(article.date).toLocaleDateString('de-DE')}</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <IconUser size={16} />
-                    <span>{article.author || 'Vereinsredaktion'}</span>
+                    <span>{article.author}</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <IconEye size={16} />
-                    <span>{article.views || 234} Aufrufe</span>
+                    <span>{article.views} Aufrufe</span>
                   </div>
                 </div>
 
                 {/* Article Text */}
                 <div className="prose prose-gray dark:prose-invert max-w-none">
-                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
-                    {article.excerpt || 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'}
-                  </p>
+                  {article.excerpt && (
+                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                      {article.excerpt}
+                    </p>
+                  )}
                   
                   {article.content ? (
-                    <div dangerouslySetInnerHTML={{ __html: article.content }} />
+                    <div 
+                      className="text-gray-700 dark:text-gray-300 leading-relaxed"
+                      dangerouslySetInnerHTML={{ __html: article.content }} 
+                    />
                   ) : (
                     <>
                       <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">

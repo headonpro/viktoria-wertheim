@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  # Next.js Application
+  web:
+    build: .
+    container_name: viktoria-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
+    depends_on:
+      - postgres
+    networks:
+      - viktoria-network
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    container_name: viktoria-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - viktoria-network
+
+  # Supabase Studio (optional for production)
+  studio:
+    image: supabase/studio:latest
+    container_name: viktoria-studio
+    restart: unless-stopped
+    ports:
+      - "54323:3000"
+    environment:
+      - STUDIO_PG_META_URL=http://postgres:5432/postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    depends_on:
+      - postgres
+    networks:
+      - viktoria-network
+
+volumes:
+  postgres-data:
+
+networks:
+  viktoria-network:
+    driver: bridge

@@ -6,7 +6,6 @@ import {
   IconX, 
   IconPhone, 
   IconMail, 
-  IconUser,
   IconBriefcase,
   IconCurrencyEuro,
   IconStar,

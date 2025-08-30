@@ -156,7 +156,7 @@ export default function DatenschutzPage() {
                       Angebot nutzerfreundlicher, effektiver und sicherer zu machen.
                     </p>
                     <p className="text-sm">
-                      Einige Cookies sind "Session-Cookies", die nach Ende Ihrer Browser-Sitzung 
+                      Einige Cookies sind &quot;Session-Cookies&quot;, die nach Ende Ihrer Browser-Sitzung 
                       automatisch gelöscht werden. Hingegen bleiben andere Cookies auf Ihrem 
                       Endgerät bestehen, bis Sie diese selbst löschen.
                     </p>
