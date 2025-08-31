@@ -1,44 +1,80 @@
 # Code Style and Conventions
 
 ## TypeScript Configuration
-- **Strict mode enabled** - Full type safety
+- **Strict mode**: All strict checks enabled
 - **Target**: ES2017
-- **Module**: ESNext with bundler resolution
+- **Module resolution**: bundler
 - **Path alias**: `@/*` maps to `./src/*`
-- **JSX**: Preserve for Next.js processing
+- **JSX**: preserve (Next.js handles transformation)
 
-## React Components
-- **Functional components** with hooks
-- **'use client'** directive for client-side components
-- **Named exports** for pages, **default exports** for components
-- **TypeScript interfaces** for props (when needed)
+## Component Patterns
 
-## File Naming
-- **Components**: PascalCase (e.g., `Header.tsx`, `DarkModeToggle.tsx`)
-- **Pages**: lowercase with `.tsx` extension
-- **Utilities**: camelCase (e.g., `utils.ts`, `supabase.ts`)
+### Server vs Client Components
+- **Server Components** (default): Pages, layouts, static displays
+- **Client Components**: Use `'use client'` directive for:
+  - Interactive features
+  - Hooks usage
+  - Browser APIs
+  - Event handlers
 
-## Code Organization
-- Components are self-contained in `/src/components/`
-- Page-specific code in `/src/app/[page]/`
-- Shared utilities in `/src/lib/` and `/src/utils/`
-- Clear separation between client and server components
+### Hydration Safety Pattern
+```tsx
+'use client'
+const [mounted, setMounted] = useState(false)
+useEffect(() => setMounted(true), [])
+if (!mounted) return null
+```
 
-## Styling Approach
-- **Tailwind CSS classes** directly in JSX
-- **Responsive design** with Tailwind breakpoints
-- **Dark mode support** via `dark:` prefix
-- **Custom colors**: viktoria-yellow, viktoria-red (team colors)
-- **Transitions**: Using `transition-all duration-300` pattern
+## Naming Conventions
+- **Components**: PascalCase (e.g., `GameCards.tsx`)
+- **Files**: kebab-case for routes, PascalCase for components
+- **CSS Classes**: Tailwind utilities with custom theme colors
+- **Functions**: camelCase
+- **Constants**: UPPER_SNAKE_CASE
+- **Types/Interfaces**: PascalCase with 'I' prefix for interfaces
 
 ## State Management
-- **React hooks** for local state
-- **next-themes** for theme state
-- **Supabase** for remote data
+1. Local component state via React hooks
+2. Theme state via next-themes provider
+3. Team selection via prop drilling
+4. Modal state with boolean flags
 
-## Best Practices Observed
-- Hydration mismatch prevention (mounted state pattern)
-- Semantic HTML with proper ARIA labels
-- Type-safe imports with TypeScript
-- Modular component structure
-- Clear component responsibilities
+## Animation System
+Use `AnimatedSection` wrapper with:
+- `animation`: "fadeIn" | "slideUp" | "slideDown" | "scaleUp"
+- `delay`: Staggered (0.1, 0.2, 0.3...)
+- `immediate`: Skip animation for critical content
+
+## Custom Tailwind Colors
+- `viktoria-blue`: #003366
+- `viktoria-blue-light`: #354992
+- `viktoria-yellow`: #FFD700
+- `viktoria-green`: #00A86B
+- `viktoria-dark`: #101010
+- `viktoria-dark-light`: #1a1a1a
+- `viktoria-dark-lighter`: #2a2a2a
+
+## Page Metadata Pattern
+```tsx
+export const metadata: Metadata = {
+  title: "Page Title - SV Viktoria Wertheim",
+  description: "German description here"
+}
+```
+
+## Dark Mode Classes
+- Light backgrounds: `bg-gray-50`
+- Dark backgrounds: `dark:bg-viktoria-dark`
+- Light text: `text-gray-900`
+- Dark text: `dark:text-white`
+
+## Component Hierarchy
+```
+PageLayout
+  └── Header (with DarkModeToggle)
+  └── Main Content
+      └── AnimatedSection(s)
+          └── Feature Components
+  └── Footer
+  └── Modals
+```

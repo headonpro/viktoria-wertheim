@@ -135,7 +135,12 @@ export default function HomePageClient({ data }: HomePageClientProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6">
         {/* Team Status Bar */}
         <AnimatedSection animation="fadeIn" className="mb-6" immediate={true}>
-          <TeamStatus selectedTeam={selectedTeam} onTeamChange={setSelectedTeam} teams={data.teams} />
+          <TeamStatus 
+            selectedTeam={selectedTeam} 
+            onTeamChange={setSelectedTeam} 
+            teams={data.teams} 
+            leagueStandings={filteredData.leagueStandings}
+          />
         </AnimatedSection>
 
         {/* Main Grid Layout */}

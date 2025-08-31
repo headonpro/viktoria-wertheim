@@ -1,42 +1,37 @@
-# Viktoria Wertheim Project Overview
+# SV Viktoria Wertheim Website - Project Overview
 
-## Project Purpose
-This is a Next.js web application for Viktoria Wertheim, which appears to be a sports club/team website. The application includes:
-- Team information pages
-- News section with carousel and modal functionality
-- Shop/merchandise page
-- Contact page
-- League tables and top scorers display
-- Sponsor showcase
-- Dark mode support
+## Purpose
+This is a Next.js 15 web application for SV Viktoria Wertheim, a German football club established in 1921. The website provides:
+- Team information and management
+- News and announcements
+- Online shop
+- Contact forms
+- Match schedules and results
+- League standings
+- Player statistics
+
+## Tech Stack
+- **Framework**: Next.js 15.5.2 with App Router and Turbopack
+- **Runtime**: React 19.1.0
+- **Language**: TypeScript 5 (strict mode enabled)
+- **Styling**: Tailwind CSS v4 with custom theme colors
+- **Database**: Supabase (PostgreSQL via Docker)
+- **Animations**: Framer Motion 12.23
+- **Icons**: Lucide React + Tabler Icons
+- **Theme**: next-themes for dark mode support
+- **Package Manager**: pnpm (preferred), npm as fallback
+
+## Project Status
+- Production-ready with Docker deployment
+- Bilingual support (German primary)
+- Dark mode implemented
+- Supabase backend integrated (running in Docker containers)
+- Database schema includes: teams, players, matches, news, sponsors, etc.
 
 ## Key Features
-- Server-side rendering with Next.js 15.5.2 and React 19
-- Supabase integration for backend services
-- Responsive design with Tailwind CSS
-- Dark/light theme switching
-- Animated sections using Framer Motion
-- News ticker and carousel components
-- League standings and player statistics
-
-## Project Structure
-```
-viktoria-wertheim/
-├── src/
-│   ├── app/           # Next.js app router pages
-│   │   ├── kontakt/   # Contact page
-│   │   ├── news/      # News page
-│   │   ├── shop/      # Shop page
-│   │   └── teams/     # Teams page
-│   ├── components/    # React components
-│   ├── lib/          # Utility functions
-│   └── utils/        # Supabase utilities
-├── supabase/         # Supabase configuration
-├── public/           # Static assets
-└── Docker files      # Containerization
-```
-
-## Deployment
-- Dockerized application with Dockerfile
-- Supabase backend for data management
-- Can be deployed on Vercel or self-hosted
+- Responsive design (mobile, tablet, desktop)
+- Real-time match updates
+- Team statistics and standings
+- News carousel with modal views
+- Admin dashboard for content management
+- Newsletter subscription system

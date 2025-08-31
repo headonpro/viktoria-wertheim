@@ -4,176 +4,197 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-SV Viktoria Wertheim website - A Next.js 15 application for a German football club (since 1921) with team information, news, shop, and contact sections. The site is fully bilingual (German primary) with dark mode support.
+SV Viktoria Wertheim website - A Next.js 15.5.2 application for a German football club (est. 1945). Full-stack application with local Supabase PostgreSQL database running in Docker containers.
 
-## Development Commands
+## Core Development Commands
 
 ```bash
-# Package manager: pnpm (preferred), npm as fallback
-pnpm install          # Install dependencies
+# Development
 pnpm run dev          # Start dev server with Turbopack at http://localhost:3000
+
+# Build & Production
 pnpm run build        # Production build with Turbopack
 pnpm run start        # Start production server
 pnpm run lint         # Run ESLint
 
-# Type checking (no script defined, run directly)
-pnpm tsc --noEmit     # Check TypeScript types without emitting files
+# Type Checking (no script defined - run directly)
+pnpm tsc --noEmit     # Check TypeScript types without emitting
+
+# Database Operations
+docker exec supabase-db pg_dump -U postgres postgres > backup.sql  # Backup
+cat backup.sql | docker exec -i supabase-db psql -U postgres postgres  # Restore
+
+# Docker Management
+docker ps | grep supabase     # Check Supabase containers (13 should be running)
+docker logs supabase-db       # Check database logs
 ```
 
-## Architecture & Key Patterns
+## Architecture
 
 ### Tech Stack
-- **Next.js 15.5.2** with App Router and Turbopack (enabled via --turbopack flag)
-- **React 19.1.0** with TypeScript 5 (strict mode)
-- **Tailwind CSS v4** with custom theme colors and dark mode via next-themes
-- **Supabase** for backend services (client setup pending)
-- **Framer Motion 12.23** for animations
+- **Framework**: Next.js 15.5.2 with App Router + Turbopack
+- **Runtime**: React 19.1.0 + TypeScript 5 (strict mode)
+- **Styling**: Tailwind CSS v4 with custom theme colors
+- **Database**: PostgreSQL via Supabase (Docker containers)
+- **State**: Local component state + prop drilling
 - **Icons**: Lucide React + Tabler Icons
+- **Animations**: Framer Motion 12.23
 
-### Custom Tailwind Theme Colors
-Defined in `src/app/globals.css`:
-- `viktoria-blue`: #003366
-- `viktoria-blue-light`: #354992  
-- `viktoria-yellow`: #FFD700
-- `viktoria-green`: #00A86B
-- `viktoria-dark`: #101010
-- `viktoria-dark-light`: #1a1a1a
-- `viktoria-dark-lighter`: #2a2a2a
+### Data Architecture
 
-### Page Structure & Data Flow
+**Server → Client Data Flow:**
+1. Server Components fetch data using `createClient()` from `@/lib/supabase/server`
+2. Data is passed as props to Client Components
+3. Client Components handle interactivity and state
 
-The app follows a consistent pattern:
-1. **PageLayout wrapper** - Provides Header + Footer + consistent spacing
-2. **AnimatedSection components** - Wrap content blocks with Framer Motion animations
-3. **Team selection state** - Flows from TeamStatus → GameCards/LeagueTable
-4. **Modal pattern** - News articles open in NewsModal overlay
+**Database Schema (10 tables):**
+- `teams` - Football teams with league, coach, points
+- `players` - Team roster with positions
+- `matches` - Game schedules and results
+- `news` - Articles with categories
+- `league_standings` - Current league tables
+- `scorers` - Goal statistics
+- `sponsors` - Sponsor information
+- `contacts` - Club officials
+- `newsletter_subscribers` - Email list
+- `youth_teams` - Youth divisions
 
-Example from homepage:
+### Component Patterns
+
+**Server Components (default):**
 ```tsx
-export default function Home() {
-  const [selectedTeam, setSelectedTeam] = useState('1')
-  const [selectedNewsArticle, setSelectedNewsArticle] = useState(null)
-  const [isNewsModalOpen, setIsNewsModalOpen] = useState(false)
-  
-  return (
-    <PageLayout>
-      <AnimatedSection animation="slideUp" delay={0.1}>
-        <GameCards selectedTeam={selectedTeam} />
-      </AnimatedSection>
-    </PageLayout>
-  )
+// src/app/[route]/page.tsx
+import { createClient } from '@/lib/supabase/server'
+
+export default async function Page() {
+  const supabase = await createClient()
+  const { data } = await supabase.from('table').select('*')
+  return <ClientComponent data={data} />
 }
 ```
 
-### Component Architecture
-
-**Server Components (default)**
-- All pages (`/app/*/page.tsx`)
-- Layout components
-- Static display components
-
-**Client Components (require `'use client'`)**
-- Interactive features (DarkModeToggle, NewsModal)
-- Components using hooks or browser APIs
-- Animation wrappers
-
-**Hydration Safety Pattern**
-Components that depend on client state use mounted check:
+**Client Components (interactive):**
 ```tsx
 'use client'
+// Must use for: hooks, event handlers, browser APIs
+
+// Hydration safety pattern:
 const [mounted, setMounted] = useState(false)
 useEffect(() => setMounted(true), [])
 if (!mounted) return null
 ```
 
-### Responsive Layout Strategy
+### File Structure
+```
+src/
+├── app/              # Pages (Server Components)
+│   ├── layout.tsx    # Root layout with ThemeProvider
+│   ├── page.tsx      # Homepage (via HomePage component)
+│   └── [routes]/     # teams, news, kontakt, etc.
+├── components/       # 30+ components
+│   ├── HomePage.tsx  # Server Component with data fetching
+│   ├── HomePageClient.tsx  # Client Component with state
+│   └── [features]/   # GameCards, NewsCarousel, etc.
+├── lib/
+│   ├── supabase/
+│   │   ├── server.ts # SSR client (cookies)
+│   │   └── client.ts # Browser client
+│   ├── database.types.ts  # Generated Supabase types
+│   └── utils.ts      # cn() for classnames
+└── utils/            # (currently unused)
+```
 
-The homepage uses a sophisticated responsive grid:
-- **Mobile**: Single column, all components stack
-- **Tablet**: Similar to mobile with adjusted spacing
-- **Desktop**: 3-column grid (2:1 ratio), sidebar for news/stats
+## Critical Configuration
 
-Components use conditional rendering:
+### Environment Variables
+```bash
+# .env.local (required)
+NEXT_PUBLIC_SUPABASE_URL=http://localhost:8000
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...  # Default local key
+DATABASE_URL=postgresql://postgres:password@localhost:5432/postgres
+```
+
+### Docker Services (13 containers)
+- `supabase-db` - PostgreSQL database
+- `supabase-kong` - API Gateway (port 8000)
+- `supabase-auth` - Authentication service
+- `supabase-rest` - PostgREST API
+- `supabase-realtime` - WebSocket subscriptions
+- `supabase-storage` - File storage
+- `supabase-studio` - Admin dashboard
+- Plus 6 supporting services
+
+### Custom Tailwind Theme
+```css
+/* Defined in globals.css */
+--viktoria-blue: #003366
+--viktoria-blue-light: #354992
+--viktoria-yellow: #FFD700
+--viktoria-green: #00A86B
+--viktoria-dark: #101010
+--viktoria-dark-light: #1a1a1a
+```
+
+## Development Workflow
+
+### Before Starting Development
+1. Ensure Docker is running: `docker ps`
+2. Check Supabase containers: `docker ps | grep supabase` (should show 13)
+3. Verify database connection: `docker exec supabase-db psql -U postgres -c '\l'`
+
+### Adding New Features
+1. Create Server Component in `app/[route]/page.tsx` for data fetching
+2. Create Client Component in `components/` for interactivity
+3. Use `AnimatedSection` wrapper for animations
+4. Follow existing patterns for consistency
+
+### Pre-Commit Checklist
+1. `pnpm run lint` - Fix all ESLint issues
+2. `pnpm tsc --noEmit` - Verify TypeScript types
+3. `pnpm run build` - Ensure production build succeeds
+4. Test responsive design (375px, 768px, 1280px)
+5. Verify dark mode functionality
+
+## Common Patterns
+
+### Data Fetching (Server Component)
 ```tsx
-{/* Desktop only */}
-<div className="hidden lg:block">...</div>
-
-{/* Mobile/Tablet only */}  
-<div className="lg:hidden">...</div>
+const supabase = await createClient()
+const results = await Promise.all([
+  supabase.from('table1').select('*'),
+  supabase.from('table2').select('*')
+])
 ```
 
-### Animation System
-
-All content animations use `AnimatedSection` wrapper with:
-- `animation`: "fadeIn" | "slideUp" | "slideDown" | "scaleUp"
-- `delay`: Staggered delays (0.1, 0.2, 0.3...) for sequential reveal
-- `immediate`: Skip animation on initial load for critical content
-
-### State Management Patterns
-
-1. **Local component state**: React hooks for UI state
-2. **Theme state**: next-themes provider at root level
-3. **Team selection**: Prop drilling from parent to child components
-4. **Modal state**: Boolean flags + selected content state
-
-### TypeScript Configuration
-
-- **Strict mode**: All strict checks enabled
-- **Path alias**: `@/*` → `./src/*`
-- **Target**: ES2017
-- **Module resolution**: bundler
-- **JSX**: preserve (Next.js handles transformation)
-
-## Code Quality Checklist
-
-Before committing:
-1. Run `pnpm run lint` and fix all ESLint issues
-2. Run `pnpm tsc --noEmit` to verify TypeScript types
-3. Run `pnpm run build` to ensure production build succeeds
-4. Test responsive design at mobile (375px), tablet (768px), desktop (1280px)
-5. Verify dark/light theme switching works correctly
-6. Check German text displays properly (UTF-8 encoding)
-
-## Critical Implementation Notes
-
-### Supabase Integration
-The `/src/utils/supabase.ts` file exists but is empty. When implementing:
-- Use environment variables for Supabase URL and anon key
-- Create client-side and server-side clients as needed
-- Follow Supabase SSR package patterns for auth
-
-### Metadata Pattern
-Each page should export metadata:
+### Animation Wrapper
 ```tsx
-export const metadata: Metadata = {
-  title: "Page Title - SV Viktoria Wertheim",
-  description: "German description here"
-}
+<AnimatedSection animation="slideUp" delay={0.1}>
+  <Component />
+</AnimatedSection>
 ```
 
-### Dark Mode Implementation
-- Components check theme via `useTheme()` hook
-- Styles use `dark:` prefix for dark variants
-- Background colors: light uses `gray-50`, dark uses `viktoria-dark`
-- Text colors: light uses `gray-900`, dark uses `white`
-
-### Component Composition
-The app uses a clear hierarchy:
-```
-PageLayout
-  └── Header (with DarkModeToggle)
-  └── Main Content
-      └── AnimatedSection(s)
-          └── Feature Components (GameCards, NewsCarousel, etc.)
-  └── Footer
-  └── Modals (NewsModal, etc.)
+### Responsive Design
+```tsx
+<div className="hidden lg:block">Desktop only</div>
+<div className="lg:hidden">Mobile/Tablet</div>
 ```
 
-## File Organization
+## Deployment
 
-- `/src/app/` - Pages and layouts (App Router)
-- `/src/components/` - All React components
-- `/src/lib/` - Utility functions (cn() for classnames)
-- `/src/utils/` - External service clients (Supabase)
-- `/public/` - Static assets
-- `/supabase/` - Supabase configuration files
+```bash
+# Production deployment to Hetzner VPS
+./deploy.sh  # Builds Docker image and deploys
+
+# Manual Docker commands
+docker-compose -f docker-compose.production.yml build
+docker-compose -f docker-compose.production.yml up -d
+```
+
+## Important Notes
+
+- **No test framework** is currently configured
+- **No API routes** defined (all data via Supabase)
+- **TypeScript strict mode** is enabled - handle all null checks
+- **Supabase types** are generated in `database.types.ts`
+- **All pages use SSG/SSR** - no static exports
+- **German language** is primary - use proper UTF-8 encoding

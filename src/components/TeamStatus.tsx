@@ -5,14 +5,16 @@ import { IconTrophy, IconChartBar, IconUsers, IconShield } from '@tabler/icons-r
 import type { Database } from '@/lib/database.types'
 
 type Team = Database['public']['Tables']['teams']['Row']
+type LeagueStanding = Database['public']['Tables']['league_standings']['Row']
 
 interface TeamStatusProps {
   selectedTeam: '1' | '2' | '3'
   onTeamChange: (team: '1' | '2' | '3') => void
   teams?: Team[]
+  leagueStandings?: LeagueStanding[]
 }
 
-export default function TeamStatus({ selectedTeam, onTeamChange, teams: teamsData }: TeamStatusProps) {
+export default function TeamStatus({ selectedTeam, onTeamChange, teams: teamsData, leagueStandings }: TeamStatusProps) {
   // Use data from props if available, otherwise use fallback
   const getTeamInfo = () => {
     if (teamsData && teamsData.length > 0) {
@@ -36,13 +38,35 @@ export default function TeamStatus({ selectedTeam, onTeamChange, teams: teamsDat
     return fallbackTeams[selectedTeam] || fallbackTeams['1']
   }
 
-  // Calculate wins, draws, losses from points and games played
-  // This is a simplified calculation - in a real app, you'd fetch this from matches table
+  // Get real stats from league_standings table
   const calculateStats = () => {
     const teamInfo = getTeamInfo()
-    const gamesPlayed = 12 // Default value, could be calculated from matches
     
-    // Rough calculation based on points (3 for win, 1 for draw)
+    // Map team selection to actual team IDs
+    const teamIdMap = {
+      '1': 'a1111111-1111-1111-1111-111111111111',
+      '2': 'a2222222-2222-2222-2222-222222222222',
+      '3': 'a3333333-3333-3333-3333-333333333333'
+    }
+    
+    // Try to get real stats from league_standings
+    if (leagueStandings && leagueStandings.length > 0) {
+      const teamId = teamIdMap[selectedTeam]
+      const standing = leagueStandings.find(s => s.team_id === teamId)
+      
+      if (standing) {
+        return {
+          position: standing.position,
+          points: standing.points,
+          wins: standing.won || 0,
+          draws: standing.drawn || 0,
+          losses: standing.lost || 0
+        }
+      }
+    }
+    
+    // Fallback to calculation if no standings data
+    const gamesPlayed = 12
     const winEstimate = Math.floor(teamInfo.points / 3)
     const remainingPoints = teamInfo.points % 3
     const drawEstimate = remainingPoints

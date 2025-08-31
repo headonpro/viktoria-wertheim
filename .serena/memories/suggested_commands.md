@@ -1,89 +1,67 @@
-# Development Commands
+# Suggested Commands for Development
 
-## Primary Development Commands
+## Development Server
 ```bash
-# Install dependencies (use pnpm as primary)
-pnpm install
-
-# Start development server with Turbopack
-pnpm run dev
-
-# Build for production with Turbopack
-pnpm run build
-
-# Start production server
-pnpm run start
-
-# Run ESLint for code quality
-pnpm run lint
+pnpm run dev          # Start dev server with Turbopack at http://localhost:3000
 ```
 
-## Alternative Package Managers
+## Build & Production
 ```bash
-# If pnpm is not available
-npm run dev
-npm run build
-npm run start
-npm run lint
-
-# Or with yarn
-yarn dev
-yarn build
-yarn start
-yarn lint
+pnpm run build        # Production build with Turbopack
+pnpm run start        # Start production server
 ```
 
-## Docker Commands (if needed)
+## Code Quality
 ```bash
-# Build Docker image
-docker build -t viktoria-wertheim .
+pnpm run lint         # Run ESLint
+pnpm tsc --noEmit     # Check TypeScript types without emitting files
+```
 
-# Run with Docker Compose
-docker-compose up -d
+## Package Management
+```bash
+pnpm install          # Install dependencies
+pnpm add <package>    # Add new dependency
+pnpm remove <package> # Remove dependency
+```
 
-# View logs
-docker-compose logs -f
+## Docker & Supabase
+```bash
+# Start Supabase services
+cd supabase && npx supabase start
 
-# Stop services
-docker-compose down
+# Stop Supabase services
+cd supabase && npx supabase stop
+
+# Database backup
+docker exec supabase-db pg_dump -U postgres postgres > backup.sql
+
+# Database restore
+cat backup.sql | docker exec -i supabase-db psql -U postgres postgres
+
+# Check Docker containers
+docker ps
+docker logs supabase-db
 ```
 
 ## Git Commands
 ```bash
-# Check status
-git status
-
-# Stage changes
-git add .
-
-# Commit with message
-git commit -m "feat: description"
-
-# Push to remote
-git push origin main
+git status            # Check current changes
+git add .             # Stage all changes
+git commit -m "msg"   # Commit changes
+git push              # Push to remote
+git pull              # Pull latest changes
 ```
 
-## Utility Commands
+## System Commands (Linux)
 ```bash
-# Check TypeScript types
-pnpm tsc --noEmit
-
-# Format with Prettier (if configured)
-pnpm prettier --write .
-
-# Update dependencies
-pnpm update
-
-# Clean install
-rm -rf node_modules pnpm-lock.yaml && pnpm install
+ls -la               # List files with details
+cd <directory>       # Change directory
+grep -r "pattern" .  # Search for pattern in files
+find . -name "*.tsx" # Find files by pattern
 ```
 
-## Development URLs
-- Development: http://localhost:3000
-- Production: Deploy to Vercel or self-host
-
-## Important Notes
-- Always use **pnpm** as the primary package manager
-- Development server uses **Turbopack** for faster builds
-- Run **lint** before committing code
-- Check TypeScript types with `tsc --noEmit` if needed
+## Testing Environment Variables
+```bash
+# Check if .env.local exists and has correct values
+cat .env.local
+```

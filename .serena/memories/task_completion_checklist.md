@@ -1,54 +1,71 @@
 # Task Completion Checklist
 
-When completing any development task in this project, follow these steps:
+## Before Committing Any Changes
 
-## Before Starting
-1. **Pull latest changes**: `git pull origin main`
-2. **Install dependencies**: `pnpm install`
-3. **Start dev server**: `pnpm run dev`
+### 1. Code Quality Checks
+```bash
+# Run ESLint to check for code issues
+pnpm run lint
 
-## During Development
-1. **Follow TypeScript strict mode** - No `any` types
-2. **Use proper component patterns** - Functional components with hooks
-3. **Apply Tailwind classes** - Maintain consistent styling
-4. **Test in both themes** - Check dark and light mode
-5. **Ensure responsive design** - Test different screen sizes
+# Fix ESLint issues if any
+pnpm run lint --fix
 
-## Before Committing
-1. **Run linter**: `pnpm run lint`
-   - Fix all ESLint errors and warnings
-   - Follow Next.js best practices
+# Verify TypeScript types
+pnpm tsc --noEmit
+```
 
-2. **Check TypeScript**: `pnpm tsc --noEmit`
-   - Ensure no type errors
-   - Verify all imports are correct
+### 2. Build Verification
+```bash
+# Ensure production build succeeds
+pnpm run build
+```
 
-3. **Test build**: `pnpm run build`
-   - Confirm production build succeeds
-   - Check for any build warnings
+### 3. Testing Checklist
+- [ ] Test on development server: `pnpm run dev`
+- [ ] Check responsive design:
+  - Mobile: 375px width
+  - Tablet: 768px width
+  - Desktop: 1280px width
+- [ ] Verify dark/light theme switching
+- [ ] Check German text displays properly (UTF-8)
+- [ ] Test all interactive elements
+- [ ] Verify animations work smoothly
 
-4. **Manual testing**:
-   - Test new features in browser
-   - Check console for errors
-   - Verify mobile responsiveness
-   - Test dark/light mode toggle
+### 4. Supabase/Database Changes
+If database schema was modified:
+```bash
+# Create migration file
+cd supabase && npx supabase migration new <migration_name>
 
-5. **Review changes**: `git diff`
-   - Ensure no debug code remains
-   - Check for sensitive information
-   - Verify code follows conventions
+# Apply migrations
+npx supabase db push
 
-## Commit Standards
-- Use conventional commits: `feat:`, `fix:`, `docs:`, `style:`, `refactor:`, `test:`, `chore:`
-- Write clear, descriptive messages
-- Reference issues if applicable
+# Backup database before major changes
+docker exec supabase-db pg_dump -U postgres postgres > backup_$(date +%Y%m%d).sql
+```
 
-## Final Checks
-- [ ] Code passes lint (`pnpm run lint`)
-- [ ] TypeScript has no errors
-- [ ] Build succeeds (`pnpm run build`)
-- [ ] Features work in both themes
-- [ ] Responsive on mobile/tablet/desktop
-- [ ] No console errors or warnings
-- [ ] Code follows project conventions
-- [ ] Commit message is descriptive
+### 5. Environment Variables
+- Verify `.env.local` has all required variables
+- Check NEXT_PUBLIC_SUPABASE_URL
+- Check NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+### 6. Git Commit
+```bash
+# Stage changes
+git add .
+
+# Commit with descriptive message
+git commit -m "feat/fix/chore: description"
+
+# Push to remote
+git push
+```
+
+### 7. Common Issues to Check
+- No console errors in browser
+- No TypeScript errors
+- No missing imports
+- No hardcoded values (use env vars)
+- No exposed secrets or API keys
+- Components properly marked as 'use client' when needed
+- Proper error handling for API calls
