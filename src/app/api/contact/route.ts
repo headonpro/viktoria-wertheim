@@ -1,7 +1,25 @@
 import { NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
+import rateLimit, { getClientIp } from '@/lib/rate-limit'
+
+// Create rate limiter: 3 requests per minute per IP
+const limiter = rateLimit({
+  interval: 60000, // 1 minute
+  uniqueTokenPerInterval: 500, // Max number of unique IPs
+})
 
 export async function POST(request: Request) {
+  // Apply rate limiting
+  const ip = getClientIp(request.headers)
+  try {
+    await limiter.check(3, ip) // Max 3 requests per minute
+  } catch (error) {
+    return NextResponse.json(
+      { error: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.' },
+      { status: 429 }
+    )
+  }
+
   try {
     const body = await request.json()
     const { name, email, subject, message } = body

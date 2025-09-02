@@ -1,11 +1,35 @@
+import { requireAdmin } from '@/lib/auth'
 import { createClient } from '@/lib/supabase/server'
 import AdminDashboard from './AdminDashboard'
-import AuthGuard from './AuthGuard'
+import { redirect } from 'next/navigation'
 
 export default async function AdminPage() {
+  // Require admin authentication
+  const user = await requireAdmin()
+  
+  if (!user) {
+    // User is authenticated but not an admin
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+        <div className="bg-white p-8 rounded-lg shadow-lg max-w-md">
+          <h1 className="text-2xl font-bold text-red-600 mb-4">Zugriff verweigert</h1>
+          <p className="text-gray-700 mb-4">
+            Sie haben keine Berechtigung für den Admin-Bereich.
+          </p>
+          <a 
+            href="/"
+            className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Zurück zur Startseite
+          </a>
+        </div>
+      </div>
+    )
+  }
+  
   const supabase = await createClient()
   
-  // Lade alle Daten für erweiterte Statistiken
+  // Load all data for extended statistics
   const [
     newsResult, 
     teamsResult, 
@@ -44,12 +68,9 @@ export default async function AdminPage() {
     youthPlayersCount: youthTeamsResult.data?.reduce((sum, t) => sum + (t.player_count || 0), 0) || 0,
     leaguePosition: standingsResult.data?.find(s => s.team_name.includes('Viktoria'))?.position || 0,
     topScorer: scorersResult.data?.[0]?.player_name || 'N/A',
-    topScorerGoals: scorersResult.data?.[0]?.goals || 0
+    topScorerGoals: scorersResult.data?.[0]?.goals || 0,
+    currentUser: user.email || 'Unknown'
   }
 
-  return (
-    <AuthGuard>
-      <AdminDashboard initialStats={stats} />
-    </AuthGuard>
-  )
+  return <AdminDashboard initialStats={stats} />
 }

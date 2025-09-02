@@ -24,9 +24,19 @@ class EnvironmentError extends Error {
  * Validates and returns a required environment variable
  */
 function getRequiredEnvVar(key: string): string {
-  const value = process.env[key]
+  const value = typeof window !== 'undefined' 
+    ? (window as any).__ENV?.[key] || process.env[key]
+    : process.env[key]
   
   if (!value || value.trim() === '') {
+    // In development, provide helpful error message
+    if (process.env.NODE_ENV === 'development') {
+      console.error(`Missing environment variable: ${key}`)
+      // Return a placeholder in development to prevent app crash
+      if (key === 'NEXT_PUBLIC_SUPABASE_URL') return 'http://localhost:8000'
+      if (key === 'NEXT_PUBLIC_SUPABASE_ANON_KEY') return 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE'
+    }
+    
     throw new EnvironmentError(
       `Missing required environment variable: ${key}. ` +
       `Please check your .env.local file and ensure ${key} is set.`
