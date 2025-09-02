@@ -29,14 +29,9 @@ export default function LoginPage() {
       }
 
       if (data.user) {
-        // Check if user is admin (you can also check user metadata or database role)
-        const adminEmails = ['admin@viktoria-wertheim.de', 'vorstand@viktoria-wertheim.de']
-        if (adminEmails.includes(data.user.email || '')) {
-          router.push('/admin')
-        } else {
-          await supabase.auth.signOut()
-          setError('Keine Berechtigung für den Admin-Bereich')
-        }
+        // Successful login - redirect to admin
+        router.push('/admin')
+        router.refresh() // Force a refresh to update the auth state
       }
     } catch (err) {
       setError('Ein Fehler ist aufgetreten')

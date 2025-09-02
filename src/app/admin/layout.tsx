@@ -1,5 +1,5 @@
 import './admin.css'
-import { AuthProvider } from './AuthContext'
+import AdminAuthWrapper from './AdminAuthWrapper'
 
 export default function AdminLayout({
   children,
@@ -8,9 +8,9 @@ export default function AdminLayout({
 }) {
   return (
     <div className="admin-wrapper">
-      <AuthProvider>
+      <AdminAuthWrapper>
         {children}
-      </AuthProvider>
+      </AdminAuthWrapper>
     </div>
   )
 }
