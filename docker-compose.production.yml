@@ -13,12 +13,12 @@ services:
       - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
       - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
       - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
-      - NEXT_PUBLIC_ADMIN_PASSWORD=${NEXT_PUBLIC_ADMIN_PASSWORD}
-      - NEXT_PUBLIC_ADMIN_SECRET=${NEXT_PUBLIC_ADMIN_SECRET}
+      - ADMIN_EMAILS=${ADMIN_EMAILS}
     depends_on:
       - postgres
     networks:
       - viktoria-network
+      - supabase_default
     deploy:
       resources:
         limits:
@@ -71,3 +71,5 @@ volumes:
 networks:
   viktoria-network:
     driver: bridge
+  supabase_default:
+    external: true
