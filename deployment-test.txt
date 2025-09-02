@@ -1,0 +1,2 @@
+Deployment Test - 02.09.2025 11:19
+This file tests the GitHub Actions CI/CD pipeline.
