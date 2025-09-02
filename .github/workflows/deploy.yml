@@ -3,52 +3,37 @@ name: Deploy to Production VPS
 on:
   push:
     branches: [main]
-  workflow_dispatch: # Manueller Trigger
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Deploy to VPS via SSH
+      - name: Test SSH Connection
         uses: appleboy/ssh-action@v0.1.5
         with:
           host: 91.98.117.169
           username: root
           password: ${{ secrets.VPS_PASSWORD }}
+          port: 22
           script: |
-            echo '🚀 Starting deployment...'
+            echo 'SSH Connection successful!'
+            whoami
+            pwd
+      
+      - name: Deploy Application
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: 91.98.117.169
+          username: root
+          password: ${{ secrets.VPS_PASSWORD }}
+          port: 22
+          command_timeout: 10m
+          script: |
             cd /opt/devserver/projects/viktoria-wertheim
-            
-            # Backup current version
-            echo '📦 Creating backup...'
-            mkdir -p ../backups
-            cp -r . ../backups/viktoria-backup-$(date +%Y%m%d-%H%M%S)
-            
-            # Pull latest changes
-            echo '📥 Pulling latest changes from GitHub...'
-            git pull origin main
-            
-            # Rebuild and restart containers
-            echo '🔨 Building Docker image...'
-            docker-compose -f docker-compose.production.yml build
-            
-            echo '♻️ Restarting containers...'
-            docker-compose -f docker-compose.production.yml down
-            docker-compose -f docker-compose.production.yml up -d
-            
-            # Wait for startup
-            echo '⏳ Waiting for services to start...'
-            sleep 15
-            
-            # Check deployment
-            echo '🔍 Checking deployment status...'
-            if curl -f http://localhost:8001 > /dev/null 2>&1; then
-              echo '✅ Deployment successful!'
-              echo 'Container status:'
-              docker ps --format 'table {{.Names}}\t{{.Status}}' | grep viktoria
-            else
-              echo '❌ Health check failed but continuing...'
-            fi
-            
-            echo '🎉 Deployment complete!'
+            echo 'Current directory:' && pwd
+            echo 'Git pull...' && git pull origin main
+            echo 'Docker build...' && docker-compose -f docker-compose.production.yml build
+            echo 'Docker restart...' && docker-compose -f docker-compose.production.yml up -d
+            echo 'Deployment complete!'
