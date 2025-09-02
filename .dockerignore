@@ -1,0 +1,17 @@
+node_modules
+.next
+.git
+.env.local
+.env.development
+volumes
+docker-compose*.yml
+Dockerfile
+.dockerignore
+*.md
+*.log
+.DS_Store
+outline*
+penpot*
+excalidraw*
+supabase*.tar.gz
+*.sql

@@ -1,0 +1,57 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Production
+.next/
+dist/
+build/
+
+# Environment
+.env
+.env.local
+.env.production
+.env.supabase
+
+# Backups & Data
+*.sql
+*.tar.gz
+*.tar
+*.zip
+volumes/
+backup/
+backups/
+
+# Docker volumes
+postgres-data/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test & Coverage
+coverage/
+.nyc_output/
+
+# Other service configs (not needed for main app)
+excalidraw.yml
+outline*.yml
+penpot*.yml
+
+# Temp files
+tmp/
+temp/
