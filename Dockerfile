@@ -23,6 +23,9 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
+# Install curl for health checks
+RUN apk add --no-cache curl
+
 # Install pnpm for production
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
