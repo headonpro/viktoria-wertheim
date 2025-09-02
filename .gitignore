@@ -38,6 +38,8 @@ pnpm-debug.log*
 *.swp
 *.swo
 *~
+.claude/
+.spec-workflow/
 
 # OS
 .DS_Store
