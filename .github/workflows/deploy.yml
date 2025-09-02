@@ -10,30 +10,43 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Test SSH Connection
-        uses: appleboy/ssh-action@v0.1.5
-        with:
-          host: 91.98.117.169
-          username: root
-          password: ${{ secrets.VPS_PASSWORD }}
-          port: 22
-          script: |
-            echo 'SSH Connection successful!'
-            whoami
-            pwd
+      - name: Checkout code
+        uses: actions/checkout@v3
       
-      - name: Deploy Application
-        uses: appleboy/ssh-action@v0.1.5
+      - name: Deploy to VPS via SSH
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: 91.98.117.169
           username: root
-          password: ${{ secrets.VPS_PASSWORD }}
+          key: ${{ secrets.VPS_SSH_KEY }}
           port: 22
-          command_timeout: 10m
           script: |
+            echo "🚀 Starting deployment..."
             cd /opt/devserver/projects/viktoria-wertheim
-            echo 'Current directory:' && pwd
-            echo 'Git pull...' && git pull origin main
-            echo 'Docker build...' && docker-compose -f docker-compose.production.yml build
-            echo 'Docker restart...' && docker-compose -f docker-compose.production.yml up -d
-            echo 'Deployment complete!'
+            
+            # Show current status
+            echo "📍 Current branch:"
+            git branch --show-current
+            
+            # Pull latest changes
+            echo "📥 Pulling latest changes..."
+            git pull origin main
+            
+            # Build Docker image
+            echo "🔨 Building Docker image..."
+            docker-compose -f docker-compose.production.yml build
+            
+            # Restart containers
+            echo "♻️ Restarting containers..."
+            docker-compose -f docker-compose.production.yml down
+            docker-compose -f docker-compose.production.yml up -d
+            
+            # Wait for startup
+            echo "⏳ Waiting for services..."
+            sleep 10
+            
+            # Check status
+            echo "📊 Container status:"
+            docker ps --format "table {{.Names}}\t{{.Status}}" | grep viktoria || true
+            
+            echo "✅ Deployment complete!"
