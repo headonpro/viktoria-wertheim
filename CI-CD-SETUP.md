@@ -67,4 +67,4 @@ Falls nötig, kann das Deployment auch manuell getriggert werden:
 
 - **LÖSCHE** die Datei `github-secrets-setup.md` nach dem Einrichten der Secrets!
 - Der SSH-Key sollte regelmäßig rotiert werden (alle 3-6 Monate)
-- Überprüfe regelmäßig die Deployment-Logs auf Fehler
+- Überprüfe regelmäßig die Deployment-Logs auf Fehler# CI/CD Pipeline Test - Wed 03 Sep 2025 11:48:32 AM CEST
