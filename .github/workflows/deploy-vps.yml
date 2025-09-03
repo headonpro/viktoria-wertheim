@@ -1,0 +1,83 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  PROJECT_PATH: /opt/devserver/projects/viktoria-wertheim
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to VPS
+        run: |
+          ssh -i ~/.ssh/deploy_key ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'ENDSSH'
+            set -e
+            echo "🚀 Starting deployment..."
+            
+            # Navigate to project directory
+            cd ${{ env.PROJECT_PATH }}
+            
+            # Git pull latest changes
+            echo "📥 Pulling latest changes..."
+            git fetch origin main
+            git reset --hard origin/main
+            
+            # Copy production environment file
+            echo "📋 Setting up environment..."
+            if [ -f .env.production.vps ]; then
+              cp .env.production.vps .env.production
+            fi
+            
+            # Build and deploy with Docker
+            echo "🐳 Building Docker image..."
+            docker build -t viktoria-frontend-final -f Dockerfile.production .
+            
+            # Stop existing container
+            echo "🛑 Stopping existing container..."
+            docker stop viktoria-frontend || true
+            docker rm viktoria-frontend || true
+            
+            # Start new container
+            echo "✨ Starting new container..."
+            docker run -d \
+              --name viktoria-frontend \
+              --restart unless-stopped \
+              --network supabase_default \
+              -p 3000:3000 \
+              -e NODE_ENV=production \
+              -e NEXT_PUBLIC_SUPABASE_URL=http://91.98.117.169:8000 \
+              -e NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE \
+              -e NEXT_PUBLIC_ADMIN_PASSWORD=Vkt2025SecureAdmin \
+              viktoria-frontend-final
+            
+            # Health check
+            echo "🔍 Checking deployment..."
+            sleep 5
+            docker ps | grep viktoria-frontend
+            
+            # Clean up old images
+            echo "🧹 Cleaning up..."
+            docker image prune -f
+            
+            echo "✅ Deployment complete!"
+          ENDSSH
+
+      - name: Cleanup SSH
+        if: always()
+        run: |
+          rm -f ~/.ssh/deploy_key
