@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { IconMail, IconMapPin, IconBrandFacebook, IconBrandInstagram, IconBrandYoutube } from '@tabler/icons-react'
+import { IconMail, IconMapPin, IconBrandInstagram } from '@tabler/icons-react'
 
 export default function Footer() {
   return (
@@ -64,19 +64,19 @@ export default function Footer() {
           {/* Social Media */}
           <div className="flex flex-col items-center text-center">
             <h4 className="font-semibold text-lg mb-4 text-viktoria-yellow">Folge uns</h4>
-            <div className="flex space-x-3 justify-center">
-              <a href="#" className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors">
-                <IconBrandFacebook size={20} />
-              </a>
-              <a href="#" className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors">
+            <div className="flex justify-center">
+              <a 
+                href="https://www.instagram.com/svviktoriawertheim/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors"
+                aria-label="SV Viktoria Wertheim auf Instagram"
+              >
                 <IconBrandInstagram size={20} />
-              </a>
-              <a href="#" className="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-lg flex items-center justify-center transition-colors">
-                <IconBrandYoutube size={20} />
               </a>
             </div>
             <p className="text-xs text-gray-300 mt-4">
-              Bleib auf dem Laufenden mit unseren Social Media Kanälen
+              Folge uns auf Instagram
             </p>
           </div>
         </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { IconX, IconCalendar, IconUser, IconEye } from '@tabler/icons-react'
 import SmartImage from '@/components/SmartImage'
@@ -22,12 +22,46 @@ interface NewsModalProps {
   article: NewsArticle | null
   isOpen: boolean
   onClose: () => void
+  onViewsUpdate?: (articleId: string | number, newViews: number) => void
 }
 
-export default function NewsModal({ article, isOpen, onClose }: NewsModalProps) {
-  // Handle keyboard events
+export default function NewsModal({ article, isOpen, onClose, onViewsUpdate }: NewsModalProps) {
+  const [displayViews, setDisplayViews] = useState<number | null>(null)
+  const [hasTrackedView, setHasTrackedView] = useState(false)
+  
+  // Track view when modal opens
+  const trackView = useCallback(async () => {
+    if (!article || hasTrackedView) return
+    
+    try {
+      const response = await fetch(`/api/news/${article.id}/view`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        setDisplayViews(data.views)
+        setHasTrackedView(true)
+        
+        // Notify parent component about the new view count
+        if (onViewsUpdate) {
+          onViewsUpdate(article.id, data.views)
+        }
+      }
+    } catch (error) {
+      console.error('Error tracking view:', error)
+    }
+  }, [article, hasTrackedView, onViewsUpdate])
+  
+  // Handle keyboard events and view tracking
   React.useEffect(() => {
-    if (isOpen) {
+    if (isOpen && article) {
+      // Track view when modal opens
+      trackView()
+      
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
           onClose()
@@ -47,8 +81,12 @@ export default function NewsModal({ article, isOpen, onClose }: NewsModalProps) 
         document.removeEventListener('keydown', handleKeyDown)
         document.body.style.overflow = ''
       }
+    } else {
+      // Reset tracking state when modal closes
+      setHasTrackedView(false)
+      setDisplayViews(null)
     }
-  }, [isOpen, onClose])
+  }, [isOpen, article, onClose, trackView])
 
   if (!article) return null
 
@@ -126,7 +164,7 @@ export default function NewsModal({ article, isOpen, onClose }: NewsModalProps) 
                   </div>
                   <div className="flex items-center space-x-1">
                     <IconEye size={16} />
-                    <span>{article.views} Aufrufe</span>
+                    <span>{displayViews !== null ? displayViews : article.views} Aufrufe</span>
                   </div>
                 </div>
 

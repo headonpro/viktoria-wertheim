@@ -54,6 +54,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
   const [isNewsModalOpen, setIsNewsModalOpen] = useState(false)
   const [isLeagueTableModalOpen, setIsLeagueTableModalOpen] = useState(false)
   const [isSponsorModalOpen, setIsSponsorModalOpen] = useState(false)
+  const [newsArticles, setNewsArticles] = useState(data.news)
   const gameCardsRef = useRef<HTMLDivElement>(null)
 
   // Map team selection to actual team IDs
@@ -113,6 +114,22 @@ export default function HomePageClient({ data }: HomePageClientProps) {
   const handleCloseModal = () => {
     setIsNewsModalOpen(false)
     setSelectedNewsArticle(null)
+  }
+
+  const handleViewsUpdate = (articleId: string | number, newViews: number) => {
+    // Update the local state with new view count
+    setNewsArticles(prevArticles => 
+      prevArticles.map(article => 
+        article.id === articleId 
+          ? { ...article, views: newViews }
+          : article
+      )
+    )
+    
+    // Update the selected article if it's the same one
+    if (selectedNewsArticle && selectedNewsArticle.id === articleId) {
+      setSelectedNewsArticle(prev => prev ? { ...prev, views: newViews } : null)
+    }
   }
 
   // Update VereinsAssistent height to match GameCards
@@ -203,7 +220,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
             {/* News Carousel - Mobile/Tablet Only */}
             <AnimatedSection animation="slideUp" delay={0.3} className="lg:hidden" immediate={true}>
               <NewsCarousel 
-                newsArticles={data.news}
+                newsArticles={newsArticles}
                 onNewsClick={handleNewsClick}
               />
             </AnimatedSection>
@@ -238,7 +255,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
             {/* News - Desktop Only */}
             <AnimatedSection animation="slideUp" delay={0.3} immediate={true}>
               <NewsCarousel 
-                newsArticles={data.news}
+                newsArticles={newsArticles}
                 onNewsClick={handleNewsClick}
                 isDesktopSidebar={true}
               />
@@ -260,6 +277,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
         isOpen={isNewsModalOpen}
         onClose={handleCloseModal}
         article={transformedNewsArticle}
+        onViewsUpdate={handleViewsUpdate}
       />
       <LeagueTableModal 
         isOpen={isLeagueTableModalOpen}
