@@ -1,0 +1,54 @@
+# Multi-Stage Production Build für Viktoria Wertheim
+FROM node:20-alpine AS deps
+WORKDIR /app
+
+# Dependencies installieren
+COPY package.json pnpm-lock.yaml ./
+RUN corepack enable pnpm && pnpm install --frozen-lockfile
+
+# Builder Stage
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+# Build Arguments für Environment Variables
+ARG NEXT_PUBLIC_SUPABASE_URL
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
+ARG NEXT_PUBLIC_ADMIN_PASSWORD
+ARG NEXT_PUBLIC_ADMIN_SECRET
+
+# Environment Variables für Build setzen
+ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
+ENV NEXT_PUBLIC_SUPABASE_ANON_KEY=$NEXT_PUBLIC_SUPABASE_ANON_KEY
+ENV NEXT_PUBLIC_ADMIN_PASSWORD=$NEXT_PUBLIC_ADMIN_PASSWORD
+ENV NEXT_PUBLIC_ADMIN_SECRET=$NEXT_PUBLIC_ADMIN_SECRET
+
+# Dependencies von deps stage kopieren
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# Next.js für Production bauen
+RUN corepack enable pnpm && \
+    pnpm run build
+
+# Production Stage
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV HOSTNAME="0.0.0.0"
+ENV PORT=3000
+
+# System dependencies
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 nextjs
+
+# Standalone build und static files kopieren
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+CMD ["node", "server.js"]
