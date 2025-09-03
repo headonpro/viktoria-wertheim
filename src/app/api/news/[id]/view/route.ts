@@ -4,10 +4,10 @@ import { cookies } from 'next/headers'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const newsId = params.id
+    const { id: newsId } = await params
     
     if (!newsId) {
       return NextResponse.json(
@@ -17,7 +17,7 @@ export async function POST(
     }
 
     // Get or create viewed articles tracking from cookies
-    const cookieStore = cookies()
+    const cookieStore = await cookies()
     const viewedArticles = cookieStore.get('viewed_articles')
     let viewedList: string[] = []
     
@@ -124,10 +124,10 @@ export async function POST(
 // GET method to retrieve current view count
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const newsId = params.id
+    const { id: newsId } = await params
     
     if (!newsId) {
       return NextResponse.json(
