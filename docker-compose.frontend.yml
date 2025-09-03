@@ -1,0 +1,40 @@
+name: viktoria-production
+
+services:
+  frontend:
+    container_name: viktoria-frontend
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+      args:
+        NEXT_PUBLIC_SUPABASE_URL: https://viktoria.headon.pro/supabase
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${ANON_KEY}
+        NEXT_PUBLIC_ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+        NEXT_PUBLIC_ADMIN_SECRET: ${ADMIN_SECRET}
+    ports:
+      - "3000:3000"
+    networks:
+      - supabase_default
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    depends_on:
+      - kong-check
+
+  kong-check:
+    image: curlimages/curl:latest
+    networks:
+      - supabase_default
+    command: >
+      sh -c "until curl -f http://supabase-kong:8000 2>/dev/null; do
+        echo 'Waiting for Supabase Kong...';
+        sleep 2;
+      done;
+      echo 'Supabase Kong is ready!'"
+
+networks:
+  supabase_default:
+    external: true
