@@ -16,12 +16,30 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Check if secrets are set
+        run: |
+          if [ -z "${{ secrets.VPS_HOST }}" ]; then
+            echo "❌ ERROR: VPS_HOST secret is not set!"
+            echo "Please add the following secrets to your repository:"
+            echo "1. Go to: https://github.com/headonpro/viktoria-wertheim/settings/secrets/actions"
+            echo "2. Add these secrets:"
+            echo "   - VPS_HOST: 91.98.117.169"
+            echo "   - VPS_USER: root"
+            echo "   - VPS_SSH_KEY: (the private key)"
+            exit 1
+          fi
+          echo "✅ Secrets appear to be configured"
+
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Test SSH Connection
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "echo '✅ SSH connection successful'"
 
       - name: Deploy to VPS
         run: |
