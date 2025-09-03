@@ -167,10 +167,16 @@ export default function TeamsPageClient({ teams, youthTeams }: TeamsPageClientPr
                     <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 font-medium uppercase tracking-wide">Trainer</p>
                     <p className="font-bold text-gray-900 dark:text-white">{currentTeam.coach}</p>
                   </div>
-                  {!isYouthSelected && currentTeam.captain !== 'Verschiedene' && (
+                  {!isYouthSelected && (
                     <div className="bg-gradient-to-br from-gray-50 to-white dark:from-viktoria-dark-lighter dark:to-viktoria-dark rounded-lg p-4 border border-gray-100 dark:border-gray-700 hover:border-viktoria-blue/30 dark:hover:border-viktoria-yellow/30 transition-colors text-center">
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 font-medium uppercase tracking-wide">Kapitän</p>
-                      <p className="font-bold text-gray-900 dark:text-white">{currentTeam.captain}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mb-2 font-medium uppercase tracking-wide">Co-Trainer</p>
+                      <p className="font-bold text-gray-900 dark:text-white">
+                        {currentTeam.name.includes('II') || currentTeam.name.includes(' 2') 
+                          ? 'Andi Sachnjuk'
+                          : currentTeam.name.includes('3') || currentTeam.name.includes('Grünenwört')
+                          ? 'Simon Schmidt'
+                          : 'Eduard Helfenstein'}
+                      </p>
                     </div>
                   )}
                   <div className="bg-gradient-to-br from-gray-50 to-white dark:from-viktoria-dark-lighter dark:to-viktoria-dark rounded-lg p-4 border border-gray-100 dark:border-gray-700 hover:border-viktoria-blue/30 dark:hover:border-viktoria-yellow/30 transition-colors text-center">
@@ -246,8 +252,8 @@ export default function TeamsPageClient({ teams, youthTeams }: TeamsPageClientPr
                       <IconUsers size={20} className="mr-2 text-viktoria-blue dark:text-viktoria-yellow" />
                       Spielerkader
                     </h3>
-                    {/* Temporarily hidden - will be reactivated when player data is ready */}
-                    {false ? (
+                    {/* Player roster display */}
+                    {currentTeam.players && currentTeam.players.length > 0 ? (
                       <div className="overflow-x-auto">
                         <table className="w-full">
                           <thead className="bg-gradient-to-b from-gray-50 to-white dark:from-viktoria-dark-lighter dark:to-viktoria-dark-light">

@@ -25,7 +25,7 @@ export default function ImpressumPage() {
   const vorstandsmitglieder = [
     { rolle: '1. Vorsitzender', name: 'Fabian Väthröder', icon: <IconUserCheck size={20} /> },
     { rolle: '2. Vorsitzender', name: 'Christian Först', icon: <IconUsers size={20} /> },
-    { rolle: 'Schatzmeister', name: 'Tobias Mittag', icon: <IconScale size={20} /> },
+    { rolle: 'Schatzmeister', name: 'Thomas Merlein', icon: <IconScale size={20} /> },
     { rolle: 'Spielausschußvorsitzender', name: 'Kevin Niedens', icon: <IconUsers size={20} /> },
     { rolle: 'Jugendleiter', name: 'Christian Först', icon: <IconUsers size={20} /> },
     { rolle: 'Schriftführer', name: 'Eduard Helfenstein', icon: <IconFileText size={20} /> }
@@ -127,22 +127,19 @@ export default function ImpressumPage() {
                       </div>
                     </a>
                     
-                    <a 
-                      href="tel:+4993421234"
-                      className="group block bg-gray-50 dark:bg-viktoria-dark rounded-lg p-4 hover:bg-gray-100 dark:hover:bg-viktoria-dark-lighter transition-all duration-300"
-                    >
+                    <div className="block bg-gray-50 dark:bg-viktoria-dark rounded-lg p-4">
                       <div className="flex items-center space-x-3">
-                        <div className="p-2 bg-viktoria-blue/10 dark:bg-viktoria-yellow/20 rounded-lg group-hover:scale-110 transition-transform">
+                        <div className="p-2 bg-viktoria-blue/10 dark:bg-viktoria-yellow/20 rounded-lg">
                           <IconPhone size={20} className="text-viktoria-blue dark:text-viktoria-yellow" />
                         </div>
                         <div>
                           <p className="text-xs text-gray-500 dark:text-gray-400">Telefon</p>
-                          <p className="font-medium text-gray-900 dark:text-white group-hover:text-viktoria-blue dark:group-hover:text-viktoria-yellow transition-colors">
-                            +49 9342 1234
+                          <p className="font-medium text-gray-900 dark:text-white">
+                            -
                           </p>
                         </div>
                       </div>
-                    </a>
+                    </div>
                     
                     <div className="bg-viktoria-blue/5 dark:bg-viktoria-yellow/10 rounded-lg p-4 border border-viktoria-blue/20 dark:border-viktoria-yellow/30">
                       <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Geschäftsstelle</p>

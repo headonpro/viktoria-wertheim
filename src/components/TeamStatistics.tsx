@@ -17,6 +17,8 @@ interface TeamStatisticsProps {
 }
 
 export default function TeamStatistics({
+  teamId,
+  teamName,
   played = 0,
   won = 0,
   drawn = 0,
@@ -30,6 +32,22 @@ export default function TeamStatistics({
   const goalDifference = goalsFor - goalsAgainst
   const pointsPerGame = played > 0 ? (points / played).toFixed(1) : '0.0'
   const goalsPerGame = played > 0 ? (goalsFor / played).toFixed(1) : '0.0'
+  
+  // Determine total games based on team (different leagues have different number of teams)
+  const getTotalGamesInSeason = () => {
+    if (teamName.includes('II') || teamName.includes(' 2')) {
+      // 2. Mannschaft: Kreisklasse A with 14 teams
+      return 26 // (14-1) * 2 = 26 games
+    } else if (teamName.includes('3') || teamName.includes('Grünenwört')) {
+      // 3. Mannschaft: Kreisklasse B with 9 teams  
+      return 16 // (9-1) * 2 = 16 games
+    } else {
+      // 1. Mannschaft: Kreisliga with 16 teams
+      return 30 // (16-1) * 2 = 30 games
+    }
+  }
+  
+  const totalGamesInSeason = getTotalGamesInSeason()
   
   // Determine form (last 5 games simulation based on overall performance)
   const getFormIndicator = () => {
@@ -139,12 +157,12 @@ export default function TeamStatistics({
         <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wide">Saisonfortschritt</span>
-            <span className="text-xs font-bold text-gray-900 dark:text-white">{played} von 30 Spielen</span>
+            <span className="text-xs font-bold text-gray-900 dark:text-white">{played} von {totalGamesInSeason} Spielen</span>
           </div>
           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
             <div 
               className="bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 h-2 rounded-full transition-all duration-500"
-              style={{ width: `${(played / 30) * 100}%` }}
+              style={{ width: `${(played / totalGamesInSeason) * 100}%` }}
             />
           </div>
         </div>
