@@ -21,8 +21,6 @@ SET row_security = off;
 -- Data for Name: scorers; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.scorers (id, player_id, player_name, team_id, team_name, goals, assists, season, created_at, updated_at) VALUES ('5ff33223-e107-40c4-8f34-399449c7ccaa', NULL, 'Andrej Jörg', NULL, 'SpG Vikt. Wertheim 3/Grünenwört', 2, 0, '2025/26', '2025-09-01 10:14:42.804272+00', '2025-09-01 10:14:42.804272+00');
-INSERT INTO public.scorers (id, player_id, player_name, team_id, team_name, goals, assists, season, created_at, updated_at) VALUES ('9393a31b-3531-42ec-a1b8-98e9c0ccb72b', NULL, 'Thomas Merlein', NULL, 'SpG Vikt. Wertheim 3/Grünenwört', 1, 0, '2025/26', '2025-09-01 10:14:42.804272+00', '2025-09-01 10:14:42.804272+00');
 INSERT INTO public.scorers (id, player_id, player_name, team_id, team_name, goals, assists, season, created_at, updated_at) VALUES ('14fba149-5054-40bd-8e46-70409713a138', NULL, 'Silas Jacob', NULL, 'SV Viktoria Wertheim', 2, 0, '2024/25', '2025-09-03 10:52:19.489478+00', '2025-09-03 10:52:19.489478+00');
 INSERT INTO public.scorers (id, player_id, player_name, team_id, team_name, goals, assists, season, created_at, updated_at) VALUES ('2ae32c9a-a3f1-45b4-9ff7-62fd9e21dfee', NULL, 'Stefan Sachnjuk', NULL, 'SV Viktoria Wertheim', 2, 0, '2024/25', '2025-09-03 10:52:19.489478+00', '2025-09-03 10:52:19.489478+00');
 INSERT INTO public.scorers (id, player_id, player_name, team_id, team_name, goals, assists, season, created_at, updated_at) VALUES ('fa70dc90-f7a8-455a-b529-6ecc8c4d20be', NULL, 'Umut Baytekin', NULL, 'SV Viktoria Wertheim', 1, 0, '2024/25', '2025-09-03 10:52:19.489478+00', '2025-09-03 10:52:19.489478+00');
@@ -33,6 +31,8 @@ INSERT INTO public.scorers (id, player_id, player_name, team_id, team_name, goal
 INSERT INTO public.scorers (id, player_id, player_name, team_id, team_name, goals, assists, season, created_at, updated_at) VALUES ('78268dd1-0990-424d-88bf-53a21bdf7b72', NULL, 'Oktay Can Kaleli', 'a2222222-2222-2222-2222-222222222222', 'SV Viktoria Wertheim II', 1, 0, '2024/25', '2025-09-03 15:29:39.021699+00', '2025-09-03 15:33:54.102829+00');
 INSERT INTO public.scorers (id, player_id, player_name, team_id, team_name, goals, assists, season, created_at, updated_at) VALUES ('e320dc3b-6302-4a9c-aa4f-c2f10628e257', NULL, 'Dennis Schomber', 'a2222222-2222-2222-2222-222222222222', 'SV Viktoria Wertheim II', 1, 0, '2024/25', '2025-09-03 15:29:39.021699+00', '2025-09-03 15:33:54.102829+00');
 INSERT INTO public.scorers (id, player_id, player_name, team_id, team_name, goals, assists, season, created_at, updated_at) VALUES ('5c105f53-998b-4f64-9e62-a32f78822167', NULL, 'Dennis Zimbelmann', 'a2222222-2222-2222-2222-222222222222', 'SV Viktoria Wertheim II', 1, 0, '2024/25', '2025-09-03 15:29:39.021699+00', '2025-09-03 15:33:54.102829+00');
+INSERT INTO public.scorers (id, player_id, player_name, team_id, team_name, goals, assists, season, created_at, updated_at) VALUES ('5ff33223-e107-40c4-8f34-399449c7ccaa', NULL, 'Andrej Jörg', 'a3333333-3333-3333-3333-333333333333', 'SpG Vikt. Wertheim 3/Grünenwört', 2, 0, '2025/26', '2025-09-01 10:14:42.804272+00', '2025-09-03 18:14:56.041601+00');
+INSERT INTO public.scorers (id, player_id, player_name, team_id, team_name, goals, assists, season, created_at, updated_at) VALUES ('9393a31b-3531-42ec-a1b8-98e9c0ccb72b', NULL, 'Thomas Merlein', 'a3333333-3333-3333-3333-333333333333', 'SpG Vikt. Wertheim 3/Grünenwört', 1, 0, '2025/26', '2025-09-01 10:14:42.804272+00', '2025-09-03 18:14:56.041601+00');
 
 
 --
