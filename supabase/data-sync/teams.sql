@@ -1,3 +1,4 @@
+TRUNCATE TABLE teams CASCADE;
 --
 -- PostgreSQL database dump
 --

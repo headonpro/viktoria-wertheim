@@ -1,3 +1,4 @@
+TRUNCATE TABLE players CASCADE;
 --
 -- PostgreSQL database dump
 --

@@ -1,3 +1,4 @@
+TRUNCATE TABLE newsletter_subscribers CASCADE;
 --
 -- PostgreSQL database dump
 --

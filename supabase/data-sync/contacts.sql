@@ -1,3 +1,4 @@
+TRUNCATE TABLE contacts CASCADE;
 --
 -- PostgreSQL database dump
 --

@@ -21,6 +21,8 @@ TABLES="teams players matches news sponsors contacts newsletter_subscribers yout
 
 for TABLE in $TABLES; do
     echo "  Exporting $TABLE..."
+    # First add TRUNCATE command, then export data
+    echo "TRUNCATE TABLE $TABLE CASCADE;" > "$BACKUP_DIR/$TABLE.sql"
     docker exec supabase-db pg_dump -U postgres \
         --table="$TABLE" \
         --data-only \
@@ -28,7 +30,7 @@ for TABLE in $TABLES; do
         --no-privileges \
         --inserts \
         --column-inserts \
-        > "$BACKUP_DIR/$TABLE.sql"
+        >> "$BACKUP_DIR/$TABLE.sql"
 done
 
 echo "✅ Export complete!"

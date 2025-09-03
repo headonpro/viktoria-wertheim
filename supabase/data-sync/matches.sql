@@ -1,3 +1,4 @@
+TRUNCATE TABLE matches CASCADE;
 --
 -- PostgreSQL database dump
 --

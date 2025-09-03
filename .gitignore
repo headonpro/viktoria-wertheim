@@ -17,6 +17,8 @@ next-env.d.ts
 
 # Backups & Data
 *.sql
+!supabase/data-sync/*.sql
+!supabase/migrations/*.sql
 *.tar.gz
 *.tar
 *.zip

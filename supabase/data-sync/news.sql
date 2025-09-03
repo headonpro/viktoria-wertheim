@@ -1,3 +1,4 @@
+TRUNCATE TABLE news CASCADE;
 --
 -- PostgreSQL database dump
 --

@@ -1,3 +1,4 @@
+TRUNCATE TABLE league_standings CASCADE;
 --
 -- PostgreSQL database dump
 --

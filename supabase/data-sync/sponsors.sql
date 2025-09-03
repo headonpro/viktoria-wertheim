@@ -1,3 +1,4 @@
+TRUNCATE TABLE sponsors CASCADE;
 --
 -- PostgreSQL database dump
 --

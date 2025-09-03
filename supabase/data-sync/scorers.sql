@@ -1,3 +1,4 @@
+TRUNCATE TABLE scorers CASCADE;
 --
 -- PostgreSQL database dump
 --

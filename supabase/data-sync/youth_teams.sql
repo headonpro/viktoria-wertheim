@@ -1,3 +1,4 @@
+TRUNCATE TABLE youth_teams CASCADE;
 --
 -- PostgreSQL database dump
 --
