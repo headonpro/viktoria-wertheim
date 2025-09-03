@@ -56,7 +56,7 @@ export default function Header() {
             <div></div>
 
             {/* Navigation - Right */}
-            <div className="flex items-center">
+            <div className="flex items-center justify-end">
               <DesktopNavigation />
             </div>
           </div>

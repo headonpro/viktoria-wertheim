@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { IconCalendar, IconClock, IconMapPin, IconSoccerField, IconChevronRight } from '@tabler/icons-react'
+import { IconCalendar, IconClock, IconMapPin, IconSoccerField } from '@tabler/icons-react'
 import type { Database } from '@/lib/database.types'
 import { getTeamAbbreviation, getTeamLogo } from '@/lib/teams/team-data'
 
@@ -221,11 +221,17 @@ export default function GameCards({ lastMatch, nextMatch }: GameCardsProps) {
             
             {/* Call to Action */}
             <div className="pt-3">
-              <div className="bg-viktoria-blue/5 dark:bg-viktoria-yellow/10 rounded-lg px-4 py-3 flex items-center justify-between group-hover:bg-viktoria-blue/10 dark:group-hover:bg-viktoria-yellow/20 transition-colors">
-                <p className="text-xs font-semibold text-viktoria-blue dark:text-viktoria-yellow">
-                  Komm vorbei und unterstütze uns!
+              <div className="text-center py-2">
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                  <span className="inline-block text-viktoria-blue dark:text-viktoria-yellow font-bold">Komm vorbei</span>
+                  <span className="mx-1.5">•</span>
+                  <span className="inline-block">unterstütze uns!</span>
                 </p>
-                <IconChevronRight size={16} className="text-viktoria-blue dark:text-viktoria-yellow" />
+                <div className="flex items-center justify-center gap-2 mt-1">
+                  <div className="h-px w-8 bg-gradient-to-r from-transparent via-viktoria-blue dark:via-viktoria-yellow to-transparent"></div>
+                  <IconSoccerField size={14} className="text-viktoria-blue dark:text-viktoria-yellow opacity-60" />
+                  <div className="h-px w-8 bg-gradient-to-l from-transparent via-viktoria-blue dark:via-viktoria-yellow to-transparent"></div>
+                </div>
               </div>
             </div>
           </div>
