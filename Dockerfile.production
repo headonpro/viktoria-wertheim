@@ -10,11 +10,11 @@ RUN corepack enable pnpm && pnpm install --frozen-lockfile
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Build Arguments für Environment Variables
-ARG NEXT_PUBLIC_SUPABASE_URL
-ARG NEXT_PUBLIC_SUPABASE_ANON_KEY
-ARG NEXT_PUBLIC_ADMIN_PASSWORD
-ARG NEXT_PUBLIC_ADMIN_SECRET
+# Build Arguments für Environment Variables (mit Default-Werten)
+ARG NEXT_PUBLIC_SUPABASE_URL=http://91.98.117.169:8000
+ARG NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE
+ARG NEXT_PUBLIC_ADMIN_PASSWORD=Vkt2025SecureAdmin
+ARG NEXT_PUBLIC_ADMIN_SECRET=dummy
 
 # Environment Variables für Build setzen
 ENV NEXT_PUBLIC_SUPABASE_URL=$NEXT_PUBLIC_SUPABASE_URL
@@ -28,7 +28,8 @@ COPY . .
 
 # Next.js für Production bauen
 RUN corepack enable pnpm && \
-    pnpm run build
+    echo "Starting build..." && \
+    pnpm run build || (echo "Build failed, showing last logs:" && cat .next/build-trace.log 2>/dev/null || true && exit 1)
 
 # Production Stage
 FROM node:20-alpine AS runner
