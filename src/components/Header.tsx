@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import HeaderLogo from './HeaderLogo'
 import DesktopNavigation from './DesktopNavigation'
 import MobileNavigation from './MobileNavigation'
@@ -9,12 +9,46 @@ import MobileSidebar from './MobileSidebar'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
 
+  useEffect(() => {
+    const controlHeader = () => {
+      if (typeof window !== 'undefined') {
+        const currentScrollY = window.scrollY
+        
+        // Show header when scrolling up or at the top
+        if (currentScrollY < lastScrollY || currentScrollY < 10) {
+          setIsVisible(true)
+        } 
+        // Hide header when scrolling down (only after scrolling 50px to avoid sensitivity)
+        else if (currentScrollY > 50 && currentScrollY > lastScrollY) {
+          setIsVisible(false)
+          setIsMenuOpen(false) // Close mobile menu when hiding header
+        }
+        
+        setLastScrollY(currentScrollY)
+      }
+    }
+
+    // Add scroll event listener
+    window.addEventListener('scroll', controlHeader)
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('scroll', controlHeader)
+    }
+  }, [lastScrollY])
+
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-transparent dark:to-transparent dark:bg-white/[0.02] backdrop-blur-md shadow-lg hover:shadow-xl transition-all duration-300">
+      <header 
+        className={`fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-transparent dark:to-transparent dark:bg-white/[0.02] backdrop-blur-md shadow-lg hover:shadow-xl transition-all duration-500 ease-in-out ${
+          isVisible ? 'translate-y-0' : '-translate-y-full'
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           {/* Mobile Layout */}

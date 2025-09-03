@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { IconBallFootball, IconTarget } from '@tabler/icons-react'
+import { IconBallFootball } from '@tabler/icons-react'
 import type { Database } from '@/lib/database.types'
 
 type Scorer = Database['public']['Tables']['scorers']['Row']
@@ -28,7 +28,7 @@ export default function TopScorers({ scorers }: TopScorersProps) {
       
       <div className="p-4 sm:p-5">
         <div className="space-y-2">
-          {scorers.map((scorer, index) => (
+          {scorers.slice(0, 5).map((scorer, index) => (
             <div 
               key={scorer.id}
               className={`flex items-center space-x-3 p-3 rounded-lg transition-all duration-200 ${
@@ -58,29 +58,19 @@ export default function TopScorers({ scorers }: TopScorersProps) {
                 }`}>
                   {scorer.player_name}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                  {scorer.team_name || 'Team unbekannt'}
-                </p>
+
               </div>
               
               {/* Stats */}
-              <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
-                <div className="flex items-center gap-1.5">
-                  <IconBallFootball size={16} className="text-viktoria-blue dark:text-viktoria-yellow" />
-                  <span className={`font-bold ${
-                    index === 0 
-                      ? 'text-lg sm:text-xl text-viktoria-blue dark:text-viktoria-yellow' 
-                      : 'text-base sm:text-lg text-gray-900 dark:text-white'
-                  }`}>
-                    {scorer.goals}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <IconTarget size={14} className="text-gray-400 dark:text-gray-500" />
-                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                    {scorer.assists || 0}
-                  </span>
-                </div>
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                <IconBallFootball size={16} className="text-viktoria-blue dark:text-viktoria-yellow" />
+                <span className={`font-bold ${
+                  index === 0 
+                    ? 'text-lg sm:text-xl text-viktoria-blue dark:text-viktoria-yellow' 
+                    : 'text-base sm:text-lg text-gray-900 dark:text-white'
+                }`}>
+                  {scorer.goals}
+                </span>
               </div>
             </div>
           ))}

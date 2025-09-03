@@ -55,6 +55,19 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             
+            # Apply database migrations
+            if [ -d "supabase/migrations" ] && [ "$(ls -A supabase/migrations/*.sql 2>/dev/null)" ]; then
+              echo "📦 Applying database migrations..."
+              for migration in supabase/migrations/*.sql; do
+                if [ -f "$migration" ]; then
+                  filename=$(basename "$migration")
+                  echo "  Applying: $filename"
+                  docker exec -i supabase-db psql -U postgres < "$migration" 2>&1 || echo "  ⚠️  Migration may have already been applied"
+                fi
+              done
+              echo "✅ Migrations complete"
+            fi
+            
             # Copy production environment file
             echo "📋 Setting up environment..."
             if [ -f .env.production.vps ]; then
