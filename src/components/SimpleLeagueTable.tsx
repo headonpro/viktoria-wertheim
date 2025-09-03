@@ -29,10 +29,14 @@ export default function SimpleLeagueTable({ standings, onShowFullTable }: Simple
 
   // Find the team's position in the standings
   const getDisplayedStandings = () => {
-    const teamIndex = standings.findIndex(team => 
-      team.team_name?.includes('Viktoria Wertheim') || 
-      team.team_name?.includes('Vikt. Wertheim')
-    )
+    // Find any Viktoria Wertheim team (including SpG variants)
+    const teamIndex = standings.findIndex(team => {
+      const name = team.team_name || ''
+      // Suche nach verschiedenen Schreibweisen von Viktoria Wertheim
+      return name === 'SV Viktoria Wertheim' || 
+             name.includes('Viktoria Wertheim') || 
+             name.includes('Vikt. Wertheim') // Für SpG Vikt. Wertheim 3/Grünenwört
+    })
     
     if (teamIndex === -1) {
       // Team not found, show top 5

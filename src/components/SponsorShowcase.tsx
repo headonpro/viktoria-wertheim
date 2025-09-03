@@ -51,7 +51,7 @@ export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorSh
                       )}
                     </>
                   ) : sponsor.website ? (
-                    <a href={sponsor.website} className="block">
+                    <a href={sponsor.website} target="_blank" rel="noopener noreferrer" className="block">
                       <div className="h-12 sm:h-14 flex items-center justify-center mb-2">
                         <div className="text-base sm:text-lg font-bold text-gray-800 dark:text-gray-200 group-hover:text-viktoria-blue dark:group-hover:text-viktoria-yellow transition-colors">
                           {sponsor.name}
@@ -91,6 +91,8 @@ export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorSh
                 <a
                   key={sponsor.id}
                   href={sponsor.website || '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group bg-gradient-to-br from-gray-50 to-white dark:from-viktoria-dark-lighter dark:to-viktoria-dark rounded-lg p-3 flex items-center justify-center border border-gray-100 dark:border-gray-700 hover:border-viktoria-blue/30 dark:hover:border-viktoria-yellow/30 transition-all duration-200 hover:shadow-sm"
                 >
                   <div className="text-center">
@@ -128,6 +130,8 @@ export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorSh
                 <a
                   key={sponsor.id}
                   href={sponsor.website || '#'}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="group bg-gradient-to-br from-gray-50 to-white dark:from-viktoria-dark-lighter dark:to-viktoria-dark rounded-lg p-2 flex items-center justify-center border border-gray-100 dark:border-gray-700 hover:border-viktoria-blue/30 dark:hover:border-viktoria-yellow/30 transition-all duration-200 hover:shadow-sm min-h-[60px]"
                 >
                   {sponsor.logo_url ? (
