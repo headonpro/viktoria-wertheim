@@ -20,13 +20,13 @@ export default function Footer() {
                 height={72}
                 className="object-contain mb-3"
               />
-              <div className="flex items-stretch gap-1.5">
-                <span className="font-bold text-viktoria-yellow text-[2.25rem] leading-none flex items-center font-[family-name:var(--font-goldman)]">SV</span>
-                <div className="flex flex-col justify-center">
-                  <span className="font-semibold text-white text-base leading-tight font-[family-name:var(--font-goldman)]">VIKTORIA</span>
-                  <span className="font-semibold text-white text-base leading-tight font-[family-name:var(--font-goldman)]">WERTHEIM</span>
-                </div>
-              </div>
+              <Image 
+                src="/SVVW.png"
+                alt="SV Viktoria Wertheim"
+                width={100}
+                height={24}
+                className="object-contain h-6 w-auto"
+              />
             </div>
 
           </div>

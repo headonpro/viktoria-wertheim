@@ -58,21 +58,13 @@ export default function Header() {
               <HeaderLogo />
             </div>
 
-            {/* Title - Center (Mobile Only) */}
+            {/* Logo - Center (Mobile Only) */}
             <div className="flex justify-center lg:hidden">
-              <div className="flex items-stretch gap-1.5">
-                <span className="font-bold text-viktoria-yellow text-[2.5rem] md:text-[3rem] leading-none flex items-center font-[family-name:var(--font-goldman)]">
-                  SV
-                </span>
-                <div className="flex flex-col justify-center">
-                  <span className="font-semibold text-white text-base md:text-lg leading-none font-[family-name:var(--font-goldman)]">
-                    VIKTORIA
-                  </span>
-                  <span className="font-semibold text-white text-base md:text-lg leading-none md:-mt-1 font-[family-name:var(--font-goldman)]">
-                    WERTHEIM
-                  </span>
-                </div>
-              </div>
+              <img 
+                src="/SVVW.png"
+                alt="SV Viktoria Wertheim"
+                className="h-10 md:h-12 w-auto object-contain"
+              />
             </div>
 
             {/* Mobile Menu Button - Right */}

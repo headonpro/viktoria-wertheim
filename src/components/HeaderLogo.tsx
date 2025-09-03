@@ -14,20 +14,15 @@ export default function HeaderLogo() {
         className="object-contain"
         priority
       />
-      {/* Text nur auf Desktop anzeigen, da auf Mobile der zentrierte Titel verwendet wird */}
-      <div className="hidden lg:flex items-stretch gap-1.5">
-        <span className="font-bold text-viktoria-yellow text-[2.25rem] leading-none flex items-center font-[family-name:var(--font-goldman)]">
-          SV
-        </span>
-        <div className="flex flex-col justify-center">
-          <span className="font-semibold text-white text-base leading-tight font-[family-name:var(--font-goldman)]">
-            VIKTORIA
-          </span>
-          <span className="font-semibold text-white text-base leading-tight font-[family-name:var(--font-goldman)]">
-            WERTHEIM
-          </span>
-        </div>
-      </div>
+      {/* Logo nur auf Desktop anzeigen */}
+      <Image 
+        src="/SVVW.png"
+        alt="SV Viktoria Wertheim"
+        width={100}
+        height={24}
+        className="hidden lg:block object-contain h-6 w-auto"
+        priority
+      />
     </Link>
   )
 }
