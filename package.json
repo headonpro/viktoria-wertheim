@@ -11,7 +11,8 @@
     "db:migrate:status": "./scripts/db-migrate.sh status",
     "db:migrate:up": "./scripts/db-migrate.sh up",
     "db:migrate:deploy": "./scripts/db-migrate.sh deploy",
-    "db:export": "./scripts/db-migrate.sh export"
+    "db:export": "./scripts/db-migrate.sh export",
+    "db:sync": "./scripts/db-sync.sh"
   },
   "dependencies": {
     "@supabase/ssr": "^0.7.0",

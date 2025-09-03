@@ -68,6 +68,20 @@ jobs:
               echo "✅ Migrations complete"
             fi
             
+            # Sync database data
+            if [ -d "supabase/data-sync" ] && [ "$(ls -A supabase/data-sync/*.sql 2>/dev/null)" ]; then
+              echo "🔄 Syncing database data..."
+              for datafile in supabase/data-sync/*.sql; do
+                if [ -f "$datafile" ]; then
+                  filename=$(basename "$datafile")
+                  echo "  Importing: $filename"
+                  # Clear existing data and import new data
+                  docker exec -i supabase-db psql -U postgres < "$datafile"
+                fi
+              done
+              echo "✅ Data sync complete"
+            fi
+            
             # Copy production environment file
             echo "📋 Setting up environment..."
             if [ -f .env.production.vps ]; then
