@@ -21,7 +21,7 @@ DB_CONTAINER=$(docker ps --format "{{.Names}}" | grep -E "supabase.*db" | head -
 
 if [ -z "$DB_CONTAINER" ]; then
     echo "❌ Error: No Supabase database container found!"
-    echo "   Make sure Supabase is running: docker-compose -f docker-compose.supabase.yml up -d"
+    echo "   Make sure Supabase is running: docker-compose up -d"
     exit 1
 fi
 

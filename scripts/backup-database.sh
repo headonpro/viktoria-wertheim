@@ -51,9 +51,9 @@ if ! docker ps | grep -q "$CONTAINER_NAME"; then
     echo -e "${RED}Error: Container '$CONTAINER_NAME' is not running!${NC}"
     echo "Please start the database container first."
     if [ "$ENVIRONMENT" = "local" ]; then
-        echo "Run: docker-compose -f docker-compose.supabase.yml up -d"
+        echo "Run: docker-compose up -d"
     else
-        echo "Run: docker-compose -f docker-compose.production.yml up -d"
+        echo "Run: docker-compose -f docker-compose.yml -f docker-compose.production.yml up -d"
     fi
     exit 1
 fi

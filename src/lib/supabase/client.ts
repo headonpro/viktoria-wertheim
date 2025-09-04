@@ -17,18 +17,19 @@ function withRetry<T>(
   return async function retry(attempt: number = 1): Promise<T> {
     try {
       return await fn()
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Don't retry on client errors (4xx)
-      if (error?.status >= 400 && error?.status < 500) {
+      const err = error as { status?: number; message?: string }
+      if (err?.status && err.status >= 400 && err.status < 500) {
         throw error
       }
 
       // Check if we should retry
       if (attempt >= MAX_RETRIES) {
         logger.error(`${context} failed after ${MAX_RETRIES} attempts`, {
-          error: error?.message,
+          error: err?.message,
           attempt,
-          status: error?.status
+          status: err?.status
         })
         throw error
       }
@@ -39,7 +40,7 @@ function withRetry<T>(
       logger.warn(`${context} failed, retrying...`, {
         attempt,
         nextAttemptIn: waitTime,
-        error: error?.message
+        error: err?.message
       })
 
       // Wait before retrying
@@ -80,13 +81,13 @@ function createClientWithRetry(): SupabaseClient {
               const retryMethods = ['select', 'insert', 'update', 'delete', 'upsert']
               
               if (retryMethods.includes(queryProp as string)) {
-                return function(...args: any[]) {
-                  const originalMethod = (queryTarget as any)[queryProp]
+                return function(...args: unknown[]) {
+                  const originalMethod = (queryTarget as any)[queryProp as string]
                   if (typeof originalMethod === 'function') {
                     const result = originalMethod.apply(queryTarget, args)
                     
                     // Wrap the promise chain methods
-                    const wrapPromiseChain = (promiseObj: any): any => {
+                    const wrapPromiseChain = (promiseObj: any): unknown => {
                       return new Proxy(promiseObj, {
                         get(promiseTarget, promiseProp) {
                           // Execute methods should have retry logic
@@ -102,7 +103,7 @@ function createClientWithRetry(): SupabaseClient {
                           // For chaining methods, continue wrapping
                           const value = promiseTarget[promiseProp]
                           if (typeof value === 'function') {
-                            return function(...chainArgs: any[]) {
+                            return function(...chainArgs: unknown[]) {
                               const chainResult = value.apply(promiseTarget, chainArgs)
                               if (chainResult && typeof chainResult.then === 'function') {
                                 // This is the final execution, wrap with retry

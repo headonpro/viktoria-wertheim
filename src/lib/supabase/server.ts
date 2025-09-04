@@ -3,7 +3,7 @@ import { cookies } from 'next/headers'
 import type { Database } from '@/lib/database.types'
 
 export async function createClient() {
-  const cookieStore = await cookies()
+  const _cookieStore = await cookies()
   
   // Use process.env directly
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
@@ -22,7 +22,7 @@ export async function createClient() {
         getAll() {
           return []  // Return empty array to avoid cookie issues
         },
-        setAll(cookiesToSet) {
+        setAll(_cookiesToSet) {
           // Do nothing - we don't want to set cookies
         },
       },

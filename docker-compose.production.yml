@@ -1,75 +1,125 @@
+# Viktoria Wertheim - Production Override Configuration
+#
+# This file overrides settings from docker-compose.yml for production deployment
+# Usage: docker-compose -f docker-compose.yml -f docker-compose.production.yml up -d
+#
+# Changes for production:
+# - Removes Studio (no public access)
+# - Adds Next.js app container
+# - Adjusts environment variables
+# - Sets production-ready configurations
+
 version: '3.8'
 
 services:
-  # Next.js Application
+  # Remove Studio in production (security)
+  studio:
+    deploy:
+      replicas: 0
+    command: ["echo", "Studio disabled in production"]
+    restart: "no"
+
+  # Production database configuration
+  db:
+    container_name: viktoria-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: viktoria_production
+    volumes:
+      - /opt/viktoria/postgres-data:/var/lib/postgresql/data
+      - /opt/viktoria/backups:/backups
+
+  # Kong API Gateway - Production settings
+  kong:
+    container_name: viktoria-kong
+    restart: always
+    environment:
+      KONG_NGINX_PROXY_PROXY_BUFFER_SIZE: 320k
+      KONG_NGINX_PROXY_PROXY_BUFFERS: 128 320k
+
+  # Auth - Production URLs
+  auth:
+    restart: always
+    environment:
+      API_EXTERNAL_URL: https://api.viktoria-wertheim.de
+      GOTRUE_SITE_URL: https://viktoria-wertheim.de
+      GOTRUE_MAILER_AUTOCONFIRM: false
+      GOTRUE_DISABLE_SIGNUP: false
+
+  # Storage - Production paths
+  storage:
+    restart: always
+    volumes:
+      - /opt/viktoria/storage:/var/lib/storage
+    environment:
+      FILE_SIZE_LIMIT: 104857600  # 100MB in production
+
+  # Next.js Production App
   web:
-    build: .
     container_name: viktoria-web
-    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        NODE_ENV: production
+    restart: always
     ports:
       - "8001:3000"
     environment:
-      - NODE_ENV=production
-      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
-      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
-      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
-      - ADMIN_EMAILS=${ADMIN_EMAILS}
+      NODE_ENV: production
+      NEXT_PUBLIC_APP_URL: https://viktoria-wertheim.de
+      NEXT_PUBLIC_SUPABASE_URL: https://api.viktoria-wertheim.de
+      # Other env vars loaded from .env.production
+    env_file:
+      - .env.production
     depends_on:
-      - postgres
-    networks:
-      - viktoria-network
-      - supabase_default
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 2G
-        reservations:
-          cpus: '0.5'
-          memory: 512M
+      - db
+      - kong
+      - auth
+      - storage
+    volumes:
+      - ./public:/app/public:ro
+      - ./.next/cache:/app/.next/cache
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
 
-  # PostgreSQL Database
-  postgres:
-    image: postgres:15
-    container_name: viktoria-postgres
-    restart: unless-stopped
-    ports:
-      - "5433:5432"
+  # Backup service (optional)
+  backup:
+    container_name: viktoria-backup
+    image: postgres:15-alpine
+    restart: always
     environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=postgres
+      PGHOST: db
+      PGPORT: 5432
+      PGUSER: postgres
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: viktoria_production
     volumes:
-      - postgres-data:/var/lib/postgresql/data
-    networks:
-      - viktoria-network
+      - /opt/viktoria/backups:/backups
+      - ./scripts/backup-automated.sh:/backup.sh:ro
+    entrypoint: ["/bin/sh", "-c"]
+    command: |
+      "while true; do
+        echo 'Running backup at' $$(date);
+        /backup.sh;
+        sleep 86400;
+      done"
+    depends_on:
+      - db
 
-  # Supabase Studio removed for production security
-  # Uncomment only for debugging purposes
-  # studio:
-  #   image: supabase/studio:latest
-  #   container_name: viktoria-studio
-  #   restart: unless-stopped
-  #   ports:
-  #     - "54323:3000"
-  #   environment:
-  #     - STUDIO_PG_META_URL=http://postgres:5432/postgres
-  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-  #   depends_on:
-  #     - postgres
-  #   networks:
-  #     - viktoria-network
+# Production network configuration
+networks:
+  default:
+    name: viktoria-network
+    driver: bridge
 
+# Production volumes
 volumes:
   postgres-data:
-
-networks:
-  viktoria-network:
-    driver: bridge
-  supabase_default:
-    external: true
+    driver: local
+  storage-data:
+    driver: local

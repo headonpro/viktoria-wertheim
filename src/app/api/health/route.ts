@@ -26,11 +26,11 @@ export async function GET() {
       rateLimit: 'ok' as 'ok' | 'warning' | 'error',
     },
     metrics: {
-      memoryUsage: {} as any,
-      diskSpace: {} as any,
+      memoryUsage: {} as Record<string, string>,
+      diskSpace: {} as Record<string, string>,
       responseTime: 0,
     },
-    rateLimits: [] as any[],
+    rateLimits: [] as Array<{ pattern: string; limit: number; description: string }>,
   }
 
   // Check database connection
@@ -38,7 +38,7 @@ export async function GET() {
     const supabase = await createClient()
     const { error } = await supabase.from('news').select('id').limit(1)
     checks.checks.database = error ? 'error' : 'ok'
-  } catch (err) {
+  } catch (_err) {
     checks.checks.database = 'error'
     checks.status = 'degraded'
   }
@@ -46,9 +46,9 @@ export async function GET() {
   // Check Supabase auth service
   try {
     const supabase = await createClient()
-    const { data: session } = await supabase.auth.getSession()
+    const { data: _session } = await supabase.auth.getSession()
     checks.checks.supabaseAuth = 'ok'
-  } catch (err) {
+  } catch (_err) {
     checks.checks.supabaseAuth = 'error'
     checks.status = 'degraded'
   }
@@ -98,7 +98,7 @@ export async function GET() {
       checks.checks.diskSpace = 'warning'
       checks.status = 'degraded'
     }
-  } catch (err) {
+  } catch (_err) {
     // If we can't check disk space, just mark as warning
     checks.checks.diskSpace = 'warning'
   }
@@ -108,7 +108,7 @@ export async function GET() {
     // Get configured rate limits for documentation
     checks.rateLimits = getAllRateLimits()
     checks.checks.rateLimit = 'ok'
-  } catch (err) {
+  } catch (_err) {
     checks.checks.rateLimit = 'warning'
   }
 

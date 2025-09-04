@@ -17,7 +17,7 @@ interface TeamStatisticsProps {
 }
 
 export default function TeamStatistics({
-  teamId,
+  teamId: _teamId,
   teamName,
   played = 0,
   won = 0,

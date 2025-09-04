@@ -75,7 +75,7 @@ function apply_local() {
     # Check if Supabase is running locally
     if ! docker ps | grep -q supabase-db; then
         echo -e "${RED}Error: Local Supabase database not running${NC}"
-        echo "Start it with: docker-compose -f docker-compose.supabase.yml up -d"
+        echo "Start it with: docker-compose up -d"
         exit 1
     fi
 
