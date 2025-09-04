@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { cookies } from 'next/headers'
+import logger from '@/lib/logger'
+import { getClientIp } from '@/lib/rate-limit'
 
 export async function POST(
   request: NextRequest,
@@ -40,7 +42,11 @@ export async function POST(
         .single()
       
       if (error) {
-        console.error('Error fetching current views:', error)
+        logger.error('Error fetching current views', {
+          newsId,
+          error: error.message,
+          ip: getClientIp(request.headers)
+        })
         return NextResponse.json(
           { error: 'Failed to fetch view count' },
           { status: 500 }
@@ -64,7 +70,11 @@ export async function POST(
       .single()
     
     if (fetchError) {
-      console.error('Error fetching news article:', fetchError)
+      logger.error('Error fetching news article', {
+        newsId,
+        error: fetchError.message,
+        ip: getClientIp(request.headers)
+      })
       return NextResponse.json(
         { error: 'News article not found' },
         { status: 404 }
@@ -84,7 +94,13 @@ export async function POST(
       .eq('id', newsId)
     
     if (updateError) {
-      console.error('Error updating views:', updateError)
+      logger.error('Error updating views', {
+        newsId,
+        currentViews,
+        newViews,
+        error: updateError.message,
+        ip: getClientIp(request.headers)
+      })
       return NextResponse.json(
         { error: 'Failed to update view count' },
         { status: 500 }
@@ -113,7 +129,14 @@ export async function POST(
     return response
     
   } catch (error) {
-    console.error('Unexpected error in view counter:', error)
+    logger.error('Unexpected error in view counter', {
+      error: error instanceof Error ? {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      } : error,
+      ip: getClientIp(request.headers)
+    })
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
@@ -144,7 +167,11 @@ export async function GET(
       .single()
     
     if (error) {
-      console.error('Error fetching views:', error)
+      logger.error('Error fetching views', {
+        newsId,
+        error: error.message,
+        ip: getClientIp(request.headers)
+      })
       return NextResponse.json(
         { error: 'Failed to fetch view count' },
         { status: 500 }
@@ -154,7 +181,14 @@ export async function GET(
     return NextResponse.json({ views: data?.views || 0 })
     
   } catch (error) {
-    console.error('Unexpected error fetching views:', error)
+    logger.error('Unexpected error fetching views', {
+      error: error instanceof Error ? {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      } : error,
+      ip: getClientIp(request.headers)
+    })
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

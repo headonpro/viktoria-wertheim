@@ -13,20 +13,17 @@ export async function createClient() {
     supabaseUrl,
     supabaseAnonKey,
     {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false
+      },
       cookies: {
         getAll() {
-          return cookieStore.getAll()
+          return []  // Return empty array to avoid cookie issues
         },
         setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch {
-            // The `setAll` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
-          }
+          // Do nothing - we don't want to set cookies
         },
       },
     }

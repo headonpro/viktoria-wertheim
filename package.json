@@ -6,13 +6,16 @@
     "dev": "next dev --turbopack",
     "build": "NODE_ENV=production next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "typecheck": "tsc --noEmit",
     "db:migrate:create": "./scripts/db-migrate.sh create",
     "db:migrate:status": "./scripts/db-migrate.sh status",
     "db:migrate:up": "./scripts/db-migrate.sh up",
     "db:migrate:deploy": "./scripts/db-migrate.sh deploy",
     "db:export": "./scripts/db-migrate.sh export",
-    "db:sync": "./scripts/db-sync.sh"
+    "db:sync": "./scripts/db-sync.sh",
+    "db:backup": "./scripts/backup-database.sh",
+    "db:backup:rotate": "./scripts/rotate-backups.sh"
   },
   "dependencies": {
     "@supabase/ssr": "^0.7.0",

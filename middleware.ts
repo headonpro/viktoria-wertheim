@@ -1,8 +1,45 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import rateLimit, { getClientIp } from '@/lib/rate-limit'
+import { getRateLimit } from '@/config/rate-limits'
+
+// Create rate limiter instance
+const limiter = rateLimit({
+  interval: 60000, // 1 minute
+  uniqueTokenPerInterval: 500, // Max 500 unique IPs per interval
+})
 
 export async function middleware(request: NextRequest) {
+  // Apply rate limiting before any other processing
+  const ip = getClientIp(request.headers)
+  const pathname = request.nextUrl.pathname
+  
+  // Get rate limit from config
+  const rateLimitValue = getRateLimit(pathname, false)
+  
+  // Check rate limit
+  try {
+    await limiter.check(rateLimitValue, `${ip}:${pathname}`)
+  } catch (error) {
+    // Rate limit exceeded
+    return new NextResponse(
+      JSON.stringify({ 
+        error: 'Too many requests. Please try again later.',
+        retryAfter: error instanceof Error ? error.message : '60 seconds'
+      }),
+      { 
+        status: 429,
+        headers: {
+          'Content-Type': 'application/json',
+          'X-RateLimit-Limit': rateLimitValue.toString(),
+          'X-RateLimit-Remaining': '0',
+          'Retry-After': '60'
+        }
+      }
+    )
+  }
+  
   const response = NextResponse.next({
     request: {
       headers: request.headers,

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import nodemailer from 'nodemailer'
 import rateLimit, { getClientIp } from '@/lib/rate-limit'
+import logger from '@/lib/logger'
 
 // Create rate limiter: 3 requests per minute per IP
 const limiter = rateLimit({
@@ -14,6 +15,10 @@ export async function POST(request: Request) {
   try {
     await limiter.check(3, ip) // Max 3 requests per minute
   } catch (error) {
+    logger.warn('Rate limit exceeded for contact form', {
+      ip,
+      error: error instanceof Error ? error.message : 'Unknown error'
+    })
     return NextResponse.json(
       { error: 'Zu viele Anfragen. Bitte versuchen Sie es später erneut.' },
       { status: 429 }
@@ -26,6 +31,15 @@ export async function POST(request: Request) {
 
     // Validate required fields
     if (!name || !email || !subject || !message) {
+      logger.info('Contact form validation failed', {
+        ip,
+        missingFields: {
+          name: !name,
+          email: !email,
+          subject: !subject,
+          message: !message
+        }
+      })
       return NextResponse.json(
         { error: 'Alle Felder sind erforderlich' },
         { status: 400 }
@@ -94,6 +108,12 @@ export async function POST(request: Request) {
     // Send email
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
       await transporter.sendMail(mailOptions)
+      logger.info('Contact form email sent successfully', {
+        ip,
+        from: email,
+        subject,
+        timestamp: new Date().toISOString()
+      })
       
       // Optional: Send confirmation email to sender
       const confirmationMail = {
@@ -132,9 +152,15 @@ export async function POST(request: Request) {
       
       await transporter.sendMail(confirmationMail)
     } else {
-      console.warn('E-Mail-Konfiguration fehlt. Bitte EMAIL_USER und EMAIL_PASS in .env.local setzen.')
+      logger.warn('E-Mail-Konfiguration fehlt. Bitte EMAIL_USER und EMAIL_PASS in .env.local setzen.')
       // In development without email config, just log the message
-      console.log('Contact form submission:', { name, email, subject, message })
+      logger.info('Contact form submission (no email config)', { 
+        ip,
+        name, 
+        email, 
+        subject, 
+        message 
+      })
     }
 
     return NextResponse.json(
@@ -142,7 +168,15 @@ export async function POST(request: Request) {
       { status: 200 }
     )
   } catch (error) {
-    console.error('Fehler beim Senden der E-Mail:', error)
+    logger.error('Fehler beim Senden der E-Mail', {
+      ip,
+      error: error instanceof Error ? {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      } : error,
+      timestamp: new Date().toISOString()
+    })
     return NextResponse.json(
       { error: 'Fehler beim Senden der Nachricht' },
       { status: 500 }
