@@ -91,8 +91,8 @@ export default function HomePageClient({ data }: HomePageClientProps) {
     
     // Filter scorers for the selected team
     const teamName = selectedTeam === '1' ? 'SV Viktoria Wertheim' :
-                     selectedTeam === '2' ? 'SV Viktoria Wertheim II' :
-                     'SpG Vikt. Wertheim 3/Grünenwört'
+                     selectedTeam === '2' ? 'SV Viktoria Wertheim 2' :
+                     'SpG Viktoria Wertheim 3/Grünenwört'
     
     const filteredScorers = data.scorers.filter(scorer => 
       scorer.team_name === teamName

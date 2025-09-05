@@ -73,12 +73,12 @@ export default async function TeamsPage() {
   try {
     // Fetch all data in parallel
     const results = await Promise.all([
-      supabase.from('teams').select('*').order('team_type'),
+      supabase.from('teams').select('*').eq('is_own_team', true).order('team_type'),
       supabase.from('players').select('*').order('number'),
       supabase.from('matches')
         .select('*')
         .order('match_date', { ascending: false })
-        .limit(20),
+        .limit(50),
       supabase.from('youth_teams').select('*').order('age_group'),
       supabase
         .from('league_standings')
@@ -133,7 +133,8 @@ export default async function TeamsPage() {
       
       const now = new Date()
       const pastMatches = teamMatches
-        .filter(m => new Date(m.match_date) < now && m.status === 'completed')
+        .filter(m => m.status === 'completed')
+        .sort((a, b) => new Date(b.match_date).getTime() - new Date(a.match_date).getTime())
         .slice(0, 3)
       
       const futureMatches = teamMatches
@@ -214,7 +215,8 @@ export default async function TeamsPage() {
       points: team.points || 0,
       teamType: team.team_type || 'senior',
       players: playersByTeam[team.id] || [],
-      ...matchesByTeam[team.id],
+      lastResults: matchesByTeam[team.id]?.lastResults || [],
+      nextMatch: matchesByTeam[team.id]?.nextMatch || null,
       leagueStats: leagueStats ? {
         played: leagueStats.played || 0,
         won: leagueStats.won || 0,

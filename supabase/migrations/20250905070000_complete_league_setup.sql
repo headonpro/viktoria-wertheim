@@ -29,7 +29,6 @@ INSERT INTO teams (id, name, short_name, league, season, team_type, created_at) 
     (gen_random_uuid(), 'TuS Großrinderfeld', 'TuS Großr', 'bfv-Kreisliga Tauberbischofsheim', '2025/26', 'first', NOW()),
     (gen_random_uuid(), '1.FC Umpfertal', '1.FC Umpf', 'bfv-Kreisliga Tauberbischofsheim', '2025/26', 'first', NOW()),
     (gen_random_uuid(), 'SG RaMBo', 'SG RaMBo', 'bfv-Kreisliga Tauberbischofsheim', '2025/26', 'first', NOW()),
-    (gen_random_uuid(), 'SV Dülfringen', 'SV Dülfr', 'bfv-Kreisliga Tauberbischofsheim', '2025/26', 'first', NOW()),
     (gen_random_uuid(), 'Türkgücü Wertheim', 'TG WER', 'bfv-Kreisliga Tauberbischofsheim', '2025/26', 'first', NOW()),
     (gen_random_uuid(), 'VfR Gerlachsheim', 'VfR Gerl', 'bfv-Kreisliga Tauberbischofsheim', '2025/26', 'first', NOW()),
     (gen_random_uuid(), 'FV Brehmbachtal', 'FV Brehm', 'bfv-Kreisliga Tauberbischofsheim', '2025/26', 'first', NOW()),
@@ -98,7 +97,6 @@ BEGIN
                 WHEN 'TuS Großrinderfeld' THEN 2
                 WHEN '1.FC Umpfertal' THEN 3
                 WHEN 'SG RaMBo' THEN 4
-                WHEN 'SV Dülfringen' THEN 5
                 WHEN 'Türkgücü Wertheim' THEN 6
                 WHEN 'VfR Gerlachsheim' THEN 7
                 WHEN 'FV Brehmbachtal' THEN 8
@@ -117,7 +115,6 @@ BEGIN
                 WHEN 'TuS Großrinderfeld' THEN 10
                 WHEN '1.FC Umpfertal' THEN 9
                 WHEN 'SG RaMBo' THEN 9
-                WHEN 'SV Dülfringen' THEN 7
                 WHEN 'Türkgücü Wertheim' THEN 6
                 WHEN 'VfR Gerlachsheim' THEN 5
                 WHEN 'FV Brehmbachtal' THEN 4
@@ -140,7 +137,6 @@ BEGIN
                 WHEN 'TuS Großrinderfeld' THEN 3
                 WHEN '1.FC Umpfertal' THEN 3
                 WHEN 'SG RaMBo' THEN 3
-                WHEN 'SV Dülfringen' THEN 2
                 WHEN 'Türkgücü Wertheim' THEN 2
                 WHEN 'VfR Gerlachsheim' THEN 1
                 WHEN 'FV Brehmbachtal' THEN 1
@@ -152,7 +148,6 @@ BEGIN
             END,
             CASE v_team.name  -- Drawn
                 WHEN 'TuS Großrinderfeld' THEN 1
-                WHEN 'SV Dülfringen' THEN 1
                 WHEN 'VfR Gerlachsheim' THEN 2
                 WHEN 'FV Brehmbachtal' THEN 1
                 WHEN 'FC Hundheim-Steinbach' THEN 1
@@ -164,7 +159,6 @@ BEGIN
             END,
             CASE v_team.name  -- Lost
                 WHEN '1.FC Umpfertal' THEN 1
-                WHEN 'SV Dülfringen' THEN 1
                 WHEN 'Türkgücü Wertheim' THEN 1
                 WHEN 'VfR Gerlachsheim' THEN 1
                 WHEN 'FV Brehmbachtal' THEN 2
@@ -183,7 +177,6 @@ BEGIN
                 WHEN 'TuS Großrinderfeld' THEN 21
                 WHEN '1.FC Umpfertal' THEN 13
                 WHEN 'SG RaMBo' THEN 10
-                WHEN 'SV Dülfringen' THEN 6
                 WHEN 'Türkgücü Wertheim' THEN 10
                 WHEN 'VfR Gerlachsheim' THEN 8
                 WHEN 'FV Brehmbachtal' THEN 9
@@ -202,7 +195,6 @@ BEGIN
                 WHEN 'TuS Großrinderfeld' THEN 3
                 WHEN '1.FC Umpfertal' THEN 5
                 WHEN 'SG RaMBo' THEN 5
-                WHEN 'SV Dülfringen' THEN 7
                 WHEN 'Türkgücü Wertheim' THEN 4
                 WHEN 'VfR Gerlachsheim' THEN 9
                 WHEN 'FV Brehmbachtal' THEN 11
