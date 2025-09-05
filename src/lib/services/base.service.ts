@@ -42,9 +42,12 @@ export abstract class BaseService<T = any> {
       const from = (page - 1) * limit
       const to = from + limit - 1
       
-      query = query
-        .order(sortBy, { ascending: sortOrder === 'asc' })
-        .range(from, to)
+      // Only apply sorting if sortBy is not empty
+      if (sortBy && sortBy.trim() !== '') {
+        query = query.order(sortBy, { ascending: sortOrder === 'asc' })
+      }
+      
+      query = query.range(from, to)
 
       const { data, error, count } = await query
 
