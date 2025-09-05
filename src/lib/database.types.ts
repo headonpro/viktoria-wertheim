@@ -463,6 +463,99 @@ export type Database = {
         }
         Relationships: []
       }
+      content_generation_log: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          generated_content_id: string | null
+          generated_content_type: string | null
+          id: string
+          status: string | null
+          trigger_data: Json | null
+          trigger_type: string
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          generated_content_id?: string | null
+          generated_content_type?: string | null
+          id?: string
+          status?: string | null
+          trigger_data?: Json | null
+          trigger_type: string
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          generated_content_id?: string | null
+          generated_content_type?: string | null
+          id?: string
+          status?: string | null
+          trigger_data?: Json | null
+          trigger_type?: string
+        }
+        Relationships: []
+      }
+      team_form: {
+        Row: {
+          form_points: number | null
+          form_string: string | null
+          id: string
+          recent_goals_against: number | null
+          recent_goals_for: number | null
+          season: string | null
+          team_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          form_points?: number | null
+          form_string?: string | null
+          id?: string
+          recent_goals_against?: number | null
+          recent_goals_for?: number | null
+          season?: string | null
+          team_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          form_points?: number | null
+          form_string?: string | null
+          id?: string
+          recent_goals_against?: number | null
+          recent_goals_for?: number | null
+          season?: string | null
+          team_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      news_templates: {
+        Row: {
+          conditions: Json | null
+          content_template: string
+          created_at: string | null
+          id: string
+          template_type: string
+          title_template: string
+        }
+        Insert: {
+          conditions?: Json | null
+          content_template: string
+          created_at?: string | null
+          id?: string
+          template_type: string
+          title_template: string
+        }
+        Update: {
+          conditions?: Json | null
+          content_template?: string
+          created_at?: string | null
+          id?: string
+          template_type?: string
+          title_template?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       contacts_by_department: {
@@ -611,6 +704,73 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      current_league_table: {
+        Row: {
+          drawn: number | null
+          form_points_last_5: number | null
+          form_string: string | null
+          goal_difference: number | null
+          goals_against: number | null
+          goals_for: number | null
+          id: string | null
+          league: string | null
+          lost: number | null
+          played: number | null
+          points: number | null
+          position: number | null
+          season: string | null
+          table_zone: string | null
+          team_id: string | null
+          team_name: string | null
+          trend: string | null
+          updated_at: string | null
+          won: number | null
+        }
+        Relationships: []
+      }
+      team_statistics_view: {
+        Row: {
+          avg_goals_per_game: number | null
+          current_points: number | null
+          current_position: number | null
+          goal_difference: number | null
+          goals_against: number | null
+          goals_for: number | null
+          id: string | null
+          name: string | null
+          played: number | null
+          games_played: number | null
+          wins: number | null
+          draws: number | null
+          losses: number | null
+          win_percentage: number | null
+        }
+        Relationships: []
+      }
+      match_results_view: {
+        Row: {
+          away_score: number | null
+          away_team: string | null
+          away_team_id: string | null
+          away_team_name: string | null
+          created_at: string | null
+          home_score: number | null
+          home_team: string | null
+          home_team_id: string | null
+          home_team_name: string | null
+          id: string | null
+          location: string | null
+          match_date: string | null
+          match_time: string | null
+          match_type: string | null
+          result_type: string | null
+          season: string | null
+          status: string | null
+          updated_at: string | null
+          winner: string | null
+        }
+        Relationships: []
       }
     }
     Functions: {

@@ -33,7 +33,7 @@ export default async function HomePage() {
         .order('goals', { ascending: false })
         .limit(10),
       supabase.from('sponsors').select('*').order('category', { ascending: true }),
-      supabase.from('league_standings').select('*').eq('season', '2024/25').order('position')
+      supabase.from('league_standings').select('*').eq('season', '2025/26').order('position')
     ])
     
     teams = results[0].data
@@ -63,9 +63,9 @@ export default async function HomePage() {
 
   // Process data for client and get last 5 matches per team
   const teamIds = {
-    '1': 'a1111111-1111-1111-1111-111111111111',
-    '2': 'a2222222-2222-2222-2222-222222222222',
-    '3': 'a3333333-3333-3333-3333-333333333333'
+    '1': '229cb117-471a-4bcc-b60e-d73772738943', // SV Viktoria Wertheim (1. Mannschaft)
+    '2': '568e99ad-d9e1-4f2d-a517-88d3a725755b', // SV Viktoria Wertheim 2 (2. Mannschaft)
+    '3': 'b86367ef-883f-4b73-9c98-77e7a0daf8b8'  // SpG Viktoria Wertheim 3/Grünenwört (3. Mannschaft)
   }
   
   // Get last 5 completed matches for each team
@@ -78,6 +78,16 @@ export default async function HomePage() {
     return teamMatches.slice(-5)
   }
   
+  // Create enriched league standings with team data
+  const enrichedStandings = leagueStandings?.map(standing => {
+    const team = teams?.find(t => t.id === standing.team_id)
+    return {
+      ...standing,
+      league: team?.league || '',
+      team_name: team?.name || ''
+    }
+  }) || []
+  
   const processedData = {
     teams: teams || [],
     matches: matches || [],
@@ -89,11 +99,11 @@ export default async function HomePage() {
       silver: sponsors?.filter(s => s.category === 'Partner') || []
     },
     leagueStandings: {
-      'Kreisliga A': leagueStandings?.filter(s => s.league === 'bfv-Kreisliga Tauberbischofsheim') || [],
-      'Kreisklasse A': leagueStandings?.filter(s => s.league === 'bfv-Kreisklasse A Tauberbischofsheim') || [],
-      'Kreisklasse B': leagueStandings?.filter(s => s.league === 'bfv-Kreisklasse B Tauberbischofsheim') || []
+      'Kreisliga A': enrichedStandings.filter(s => s.league === 'bfv-Kreisliga Tauberbischofsheim'),
+      'Kreisklasse A': enrichedStandings.filter(s => s.league === 'bfv-Kreisklasse A Tauberbischofsheim'),
+      'Kreisklasse B': enrichedStandings.filter(s => s.league === 'bfv-Kreisklasse B Tauberbischofsheim')
     },
-    allLeagueStandings: leagueStandings || [], // Add all standings for modal
+    allLeagueStandings: enrichedStandings, // Use enriched standings for modal
     lastFiveMatches: {
       '1': getLastFiveMatches(teamIds['1']),
       '2': getLastFiveMatches(teamIds['2']),

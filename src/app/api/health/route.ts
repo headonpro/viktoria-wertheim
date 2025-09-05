@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import * as fs from 'fs'
 import * as os from 'os'
+import logger from '@/lib/logger'
 import { getAllRateLimits } from '@/config/rate-limits'
 
 export async function GET() {
@@ -38,7 +39,8 @@ export async function GET() {
     const supabase = await createClient()
     const { error } = await supabase.from('news').select('id').limit(1)
     checks.checks.database = error ? 'error' : 'ok'
-  } catch (_err) {
+  } catch (err) {
+    logger.error('Database health check failed', { error: err })
     checks.checks.database = 'error'
     checks.status = 'degraded'
   }
@@ -48,7 +50,8 @@ export async function GET() {
     const supabase = await createClient()
     const { data: _session } = await supabase.auth.getSession()
     checks.checks.supabaseAuth = 'ok'
-  } catch (_err) {
+  } catch (err) {
+    logger.error('Supabase auth health check failed', { error: err })
     checks.checks.supabaseAuth = 'error'
     checks.status = 'degraded'
   }
@@ -98,8 +101,8 @@ export async function GET() {
       checks.checks.diskSpace = 'warning'
       checks.status = 'degraded'
     }
-  } catch (_err) {
-    // If we can't check disk space, just mark as warning
+  } catch (err) {
+    logger.warn('Disk space check failed', { error: err })
     checks.checks.diskSpace = 'warning'
   }
 
@@ -108,7 +111,8 @@ export async function GET() {
     // Get configured rate limits for documentation
     checks.rateLimits = getAllRateLimits()
     checks.checks.rateLimit = 'ok'
-  } catch (_err) {
+  } catch (err) {
+    logger.warn('Rate limit check failed', { error: err })
     checks.checks.rateLimit = 'warning'
   }
 

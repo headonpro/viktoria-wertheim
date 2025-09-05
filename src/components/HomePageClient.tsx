@@ -59,9 +59,9 @@ export default function HomePageClient({ data }: HomePageClientProps) {
 
   // Map team selection to actual team IDs
   const teamIdMap = useMemo(() => ({
-    '1': 'a1111111-1111-1111-1111-111111111111',
-    '2': 'a2222222-2222-2222-2222-222222222222',
-    '3': 'a3333333-3333-3333-3333-333333333333'
+    '1': '229cb117-471a-4bcc-b60e-d73772738943', // SV Viktoria Wertheim (1. Mannschaft)
+    '2': '568e99ad-d9e1-4f2d-a517-88d3a725755b', // SV Viktoria Wertheim 2 (2. Mannschaft)
+    '3': 'b86367ef-883f-4b73-9c98-77e7a0daf8b8'  // SpG Viktoria Wertheim 3/Grünenwört (3. Mannschaft)
   }), [])
 
   const leagueMap = useMemo(() => ({
@@ -172,7 +172,7 @@ export default function HomePageClient({ data }: HomePageClientProps) {
             selectedTeam={selectedTeam} 
             onTeamChange={setSelectedTeam} 
             teams={data.teams} 
-            leagueStandings={filteredData.leagueStandings}
+            leagueStandings={data.allLeagueStandings}
             lastFiveMatches={data.lastFiveMatches[selectedTeam]}
           />
         </AnimatedSection>
