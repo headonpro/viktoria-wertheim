@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="de" suppressHydrationWarning>
       <head>
-        <script defer data-domain="viktoria-wertheim.de" src="https://plausible.io/js/script.js"></script>
+        <script defer data-domain="viktoria.headon.pro" src="https://plausible.io/js/script.js"></script>
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${goldman.variable} antialiased`}
