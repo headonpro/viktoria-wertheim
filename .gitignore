@@ -11,12 +11,15 @@ next-env.d.ts
 
 # Environment
 .env
+.env.*
 .env.local
 .env.production
 .env.supabase
 .env.supabase.*
 .env.*.vps-backup
 .env.*.from-vps
+.env.backup
+*.env
 
 # Docker backups
 docker-compose.*.broken
@@ -65,6 +68,15 @@ coverage/
 excalidraw.yml
 outline*.yml
 penpot*.yml
+
+# Security - Never commit these
+*.key
+*.pem
+*.p12
+*.pfx
+*_secret*
+*_credentials*
+update-secrets.sh
 
 # Temp files
 tmp/
