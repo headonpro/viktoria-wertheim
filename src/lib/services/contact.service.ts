@@ -70,10 +70,14 @@ class ContactService {
         throw API_ERRORS.EMAIL_CONFIG_MISSING()
       }
 
-      // Email to admin
+      // Email to admin - using development email for now
+      const adminEmail = process.env.NODE_ENV === 'production' 
+        ? 'info@viktoria-wertheim.de' 
+        : 'headonpro@gmail.com'
+      
       const adminMailOptions = {
         from: `"${name}" <${email}>`,
-        to: 'info@viktoria-wertheim.de',
+        to: adminEmail,
         replyTo: email,
         subject: `[Website Kontakt] ${subject}`,
         text: message,
@@ -90,7 +94,7 @@ class ContactService {
 
       // Send confirmation email to user
       const confirmationMailOptions = {
-        from: '"SV Viktoria Wertheim" <info@viktoria-wertheim.de>',
+        from: '"SV Viktoria Wertheim" <headonpro@gmail.com>',
         to: email,
         subject: 'Ihre Nachricht wurde erhalten - SV Viktoria Wertheim',
         html: this.generateConfirmationEmailHTML(name, subject, message)
