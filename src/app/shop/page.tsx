@@ -202,10 +202,10 @@ export default function ShopPage() {
                           </div>
                           <div>
                             <h4 className="font-bold text-gray-900 dark:text-white mb-2">
-                              Jetzt im Vereinsheim kaufen
+                              Bald im Vereinsheim erhältlich
                             </h4>
                             <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                              Besuchen Sie uns vor Ort für aktuelle Fanartikel
+                              Ab Shop-Launch auch vor Ort verfügbar
                             </p>
                             <div className="space-y-1">
                               <p className="text-sm font-semibold text-gray-900 dark:text-white">
