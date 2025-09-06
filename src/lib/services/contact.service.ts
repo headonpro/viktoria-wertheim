@@ -78,13 +78,11 @@ class ContactService {
         throw API_ERRORS.EMAIL_CONFIG_MISSING()
       }
 
-      // Email to admin - using development email for now
-      const adminEmail = process.env.NODE_ENV === 'production' 
-        ? 'info@viktoria-wertheim.de' 
-        : 'headonpro@gmail.com'
+      // Email to admin - use ADMIN_EMAILS env variable or fallback
+      const adminEmail = process.env.ADMIN_EMAILS || 'headonpro@gmail.com'
       
       const adminMailOptions = {
-        from: `"${name}" <${email}>`,
+        from: `"SV Viktoria Wertheim" <${process.env.EMAIL_USER || 'headonpro@gmail.com'}>`,
         to: adminEmail,
         replyTo: email,
         subject: `[Website Kontakt] ${subject}`,
