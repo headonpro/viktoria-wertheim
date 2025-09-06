@@ -4,18 +4,23 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is the official website for SV Viktoria Wertheim football club, built with Next.js 15, TypeScript, Tailwind CSS, and Supabase. The project runs both locally and in production using Docker containers.
+This is the official website for SV Viktoria Wertheim football club, built with Next.js 15, TypeScript, Tailwind CSS, and Supabase Cloud. The project uses Supabase Cloud for production database and local Supabase stack for development.
 
 ## Core Commands
 
 ### Development
 ```bash
-# Start local development (Next.js + Supabase)
-docker-compose up -d     # Start Supabase
-pnpm run dev            # Start Next.js with Turbopack
+# Start local development (with local Supabase + AI)
+docker-compose --profile dev up -d     # Start local Supabase stack
+cd viktoria-ai && docker-compose up -d # Start AI service (Ollama + Llama 3.2)
+pnpm run dev                          # Start Next.js with Turbopack
 
 # Stop local services
-docker-compose down
+docker-compose --profile dev down
+cd viktoria-ai && docker-compose down
+
+# Alternative: Use production Supabase Cloud directly
+pnpm run dev  # Uses .env with cloud credentials
 ```
 
 ### Build & Test
@@ -57,11 +62,11 @@ git push origin main  # Triggers GitHub Actions workflow
 ### Tech Stack
 - **Frontend**: Next.js 15.5.2 with App Router, React 19, TypeScript
 - **Styling**: Tailwind CSS v4, Framer Motion for animations
-- **Backend**: Supabase (Auth, Database, Storage, Realtime)
-- **Database**: PostgreSQL 15 (via Supabase)
+- **Backend**: Supabase Cloud (Auth, Database, Storage, Realtime)
+- **Database**: PostgreSQL 15 (Supabase Cloud - hosted in EU)
 - **Email**: Nodemailer for contact form
 - **Icons**: Tabler Icons, Lucide React
-- **Deployment**: Docker containers on VPS (91.98.117.169)
+- **Deployment**: Docker container on VPS (91.98.117.169) - Frontend only
 - **CI/CD**: GitHub Actions (automatic on push to main)
 
 ### Directory Structure
@@ -79,23 +84,25 @@ src/
 ```
 
 ### Key Files
-- `docker-compose.supabase.yml` - Local Supabase stack (17KB, full Supabase services)
-- `docker-compose.production.yml` - Production deployment config
-- `docker-compose.frontend.yml` - Frontend-only deployment
+- `docker-compose.yml` - Local Supabase stack for development (profiles: dev, prod, all)
+- `Dockerfile` - Production build for Next.js frontend
 - `middleware.ts` - Security headers (CSP, HSTS), auth protection, rate limiting
-- `.env.local` - Local environment variables
-- `.env.production` - Production environment (never commit)
-- `deploy-vps.sh` - Manual VPS deployment script
+- `.env` - Local development environment
+- `.env.production` - Production environment (uses Supabase Cloud - never commit)
+- `deploy.sh` - Deployment script (dev/prod modes)
 - `.github/workflows/deploy-vps.yml` - GitHub Actions deployment workflow
 
 ## Environment Configuration
 
 ### Required Environment Variables
+
+#### Production (Supabase Cloud)
 ```bash
-# Supabase
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-DATABASE_URL=
+# Supabase Cloud credentials
+NEXT_PUBLIC_SUPABASE_URL=https://oijvttaznvcexbznvaiv.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<cloud-anon-key>
+SUPABASE_SERVICE_ROLE_KEY=<cloud-service-key>
+DATABASE_URL=postgresql://postgres.<project-ref>:<password>@aws-0-eu-central-1.pooler.supabase.com:6543/postgres
 
 # Email (for contact form)
 EMAIL_USER=
@@ -103,17 +110,34 @@ EMAIL_PASS=
 
 # Admin
 ADMIN_EMAILS=            # Comma-separated admin emails
-NEXT_PUBLIC_APP_URL=     # Production URL
+NEXT_PUBLIC_APP_URL=https://viktoria.headon.pro
+```
+
+#### Local Development (Local Supabase)
+```bash
+# Local Supabase credentials
+NEXT_PUBLIC_SUPABASE_URL=http://localhost:8000
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<local-anon-key>
+SUPABASE_SERVICE_ROLE_KEY=<local-service-key>
+DATABASE_URL=postgresql://postgres:postgres2025viktoria@localhost:5432/postgres
 ```
 
 ## Development Workflow
 
 ### Local Development Setup
-1. Start Supabase: `docker-compose -f docker-compose.supabase.yml up -d`
+
+#### Option 1: Local Supabase Stack (Recommended)
+1. Start Supabase: `docker-compose --profile dev up -d`
 2. Wait for health checks: `docker ps | grep supabase`
 3. Start Next.js: `pnpm run dev`
 4. Access app: `http://localhost:3000`
 5. Access Supabase Studio: `http://localhost:54323`
+
+#### Option 2: Use Supabase Cloud
+1. Update `.env` with Supabase Cloud credentials
+2. Start Next.js: `pnpm run dev`
+3. Access app: `http://localhost:3000`
+4. Manage database at: https://supabase.com/dashboard
 
 ### Admin Area Access
 - Admin login: `/auth/login`
@@ -121,10 +145,16 @@ NEXT_PUBLIC_APP_URL=     # Production URL
 - Authorized via `ADMIN_EMAILS` environment variable
 
 ### Database Changes
-1. Create migration: `./scripts/db-migrate.sh create <name>`
-2. Edit migration file in `supabase/migrations/`
-3. Test locally: `./scripts/db-migrate.sh up`
-4. Deploy to production: `./scripts/db-migrate.sh deploy`
+
+#### Using Supabase Cloud Dashboard (Recommended)
+1. Go to: https://supabase.com/dashboard/project/oijvttaznvcexbznvaiv
+2. Use SQL Editor for schema changes
+3. Save important migrations in `supabase/migrations/`
+
+#### Using Migration Scripts
+1. Create migration file: `supabase/migrations/[timestamp]_[name].sql`
+2. Test locally: Apply to local Supabase stack
+3. Deploy to production: Apply via Supabase Dashboard SQL Editor
 
 ### Adding New Features
 1. Components go in `src/components/` or page-specific directories
@@ -137,16 +167,35 @@ NEXT_PUBLIC_APP_URL=     # Production URL
 
 ## Production Infrastructure
 
-### Docker Services
-- `viktoria-web` - Next.js application (port 8001)
-- `viktoria-postgres` - PostgreSQL database (port 5433)
-- `supabase-*` - Supabase services (Auth, Realtime, Storage, etc.)
+### Production Infrastructure
+
+#### VPS Docker Services
+- `viktoria-web` - Next.js application (port 8001) - Frontend only
+
+#### Supabase Cloud Services
+- **Database**: PostgreSQL 15 (EU region - Frankfurt)
+- **Auth**: Supabase Authentication service
+- **Storage**: Supabase Storage for files
+- **Realtime**: WebSocket connections for live updates
+- **Project URL**: https://oijvttaznvcexbznvaiv.supabase.co
+
+#### Local Development Docker Services (docker-compose.yml)
+- `supabase-db` - PostgreSQL database (port 5432)
+- `supabase-kong` - API Gateway (port 8000)
+- `supabase-auth` - Authentication service
+- `supabase-rest` - PostgREST API
+- `supabase-realtime` - Realtime subscriptions
+- `supabase-storage` - File storage
+- `supabase-imgproxy` - Image optimization
+- `supabase-meta` - Database introspection
+- `supabase-studio` - Admin UI (port 54323)
 
 ### VPS Deployment
 - **Server**: 91.98.117.169 (root access)
-- **Project Path**: `/opt/devserver/projects/viktoria-wertheim/`
+- **Project Path**: `/opt/viktoria/` (simplified path)
 - **URL**: https://viktoria.headon.pro
 - **Deployment**: Push to GitHub main triggers automatic deployment
+- **Architecture**: Frontend on VPS + Supabase Cloud backend
 
 ### Health Monitoring
 ```bash
@@ -175,25 +224,32 @@ curl https://viktoria.headon.pro/api/health
 
 ### Common Issues
 
-1. **Supabase connection errors**: Check if Docker containers are running
+1. **Supabase connection errors**: 
+   - Local: Check if Docker containers are running (`docker ps`)
+   - Production: Verify Supabase Cloud credentials and project status
 2. **Build failures**: Ensure `NODE_ENV=production` for production builds
 3. **Auth issues**: Verify Supabase keys and admin emails in environment
 4. **Database errors**: Check migration status and PostgreSQL logs
 
 ### Debug Commands
 ```bash
-# Container logs
+# Frontend container logs (VPS)
+ssh root@91.98.117.169 "docker logs viktoria-web --tail 50"
+ssh root@91.98.117.169 "docker logs -f viktoria-web"  # Follow logs
+
+# Local Supabase logs
 docker logs supabase-db --tail 50
-docker logs viktoria-web --tail 50
-docker logs -f viktoria-web  # Follow logs in real-time
+docker logs supabase-kong --tail 50
+docker logs supabase-auth --tail 50
 
 # Database access
+# Local:
 docker exec -it supabase-db psql -U postgres
+# Production: Use Supabase Dashboard SQL Editor
 
-# Network inspection
+# Network inspection (local)
 docker network ls
-docker network inspect supabase_default  # Local
-docker network inspect viktoria-network   # Production
+docker network inspect viktoria-network
 
 # Container health
 docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
@@ -206,10 +262,12 @@ curl https://viktoria.headon.pro/api/health  # Production
 ## Important Notes
 
 - Always use `pnpm` for package management
-- Production deployments are zero-downtime via Docker
-- Supabase Studio is available at port 54323 (local only)
-- Test database migrations locally before deploying
+- Production uses Supabase Cloud (Frankfurt region) for backend
+- Frontend runs as Docker container on VPS
+- Supabase Studio: Local at port 54323, Cloud at supabase.com/dashboard
+- Test database changes locally before applying to cloud
 - Keep `.env.production` secure and never commit it
 - GitHub Actions secrets required: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`
 - Production URL: https://viktoria.headon.pro
+- Supabase Cloud Project: oijvttaznvcexbznvaiv
 - Always run `pnpm run lint` and `pnpm run typecheck` before committing

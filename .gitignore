@@ -69,3 +69,20 @@ penpot*.yml
 # Temp files
 tmp/
 temp/
+
+# Data Export Files (CSV, JSON exports from DB)
+*_export.csv
+*_standings.csv
+*_standings.json
+matches_*.csv
+league_*.csv
+league_*.json
+
+# Migration artifacts (one-time use files)
+*_migration.sql
+*_export.sql
+*_insert.sql
+migrate_*.sql
+final_migration.*
+local_data.sql
+local_schema.sql
