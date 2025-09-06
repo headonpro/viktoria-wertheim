@@ -67,7 +67,7 @@ git push origin main  # Triggers GitHub Actions workflow
 - **Email**: Nodemailer for contact form
 - **Icons**: Tabler Icons, Lucide React
 - **Deployment**: Docker container on VPS (91.98.117.169) - Frontend only
-- **CI/CD**: GitHub Actions (automatic on push to main)
+- **CI/CD**: GitHub Actions (automatic deployment on push to main)
 
 ### Directory Structure
 ```
