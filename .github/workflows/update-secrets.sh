@@ -1,8 +1,0 @@
-#!/bin/bash
-# This script shows the commands to update GitHub secrets
-echo "Please go to: https://github.com/headonpro/viktoria-wertheim/settings/secrets/actions"
-echo ""
-echo "Update these secrets:"
-echo "NEXT_PUBLIC_SUPABASE_URL: https://vbumolcclqrhfqiofvcz.supabase.co"
-echo "NEXT_PUBLIC_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidW1vbGNjbHFyaGZxaW9mdmN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzNzA2NzQsImV4cCI6MjA3MTk0NjY3NH0.A0rpZrMnFOaLMA_-lVpW7y1r7x2XYxQei0LXvc4TcaI"
-echo "SUPABASE_SERVICE_ROLE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidW1vbGNjbHFyaGZxaW9mdmN6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NjM3MDY3NCwiZXhwIjoyMDcxOTQ2Njc0fQ.oXtr3Nlg4YWFWRvpTUPqYBosnBMoKrnhIs99Hn_1lNQ"
