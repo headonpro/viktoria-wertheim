@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  PROJECT_PATH: /opt/devserver/projects/viktoria-wertheim
+  PROJECT_PATH: /opt/viktoria
 
 jobs:
   deploy:
@@ -55,65 +55,34 @@ jobs:
             git fetch origin main
             git reset --hard origin/main
             
-            # Apply database migrations
-            if [ -d "supabase/migrations" ] && [ "$(ls -A supabase/migrations/*.sql 2>/dev/null)" ]; then
-              echo "📦 Applying database migrations..."
-              for migration in supabase/migrations/*.sql; do
-                if [ -f "$migration" ]; then
-                  filename=$(basename "$migration")
-                  echo "  Applying: $filename"
-                  docker exec -i supabase-db psql -U postgres < "$migration" 2>&1 || echo "  ⚠️  Migration may have already been applied"
-                fi
-              done
-              echo "✅ Migrations complete"
-            fi
-            
-            # Sync database data
-            if [ -d "supabase/data-sync" ] && [ "$(ls -A supabase/data-sync/*.sql 2>/dev/null)" ]; then
-              echo "🔄 Syncing database data..."
-              for datafile in supabase/data-sync/*.sql; do
-                if [ -f "$datafile" ]; then
-                  filename=$(basename "$datafile")
-                  echo "  Importing: $filename"
-                  # Clear existing data and import new data
-                  docker exec -i supabase-db psql -U postgres < "$datafile"
-                fi
-              done
-              echo "✅ Data sync complete"
-            fi
-            
-            # Copy production environment file
-            echo "📋 Setting up environment..."
-            if [ -f .env.production.vps ]; then
-              cp .env.production.vps .env.production
-            fi
+            # Note: Database managed by Supabase Cloud - no local migrations needed
+            echo "📋 Using Supabase Cloud for database..."
             
             # Build and deploy with Docker
             echo "🐳 Building Docker image..."
-            docker build -t viktoria-frontend-final -f Dockerfile.production .
+            docker build -t viktoria-frontend-final .
             
             # Stop existing container
             echo "🛑 Stopping existing container..."
-            docker stop viktoria-frontend || true
-            docker rm viktoria-frontend || true
+            docker stop viktoria-web || true
+            docker rm viktoria-web || true
             
-            # Start new container
+            # Start new container with Supabase Cloud
             echo "✨ Starting new container..."
             docker run -d \
-              --name viktoria-frontend \
+              --name viktoria-web \
               --restart unless-stopped \
-              --network supabase_default \
-              -p 3000:3000 \
+              -p 8001:3000 \
               -e NODE_ENV=production \
-              -e NEXT_PUBLIC_SUPABASE_URL=http://91.98.117.169:8000 \
-              -e NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyAgCiAgICAicm9sZSI6ICJhbm9uIiwKICAgICJpc3MiOiAic3VwYWJhc2UtZGVtbyIsCiAgICAiaWF0IjogMTY0MTc2OTIwMCwKICAgICJleHAiOiAxNzk5NTM1NjAwCn0.dc_X5iR_VP_qT0zsiyj_I_OZ2T9FtRU2BBNWN8Bu4GE \
-              -e NEXT_PUBLIC_ADMIN_PASSWORD=Vkt2025SecureAdmin \
+              -e NEXT_PUBLIC_SUPABASE_URL=https://oijvttaznvcexbznvaiv.supabase.co \
+              -e NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9panZ0dGF6bnZjZXhiem52YWl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjU0ODY5OTYsImV4cCI6MjA0MTA2Mjk5Nn0.a1gHBj2qE8lDz8H3iRx8IVGXmGvDCdNpU0xVpE8Z1Y4 \
+              -e NEXT_PUBLIC_APP_URL=https://viktoria.headon.pro \
               viktoria-frontend-final
             
             # Health check
             echo "🔍 Checking deployment..."
             sleep 5
-            docker ps | grep viktoria-frontend
+            docker ps | grep viktoria-web
             
             # Clean up old images
             echo "🧹 Cleaning up..."
