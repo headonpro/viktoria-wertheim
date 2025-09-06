@@ -75,7 +75,7 @@ jobs:
               -p 8001:3000 \
               -e NODE_ENV=production \
               -e NEXT_PUBLIC_SUPABASE_URL=https://oijvttaznvcexbznvaiv.supabase.co \
-              -e NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9panZ0dGF6bnZjZXhiem52YWl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjU0ODY5OTYsImV4cCI6MjA0MTA2Mjk5Nn0.a1gHBj2qE8lDz8H3iRx8IVGXmGvDCdNpU0xVpE8Z1Y4 \
+              -e NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9panZ0dGF6bnZjZXhiem52YWl2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxMDYzNjcsImV4cCI6MjA3MjY4MjM2N30.yi7xHbPkg0eSLYNiF3vryfCfy_Mc5T7mN_vVA6WslC4 \
               -e SUPABASE_SERVICE_ROLE_KEY="${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
               -e NEXT_PUBLIC_APP_URL=https://viktoria.headon.pro \
               viktoria-frontend-final
