@@ -26,11 +26,19 @@ class ContactService {
     }
 
     this.transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // true for 465, false for other ports
       auth: {
         user: emailUser,
         pass: emailPass
-      }
+      },
+      tls: {
+        rejectUnauthorized: false // Allow self-signed certificates
+      },
+      connectionTimeout: 10000, // 10 seconds
+      greetingTimeout: 10000,   // 10 seconds
+      socketTimeout: 10000      // 10 seconds
     })
   }
 
