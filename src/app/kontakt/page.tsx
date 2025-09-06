@@ -44,7 +44,7 @@ export default async function ContactPage() {
     department: contact.department,
     phone: contact.phone || '',
     email: contact.email || '',
-    order: contact.order_position
+    order_position: contact.order_position
   }))
   
   // Static data for general contact info (could be moved to DB later)
@@ -56,9 +56,8 @@ export default async function ContactPage() {
   
   // Social media links (could be moved to DB later)
   const socialMedia = [
-    { icon: 'facebook', name: 'Facebook', url: '#', followers: '2.3k' },
-    { icon: 'instagram', name: 'Instagram', url: '#', followers: '1.8k' },
-    { icon: 'youtube', name: 'YouTube', url: '#', followers: '500' }
+    { icon: 'facebook', name: 'Facebook', url: 'https://de-de.facebook.com/SvViktoriaWertheim2000/' },
+    { icon: 'instagram', name: 'Instagram', url: 'https://www.instagram.com/svviktoriawertheim/' }
   ]
   
   return <ContactPageClient 
