@@ -59,9 +59,6 @@ importers:
       react-leaflet:
         specifier: ^5.0.0
         version: 5.0.0(leaflet@1.9.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      sharp:
-        specifier: ^0.34.3
-        version: 0.34.3
       tailwind-merge:
         specifier: ^3.3.1
         version: 3.3.1
@@ -84,6 +81,9 @@ importers:
       '@types/react-dom':
         specifier: ^19
         version: 19.1.9(@types/react@19.1.12)
+      '@types/sharp':
+        specifier: ^0.32.0
+        version: 0.32.0
       critters:
         specifier: ^0.0.25
         version: 0.0.25
@@ -99,6 +99,9 @@ importers:
       shadcn:
         specifier: ^3.2.1
         version: 3.2.1(@types/node@20.19.11)(typescript@5.9.2)
+      sharp:
+        specifier: ^0.34.3
+        version: 0.34.3
       tailwindcss:
         specifier: ^4
         version: 4.1.12
@@ -1071,6 +1074,10 @@ packages:
 
   '@types/react@19.1.12':
     resolution: {integrity: sha512-cMoR+FoAf/Jyq6+Df2/Z41jISvGZZ2eTlnsaJRptmZ76Caldwy1odD4xTr/gNV9VLj0AWgg/nmkevIyUfIIq5w==}
+
+  '@types/sharp@0.32.0':
+    resolution: {integrity: sha512-OOi3kL+FZDnPhVzsfD37J88FNeZh6gQsGcLc95NbeURRGvmSjeXiDcyWzF2o3yh/gQAUn2uhh/e+CPCa5nwAxw==}
+    deprecated: This is a stub types definition. sharp provides its own type definitions, so you do not need this installed.
 
   '@types/statuses@2.0.6':
     resolution: {integrity: sha512-xMAgYwceFhRA2zY+XbEA7mxYbA093wdiW8Vu6gZPGWy9cmOyU9XesH1tNcEWsKFd5Vzrqx5T3D38PWx1FIIXkA==}
@@ -4691,6 +4698,10 @@ snapshots:
   '@types/react@19.1.12':
     dependencies:
       csstype: 3.1.3
+
+  '@types/sharp@0.32.0':
+    dependencies:
+      sharp: 0.34.3
 
   '@types/statuses@2.0.6': {}
 

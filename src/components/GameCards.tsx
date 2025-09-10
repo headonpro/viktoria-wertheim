@@ -4,6 +4,7 @@ import React from 'react'
 import { IconCalendar, IconClock, IconMapPin, IconSoccerField } from '@tabler/icons-react'
 import type { Database } from '@/lib/database.types'
 import { getTeamAbbreviation, getTeamLogo } from '@/lib/teams/team-data'
+import { TEAM_LOGOS } from '@/lib/teams/team-logos'
 
 type Match = Database['public']['Tables']['matches']['Row']
 
@@ -37,11 +38,20 @@ export default function GameCards({ lastMatch, nextMatch }: GameCardsProps) {
                 <div className="flex-1 text-center max-w-[45%]">
                   <div className="h-12 sm:h-14 mb-2 flex items-center justify-center">
                     {getTeamLogo(lastMatch.home_team) ? (
-                      <img 
-                        src={getTeamLogo(lastMatch.home_team)!} 
-                        alt={lastMatch.home_team || ''} 
-                        className="max-h-full max-w-full object-contain"
-                      />
+                      <picture>
+                        {TEAM_LOGOS[getTeamLogo(lastMatch.home_team)!]?.webp && (
+                          <source 
+                            srcSet={`${TEAM_LOGOS[getTeamLogo(lastMatch.home_team)!].webp!.small} 1x, ${TEAM_LOGOS[getTeamLogo(lastMatch.home_team)!].webp!.medium} 2x`}
+                            type="image/webp"
+                          />
+                        )}
+                        <img 
+                          src={getTeamLogo(lastMatch.home_team)!} 
+                          alt={lastMatch.home_team || ''} 
+                          className="max-h-full max-w-full object-contain"
+                          loading="lazy"
+                        />
+                      </picture>
                     ) : (
                       <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-lg flex items-center justify-center">
                         <span className="text-xs sm:text-sm font-bold text-gray-600 dark:text-gray-300">
@@ -65,11 +75,20 @@ export default function GameCards({ lastMatch, nextMatch }: GameCardsProps) {
                 <div className="flex-1 text-center max-w-[45%]">
                   <div className="h-12 sm:h-14 mb-2 flex items-center justify-center">
                     {getTeamLogo(lastMatch.away_team) ? (
-                      <img 
-                        src={getTeamLogo(lastMatch.away_team)!} 
-                        alt={lastMatch.away_team || ''} 
-                        className="max-h-full max-w-full object-contain"
-                      />
+                      <picture>
+                        {TEAM_LOGOS[getTeamLogo(lastMatch.away_team)!]?.webp && (
+                          <source 
+                            srcSet={`${TEAM_LOGOS[getTeamLogo(lastMatch.away_team)!].webp!.small} 1x, ${TEAM_LOGOS[getTeamLogo(lastMatch.away_team)!].webp!.medium} 2x`}
+                            type="image/webp"
+                          />
+                        )}
+                        <img 
+                          src={getTeamLogo(lastMatch.away_team)!} 
+                          alt={lastMatch.away_team || ''} 
+                          className="max-h-full max-w-full object-contain"
+                          loading="lazy"
+                        />
+                      </picture>
                     ) : (
                       <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 rounded-lg flex items-center justify-center">
                         <span className="text-xs sm:text-sm font-bold text-white dark:text-gray-900">
@@ -145,11 +164,20 @@ export default function GameCards({ lastMatch, nextMatch }: GameCardsProps) {
                 <div className="flex-1 text-center max-w-[45%]">
                   <div className="h-12 sm:h-14 mb-2 flex items-center justify-center">
                     {getTeamLogo(nextMatch.home_team) ? (
-                      <img 
-                        src={getTeamLogo(nextMatch.home_team)!} 
-                        alt={nextMatch.home_team || ''} 
-                        className="max-h-full max-w-full object-contain"
-                      />
+                      <picture>
+                        {TEAM_LOGOS[getTeamLogo(nextMatch.home_team)!]?.webp && (
+                          <source 
+                            srcSet={`${TEAM_LOGOS[getTeamLogo(nextMatch.home_team)!].webp!.small} 1x, ${TEAM_LOGOS[getTeamLogo(nextMatch.home_team)!].webp!.medium} 2x`}
+                            type="image/webp"
+                          />
+                        )}
+                        <img 
+                          src={getTeamLogo(nextMatch.home_team)!} 
+                          alt={nextMatch.home_team || ''} 
+                          className="max-h-full max-w-full object-contain"
+                          loading="lazy"
+                        />
+                      </picture>
                     ) : (
                       <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-lg flex items-center justify-center">
                         <span className="text-xs sm:text-sm font-bold text-gray-600 dark:text-gray-300">
@@ -174,11 +202,20 @@ export default function GameCards({ lastMatch, nextMatch }: GameCardsProps) {
                 <div className="flex-1 text-center max-w-[45%]">
                   <div className="h-12 sm:h-14 mb-2 flex items-center justify-center">
                     {getTeamLogo(nextMatch.away_team) ? (
-                      <img 
-                        src={getTeamLogo(nextMatch.away_team)!} 
-                        alt={nextMatch.away_team || ''} 
-                        className="max-h-full max-w-full object-contain"
-                      />
+                      <picture>
+                        {TEAM_LOGOS[getTeamLogo(nextMatch.away_team)!]?.webp && (
+                          <source 
+                            srcSet={`${TEAM_LOGOS[getTeamLogo(nextMatch.away_team)!].webp!.small} 1x, ${TEAM_LOGOS[getTeamLogo(nextMatch.away_team)!].webp!.medium} 2x`}
+                            type="image/webp"
+                          />
+                        )}
+                        <img 
+                          src={getTeamLogo(nextMatch.away_team)!} 
+                          alt={nextMatch.away_team || ''} 
+                          className="max-h-full max-w-full object-contain"
+                          loading="lazy"
+                        />
+                      </picture>
                     ) : (
                       <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-br from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 rounded-lg flex items-center justify-center">
                         <span className="text-xs sm:text-sm font-bold text-white dark:text-gray-900">

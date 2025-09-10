@@ -33,6 +33,13 @@ export default function RootLayout({
   return (
     <html lang="de" suppressHydrationWarning>
       <head>
+        {/* Preload critical images for better LCP */}
+        <link rel="preload" as="image" href="/optimized/SVVW-128w.webp" type="image/webp" />
+        <link rel="preload" as="image" href="/optimized/viktorialogo-48w.webp" type="image/webp" />
+        {/* DNS Prefetch for external resources */}
+        <link rel="dns-prefetch" href="https://plausible.io" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <script defer data-domain="viktoria.headon.pro" src="https://plausible.io/js/script.js"></script>
       </head>
       <body

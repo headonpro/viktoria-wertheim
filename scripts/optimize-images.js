@@ -4,100 +4,116 @@ const sharp = require('sharp');
 const fs = require('fs').promises;
 const path = require('path');
 
-async function optimizeImage(inputPath, outputPath, maxWidth = 512) {
-  try {
-    const stats = await fs.stat(inputPath);
-    const sizeBefore = (stats.size / 1024).toFixed(2);
+const QUALITY = {
+  webp: 85,
+  avif: 80
+};
+
+const SIZES = {
+  // For logos and icons
+  logo: [48, 64, 96, 128, 256],
+  // For sponsor logos  
+  sponsor: [100, 150, 200, 300, 400],
+  // For team logos
+  team: [48, 64, 96, 128, 192]
+};
+
+async function processImage(inputPath, outputDir, baseName, sizes, formats = ['webp']) {
+  const stats = await fs.stat(inputPath);
+  
+  for (const format of formats) {
+    for (const size of sizes) {
+      const outputName = `${baseName}-${size}w.${format}`;
+      const outputPath = path.join(outputDir, outputName);
+      
+      try {
+        await sharp(inputPath)
+          .resize(size, null, {
+            withoutEnlargement: true,
+            fit: 'inside'
+          })
+          [format]({ quality: QUALITY[format] })
+          .toFile(outputPath);
+          
+        const newStats = await fs.stat(outputPath);
+        const saved = Math.round((stats.size - newStats.size) / 1024);
+        console.log(`✓ ${outputName} (saved ${saved}KB)`);
+      } catch (error) {
+        console.error(`✗ Failed to process ${outputName}:`, error.message);
+      }
+    }
     
-    // Convert to WebP with quality optimization
-    await sharp(inputPath)
-      .resize(maxWidth, null, {
-        withoutEnlargement: true,
-        fit: 'inside'
-      })
-      .webp({ quality: 85, effort: 6 })
-      .toFile(outputPath);
+    // Also create a full-size optimized version
+    const fullSizeName = `${baseName}.${format}`;
+    const fullSizePath = path.join(outputDir, fullSizeName);
     
-    const statsAfter = await fs.stat(outputPath);
-    const sizeAfter = (statsAfter.size / 1024).toFixed(2);
-    const savings = ((1 - statsAfter.size / stats.size) * 100).toFixed(1);
-    
-    console.log(`✅ ${path.basename(inputPath)}: ${sizeBefore}KB → ${sizeAfter}KB (${savings}% saved)`);
-    return { before: stats.size, after: statsAfter.size };
-  } catch (error) {
-    console.error(`❌ Error optimizing ${inputPath}:`, error.message);
-    return { before: 0, after: 0 };
+    try {
+      await sharp(inputPath)
+        [format]({ quality: QUALITY[format] })
+        .toFile(fullSizePath);
+        
+      const newStats = await fs.stat(fullSizePath);
+      const saved = Math.round((stats.size - newStats.size) / 1024);
+      console.log(`✓ ${fullSizeName} (saved ${saved}KB)`);
+    } catch (error) {
+      console.error(`✗ Failed to process ${fullSizeName}:`, error.message);
+    }
   }
 }
 
-async function optimizeTeamLogos() {
-  const logosDir = path.join(__dirname, '..', 'public', 'logos', 'teams');
-  const optimizedDir = path.join(__dirname, '..', 'public', 'logos', 'teams', 'optimized');
+async function optimizeImages() {
+  console.log('🖼️  Starting image optimization...\n');
   
-  // Create optimized directory if it doesn't exist
-  await fs.mkdir(optimizedDir, { recursive: true });
+  // Create optimized directories
+  const dirs = [
+    'public/optimized',
+    'public/optimized/logos',
+    'public/optimized/logos/sponsors',
+    'public/optimized/logos/teams'
+  ];
   
-  // Get all PNG files
-  const files = await fs.readdir(logosDir);
-  const pngFiles = files.filter(file => file.endsWith('.png'));
-  
-  console.log(`\n🖼️  Optimizing ${pngFiles.length} team logos...\n`);
-  
-  let totalBefore = 0;
-  let totalAfter = 0;
-  
-  // Optimize each image
-  for (const file of pngFiles) {
-    const inputPath = path.join(logosDir, file);
-    const outputName = file.replace('.png', '.webp');
-    const outputPath = path.join(optimizedDir, outputName);
-    
-    const result = await optimizeImage(inputPath, outputPath, 512);
-    totalBefore += result.before;
-    totalAfter += result.after;
+  for (const dir of dirs) {
+    await fs.mkdir(dir, { recursive: true });
   }
   
-  // Optimize sponsor logos
-  const sponsorsDir = path.join(__dirname, '..', 'public', 'logos', 'sponsors');
-  const sponsorsOptimizedDir = path.join(__dirname, '..', 'public', 'logos', 'sponsors', 'optimized');
+  // Process main logos
+  console.log('📁 Processing main logos...');
+  await processImage('public/viktorialogo.png', 'public/optimized', 'viktorialogo', SIZES.logo, ['webp', 'avif']);
+  await processImage('public/SVVW.png', 'public/optimized', 'SVVW', SIZES.logo, ['webp', 'avif']);
   
-  await fs.mkdir(sponsorsOptimizedDir, { recursive: true });
-  
-  const sponsorFiles = await fs.readdir(sponsorsDir);
-  const sponsorPngFiles = sponsorFiles.filter(file => file.endsWith('.png'));
-  
-  console.log(`\n🏢 Optimizing ${sponsorPngFiles.length} sponsor logos...\n`);
-  
-  for (const file of sponsorPngFiles) {
-    const inputPath = path.join(sponsorsDir, file);
-    const outputName = file.replace('.png', '.webp');
-    const outputPath = path.join(sponsorsOptimizedDir, outputName);
-    
-    const result = await optimizeImage(inputPath, outputPath, 400);
-    totalBefore += result.before;
-    totalAfter += result.after;
+  // Process sponsor logos
+  console.log('\n📁 Processing sponsor logos...');
+  const sponsorLogos = await fs.readdir('public/logos/sponsors');
+  for (const logo of sponsorLogos) {
+    if (logo.endsWith('.png')) {
+      const baseName = path.basename(logo, '.png');
+      await processImage(
+        path.join('public/logos/sponsors', logo),
+        'public/optimized/logos/sponsors',
+        baseName,
+        SIZES.sponsor,
+        ['webp']
+      );
+    }
   }
   
-  // Optimize main logos
-  const mainLogos = ['viktorialogo.png', 'SVVW.png'];
-  
-  console.log(`\n⚽ Optimizing main logos...\n`);
-  
-  for (const logo of mainLogos) {
-    const inputPath = path.join(__dirname, '..', 'public', logo);
-    const outputPath = path.join(__dirname, '..', 'public', logo.replace('.png', '.webp'));
-    
-    const result = await optimizeImage(inputPath, outputPath, 256);
-    totalBefore += result.before;
-    totalAfter += result.after;
+  // Process team logos
+  console.log('\n📁 Processing team logos...');
+  const teamLogos = await fs.readdir('public/logos/teams');
+  for (const logo of teamLogos) {
+    if (logo.endsWith('.png')) {
+      const baseName = path.basename(logo, '.png');
+      await processImage(
+        path.join('public/logos/teams', logo),
+        'public/optimized/logos/teams',
+        baseName,
+        SIZES.team,
+        ['webp']
+      );
+    }
   }
   
-  // Summary
-  const totalSavings = ((1 - totalAfter / totalBefore) * 100).toFixed(1);
-  console.log(`\n✨ Optimization Complete!`);
-  console.log(`📊 Total: ${(totalBefore / 1024 / 1024).toFixed(2)}MB → ${(totalAfter / 1024 / 1024).toFixed(2)}MB`);
-  console.log(`💾 Saved: ${((totalBefore - totalAfter) / 1024 / 1024).toFixed(2)}MB (${totalSavings}%)\n`);
+  console.log('\n✅ Image optimization complete!');
 }
 
-// Run optimization
-optimizeTeamLogos().catch(console.error);
+optimizeImages().catch(console.error);

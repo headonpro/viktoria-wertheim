@@ -97,15 +97,22 @@ export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorSh
                 >
                   <div className="text-center">
                     {sponsor.logo_url ? (
-                      <img 
-                        src={sponsor.logo_url} 
-                        alt={sponsor.name}
-                        className={`h-12 w-auto object-contain transition-all duration-200 hover:scale-105 ${
-                          sponsor.name === 'Zorbas' 
-                            ? 'dark:invert dark:brightness-90' 
-                            : 'invert dark:invert-0'
-                        }`}
-                      />
+                      <picture>
+                        <source 
+                          srcSet={`/optimized/logos/sponsors/${sponsor.logo_url.split('/').pop()?.replace('.png', '-150w.webp')} 1x, /optimized/logos/sponsors/${sponsor.logo_url.split('/').pop()?.replace('.png', '-300w.webp')} 2x`}
+                          type="image/webp"
+                        />
+                        <img 
+                          src={sponsor.logo_url} 
+                          alt={sponsor.name}
+                          className={`h-12 w-auto object-contain transition-all duration-200 hover:scale-105 ${
+                            sponsor.name === 'Zorbas' 
+                              ? 'dark:invert dark:brightness-90' 
+                              : 'invert dark:invert-0'
+                          }`}
+                          loading="lazy"
+                        />
+                      </picture>
                     ) : (
                       <div className="text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 group-hover:text-viktoria-blue dark:group-hover:text-viktoria-yellow transition-colors">
                         {sponsor.name}
@@ -135,15 +142,22 @@ export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorSh
                   className="group bg-gradient-to-br from-gray-50 to-white dark:from-viktoria-dark-lighter dark:to-viktoria-dark rounded-lg p-2 flex items-center justify-center border border-gray-100 dark:border-gray-700 hover:border-viktoria-blue/30 dark:hover:border-viktoria-yellow/30 transition-all duration-200 hover:shadow-sm min-h-[60px]"
                 >
                   {sponsor.logo_url ? (
-                    <img 
-                      src={sponsor.logo_url} 
-                      alt={sponsor.name}
-                      className={`h-10 w-auto object-contain transition-all duration-200 hover:scale-105 ${
-                        sponsor.name === 'Zorbas' 
-                          ? 'dark:invert dark:brightness-90' 
-                          : 'invert dark:invert-0'
-                      }`}
-                    />
+                    <picture>
+                      <source 
+                        srcSet={`/optimized/logos/sponsors/${sponsor.logo_url.split('/').pop()?.replace('.png', '-100w.webp')} 1x, /optimized/logos/sponsors/${sponsor.logo_url.split('/').pop()?.replace('.png', '-200w.webp')} 2x`}
+                        type="image/webp"
+                      />
+                      <img 
+                        src={sponsor.logo_url} 
+                        alt={sponsor.name}
+                        className={`h-10 w-auto object-contain transition-all duration-200 hover:scale-105 ${
+                          sponsor.name === 'Zorbas' 
+                            ? 'dark:invert dark:brightness-90' 
+                            : 'invert dark:invert-0'
+                        }`}
+                        loading="lazy"
+                      />
+                    </picture>
                   ) : (
                     <div className="text-xs font-medium text-gray-600 dark:text-gray-400 group-hover:text-viktoria-blue dark:group-hover:text-viktoria-yellow transition-colors text-center">
                       {sponsor.name}
