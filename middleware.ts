@@ -53,6 +53,38 @@ export async function middleware(request: NextRequest) {
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()')
   
+  // Add performance headers - Preconnect to critical domains
+  response.headers.set('Link', [
+    '<https://vbumolcclqrhfqiofvcz.supabase.co>; rel=preconnect',
+    '<https://fonts.googleapis.com>; rel=preconnect',
+    '<https://fonts.gstatic.com>; rel=preconnect crossorigin'
+  ].join(', '))
+  
+  // Cache headers for different resource types
+  const url = request.nextUrl.pathname
+  
+  // Static assets (images, fonts, etc.) - long cache
+  if (url.match(/\.(webp|png|jpg|jpeg|gif|svg|woff2?|ttf|eot)$/i)) {
+    response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
+  }
+  // CSS and JS files with hash - long cache
+  else if (url.includes('/_next/static/')) {
+    response.headers.set('Cache-Control', 'public, max-age=31536000, immutable')
+  }
+  // HTML pages - short cache with revalidation
+  else if (url === '/' || url.startsWith('/team') || url.startsWith('/news')) {
+    response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=86400')
+  }
+  // API routes - no cache by default, but allow CDN caching
+  else if (url.startsWith('/api/')) {
+    // Public API routes can be cached
+    if (url.startsWith('/api/teams') || url.startsWith('/api/matches') || url.startsWith('/api/news')) {
+      response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300')
+    } else {
+      response.headers.set('Cache-Control', 'no-store, must-revalidate')
+    }
+  }
+  
   // Content Security Policy
   const cspHeader = [
     "default-src 'self'",
