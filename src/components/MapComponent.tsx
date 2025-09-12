@@ -14,12 +14,18 @@ interface MapComponentProps {
 function MapComponentInner({ latitude, longitude, title = 'SV Viktoria Wertheim', address }: MapComponentProps) {
   const [isMounted, setIsMounted] = useState(false)
   const [mapView, setMapView] = useState<'street' | 'satellite'>('satellite')
+  const [mapReady, setMapReady] = useState(false)
 
   useEffect(() => {
     setIsMounted(true)
+    // Add a small delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      setMapReady(true)
+    }, 100)
+    return () => clearTimeout(timer)
   }, [])
 
-  if (!isMounted) {
+  if (!isMounted || !mapReady) {
     return (
       <div className="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-viktoria-dark dark:to-viktoria-dark-lighter h-96 rounded-xl flex items-center justify-center">
         <div className="text-center">
@@ -33,10 +39,29 @@ function MapComponentInner({ latitude, longitude, title = 'SV Viktoria Wertheim'
   }
 
   // Import dynamically to avoid SSR issues
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { MapContainer, TileLayer, Marker, Popup } = require('react-leaflet')
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const L = require('leaflet')
+  let MapContainer, TileLayer, Marker, Popup, L
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const leafletComponents = require('react-leaflet')
+    MapContainer = leafletComponents.MapContainer
+    TileLayer = leafletComponents.TileLayer
+    Marker = leafletComponents.Marker
+    Popup = leafletComponents.Popup
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    L = require('leaflet')
+  } catch (error) {
+    console.error('Error loading map components:', error)
+    return (
+      <div className="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-viktoria-dark dark:to-viktoria-dark-lighter h-96 rounded-xl flex items-center justify-center">
+        <div className="text-center">
+          <IconMapPin size={48} className="text-gray-400 dark:text-gray-600 mx-auto mb-4" />
+          <p className="text-gray-500 dark:text-gray-400 font-medium">
+            Karte konnte nicht geladen werden
+          </p>
+        </div>
+      </div>
+    )
+  }
 
   // Fallback to default icon URL if custom icons not available
   const defaultIcon = L.icon({

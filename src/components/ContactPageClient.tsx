@@ -20,8 +20,34 @@ import {
   IconBrandYoutube
 } from '@tabler/icons-react'
 
-// Lazy load the map component
-const MapComponent = dynamic(() => import('@/components/MapComponent'), {
+// Lazy load the map component with error boundary
+const MapComponent = dynamic(() => import('@/components/MapComponent').catch(() => {
+  // Fallback component if map fails to load
+  return {
+    default: ({ latitude, longitude, title, address }: any) => (
+      <div className="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-viktoria-dark dark:to-viktoria-dark-lighter h-96 rounded-xl flex items-center justify-center">
+        <div className="text-center p-6">
+          <IconMapPin size={48} className="text-gray-400 dark:text-gray-600 mx-auto mb-4" />
+          <p className="text-gray-700 dark:text-gray-300 font-medium mb-2">
+            {title || 'SV Viktoria Wertheim'}
+          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+            {address || 'Haslocher Weg 85, 97877 Wertheim'}
+          </p>
+          <a 
+            href={`https://maps.google.com/?q=${latitude},${longitude}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center px-4 py-2 bg-viktoria-blue dark:bg-viktoria-yellow text-white dark:text-gray-900 rounded-lg hover:shadow-lg transition-all text-sm font-medium"
+          >
+            <IconMapPin size={18} className="mr-2" />
+            In Google Maps öffnen
+          </a>
+        </div>
+      </div>
+    )
+  }
+}), {
   ssr: false,
   loading: () => (
     <div className="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-viktoria-dark dark:to-viktoria-dark-lighter h-96 rounded-xl flex items-center justify-center">
@@ -195,27 +221,27 @@ export default function ContactPageClient({ contacts, generalInfo, socialMedia }
           {/* Hero Section - Simplified */}
           <AnimatedSection animation="fadeIn" immediate={true}>
             <div className="bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 rounded-3xl shadow-2xl mb-12 p-8">
-              <h1 className="text-3xl sm:text-5xl font-bold text-white dark:text-gray-900 mb-2">
+              <h1 className="text-3xl sm:text-5xl font-bold text-white dark:text-gray-900 mb-2 text-center">
                 Kontakt
               </h1>
-              <p className="text-lg text-white/90 dark:text-gray-800 mb-6">
+              <p className="text-lg text-white/90 dark:text-gray-800 mb-6 text-center">
                 Wir sind für Sie da - persönlich und digital
               </p>
               
               {/* Quick Info Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div className="bg-white/20 dark:bg-black/20 backdrop-blur rounded-xl p-4">
-                  <IconBuildingCommunity size={20} className="text-white dark:text-gray-900 mb-2" />
+                <div className="bg-white/20 dark:bg-black/20 backdrop-blur rounded-xl p-4 text-center">
+                  <IconBuildingCommunity size={20} className="text-white dark:text-gray-900 mb-2 mx-auto" />
                   <p className="text-sm text-white dark:text-gray-900 font-semibold">Geschäftsstelle</p>
                   <p className="text-xs text-white/90 dark:text-gray-800">{generalInfo.address}</p>
                 </div>
-                <div className="bg-white/20 dark:bg-black/20 backdrop-blur rounded-xl p-4">
-                  <IconClockFilled size={20} className="text-white dark:text-gray-900 mb-2" />
+                <div className="bg-white/20 dark:bg-black/20 backdrop-blur rounded-xl p-4 text-center">
+                  <IconClockFilled size={20} className="text-white dark:text-gray-900 mb-2 mx-auto" />
                   <p className="text-sm text-white dark:text-gray-900 font-semibold">Öffnungszeiten</p>
                   <p className="text-xs text-white/90 dark:text-gray-800">{generalInfo.hours}</p>
                 </div>
-                <div className="bg-white/20 dark:bg-black/20 backdrop-blur rounded-xl p-4">
-                  <IconMailFilled size={20} className="text-white dark:text-gray-900 mb-2" />
+                <div className="bg-white/20 dark:bg-black/20 backdrop-blur rounded-xl p-4 text-center">
+                  <IconMailFilled size={20} className="text-white dark:text-gray-900 mb-2 mx-auto" />
                   <p className="text-sm text-white dark:text-gray-900 font-semibold">E-Mail</p>
                   <a href="mailto:info@viktoria-wertheim.de" className="text-xs text-white/90 dark:text-gray-800 hover:underline">
                     info@viktoria-wertheim.de
@@ -230,7 +256,7 @@ export default function ContactPageClient({ contacts, generalInfo, socialMedia }
             <AnimatedSection animation="slideUp" immediate={true} className="lg:col-span-2">
               <div className={cardClass}>
                 <div className={headerClass}>
-                  <h2 className="text-xl font-bold text-white dark:text-gray-900">
+                  <h2 className="text-xl font-bold text-white dark:text-gray-900 text-center">
                     Nachricht senden
                   </h2>
                 </div>
@@ -374,7 +400,7 @@ export default function ContactPageClient({ contacts, generalInfo, socialMedia }
                 <AnimatedSection animation="slideUp" immediate={true}>
                   <div className={cardClass}>
                     <div className={headerClass}>
-                      <h3 className="text-lg font-bold text-white dark:text-gray-900">
+                      <h3 className="text-lg font-bold text-white dark:text-gray-900 text-center">
                         Ansprechpartner
                       </h3>
                     </div>
@@ -442,7 +468,7 @@ export default function ContactPageClient({ contacts, generalInfo, socialMedia }
                 <AnimatedSection animation="slideUp" immediate={true}>
                   <div className={cardClass}>
                     <div className={headerClass}>
-                      <h3 className="text-lg font-bold text-white dark:text-gray-900">
+                      <h3 className="text-lg font-bold text-white dark:text-gray-900 text-center">
                         Folge uns
                       </h3>
                     </div>
@@ -486,11 +512,11 @@ export default function ContactPageClient({ contacts, generalInfo, socialMedia }
           <AnimatedSection animation="fadeIn" immediate={true} className="mt-8">
             <div className={cardClass}>
               <div className={headerClass}>
-                <div className="flex items-center justify-between">
+                <div className="text-center">
                   <h3 className="text-xl font-bold text-white dark:text-gray-900">
                     So finden Sie uns
                   </h3>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center justify-center space-x-2 mt-2">
                     <IconMapPinFilled size={20} className="text-white dark:text-gray-900" />
                     <span className="text-sm text-white/90 dark:text-gray-800">Sportplatz Wertheim</span>
                   </div>
