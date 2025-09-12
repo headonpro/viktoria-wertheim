@@ -81,7 +81,8 @@ export async function middleware(request: NextRequest) {
     if (url.startsWith('/api/teams') || url.startsWith('/api/matches') || url.startsWith('/api/news')) {
       response.headers.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300')
     } else {
-      response.headers.set('Cache-Control', 'no-store, must-revalidate')
+      // Use no-cache instead of no-store to allow back/forward cache
+      response.headers.set('Cache-Control', 'private, no-cache, must-revalidate')
     }
   }
   

@@ -162,16 +162,16 @@ export default function LeagueTableModal({ isOpen, onClose, selectedTeam, allSta
               <table className="w-full">
                 <thead className="bg-gray-50 dark:bg-viktoria-dark sticky top-0">
                   <tr>
-                    <th className="px-2 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400">Pl.</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400">Mannschaft</th>
-                    <th className="px-2 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">Sp.</th>
-                    <th className="px-2 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">S</th>
-                    <th className="px-2 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">U</th>
-                    <th className="px-2 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">N</th>
-                    <th className="px-2 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">Tore</th>
-                    <th className="px-2 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">Diff.</th>
-                    <th className="px-2 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">Pkt.</th>
-                    <th className="px-2 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">Trend</th>
+                    <th scope="col" className="px-2 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400">Pl.</th>
+                    <th scope="col" className="px-4 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-400">Mannschaft</th>
+                    <th scope="col" className="px-2 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">Sp.</th>
+                    <th scope="col" className="px-2 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">S</th>
+                    <th scope="col" className="px-2 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">U</th>
+                    <th scope="col" className="px-2 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">N</th>
+                    <th scope="col" className="px-2 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">Tore</th>
+                    <th scope="col" className="px-2 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">Diff.</th>
+                    <th scope="col" className="px-2 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">Pkt.</th>
+                    <th scope="col" className="px-2 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-400">Trend</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">

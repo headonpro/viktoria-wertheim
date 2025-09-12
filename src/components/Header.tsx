@@ -63,6 +63,8 @@ export default function Header() {
               <img 
                 src="/SVVW.png"
                 alt="SV Viktoria Wertheim"
+                width={127}
+                height={40}
                 className="h-10 md:h-12 w-auto object-contain"
               />
             </div>

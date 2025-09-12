@@ -75,15 +75,15 @@ export default function SimpleLeagueTable({ standings, onShowFullTable }: Simple
         <table className="w-full">
           <thead className="bg-gradient-to-b from-gray-50 to-white dark:from-viktoria-dark-lighter dark:to-viktoria-dark-light border-b border-gray-200 dark:border-gray-700">
             <tr>
-              <th className="px-2 sm:px-3 py-3 text-left text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Pl.</th>
-              <th className="px-2 sm:px-3 py-3 text-left text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Team</th>
-              <th className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider hidden sm:table-cell">Sp.</th>
-              <th className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">S</th>
-              <th className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">U</th>
-              <th className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">N</th>
-              <th className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider hidden sm:table-cell">Tore</th>
-              <th className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Pkt.</th>
-              <th className="px-1 py-3 text-center"></th>
+              <th scope="col" className="px-2 sm:px-3 py-3 text-left text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Pl.</th>
+              <th scope="col" className="px-2 sm:px-3 py-3 text-left text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Team</th>
+              <th scope="col" className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider hidden sm:table-cell">Sp.</th>
+              <th scope="col" className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">S</th>
+              <th scope="col" className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">U</th>
+              <th scope="col" className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">N</th>
+              <th scope="col" className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider hidden sm:table-cell">Tore</th>
+              <th scope="col" className="px-2 sm:px-3 py-3 text-center text-[10px] sm:text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Pkt.</th>
+              <th scope="col" className="px-1 py-3 text-center"><span className="sr-only">Trend</span></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 dark:divide-gray-700">

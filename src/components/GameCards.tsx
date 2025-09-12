@@ -48,6 +48,8 @@ export default function GameCards({ lastMatch, nextMatch }: GameCardsProps) {
                         <img 
                           src={getTeamLogo(lastMatch.home_team)!} 
                           alt={lastMatch.home_team || ''} 
+                          width={48}
+                          height={48}
                           className="max-h-full max-w-full object-contain"
                           loading="lazy"
                         />
@@ -85,6 +87,8 @@ export default function GameCards({ lastMatch, nextMatch }: GameCardsProps) {
                         <img 
                           src={getTeamLogo(lastMatch.away_team)!} 
                           alt={lastMatch.away_team || ''} 
+                          width={48}
+                          height={48}
                           className="max-h-full max-w-full object-contain"
                           loading="lazy"
                         />
@@ -174,6 +178,8 @@ export default function GameCards({ lastMatch, nextMatch }: GameCardsProps) {
                         <img 
                           src={getTeamLogo(nextMatch.home_team)!} 
                           alt={nextMatch.home_team || ''} 
+                          width={48}
+                          height={48}
                           className="max-h-full max-w-full object-contain"
                           loading="lazy"
                         />
@@ -212,6 +218,8 @@ export default function GameCards({ lastMatch, nextMatch }: GameCardsProps) {
                         <img 
                           src={getTeamLogo(nextMatch.away_team)!} 
                           alt={nextMatch.away_team || ''} 
+                          width={48}
+                          height={48}
                           className="max-h-full max-w-full object-contain"
                           loading="lazy"
                         />

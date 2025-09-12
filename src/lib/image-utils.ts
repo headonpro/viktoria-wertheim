@@ -62,14 +62,13 @@ export function getImageProps(imageSrc: string, alt: string = '') {
     }
   }
   
-  // Fallback for placeholder or relative URLs
+  // Fallback for relative URLs - no placeholder needed
   return {
-    useNextImage: true,
+    useNextImage: false,
     props: {
-      src: imageSrc || '/api/placeholder/400/300',
+      src: imageSrc || '',
       alt,
-      fill: true,
-      className: "object-cover"
+      style: { objectFit: 'cover' as const }
     }
   }
 }

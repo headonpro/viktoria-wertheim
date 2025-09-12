@@ -258,10 +258,10 @@ export default function TeamsPageClient({ teams, youthTeams }: TeamsPageClientPr
                         <table className="w-full">
                           <thead className="bg-gradient-to-b from-gray-50 to-white dark:from-viktoria-dark-lighter dark:to-viktoria-dark-light">
                             <tr className="border-b-2 border-gray-200 dark:border-gray-700">
-                              <th className="text-left py-3 px-2 text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Nr.</th>
-                              <th className="text-left py-3 px-2 text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Name</th>
-                              <th className="text-left py-3 px-2 text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider hidden sm:table-cell">Position</th>
-                              <th className="text-left py-3 px-2 text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider hidden sm:table-cell">Alter</th>
+                              <th scope="col" className="text-left py-3 px-2 text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Nr.</th>
+                              <th scope="col" className="text-left py-3 px-2 text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider">Name</th>
+                              <th scope="col" className="text-left py-3 px-2 text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider hidden sm:table-cell">Position</th>
+                              <th scope="col" className="text-left py-3 px-2 text-xs font-bold text-gray-600 dark:text-gray-400 uppercase tracking-wider hidden sm:table-cell">Alter</th>
                             </tr>
                           </thead>
                           <tbody>
