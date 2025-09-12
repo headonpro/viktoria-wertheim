@@ -168,7 +168,7 @@ export default function NewsCarousel({ newsArticles, onNewsClick, isDesktopSideb
               >
                 <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 overflow-hidden">
                   <SmartImage
-                    src={article.image_url || '/api/placeholder/400/300'}
+                    src={article.image_url || '/placeholder.svg'}
                     alt={article.title}
                     className="hover:scale-105 transition-transform duration-300"
                   />

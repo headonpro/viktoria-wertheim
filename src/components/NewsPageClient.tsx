@@ -127,7 +127,7 @@ export default function NewsPageClient({ newsArticles }: NewsPageClientProps) {
                     <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
                       {/* Image */}
                       <div className="h-48 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 relative overflow-hidden">
-                        {article.image && article.image !== '/api/placeholder/800/400' && (
+                        {article.image && article.image !== '/placeholder.svg' && (
                           <SmartImage
                             src={article.image}
                             alt={article.title}

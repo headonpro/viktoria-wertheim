@@ -39,7 +39,7 @@ export default function SmartImage({
   }
   
   // Use fallback if image failed to load
-  const imageSrc = imageError ? '/api/placeholder/400/300' : src
+  const imageSrc = imageError ? '/placeholder.svg' : src
   const { useNextImage, props } = getImageProps(imageSrc, alt)
   
   if (useNextImage) {

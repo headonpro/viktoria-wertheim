@@ -25,26 +25,6 @@ export default function HeaderLogo() {
           sizes="48px"
         />
       </picture>
-      {/* Logo nur auf Desktop anzeigen */}
-      <picture className="hidden lg:block">
-        <source 
-          srcSet="/optimized/SVVW-128w.avif 1x, /optimized/SVVW-256w.avif 2x"
-          type="image/avif"
-        />
-        <source 
-          srcSet="/optimized/SVVW-128w.webp 1x, /optimized/SVVW-256w.webp 2x"
-          type="image/webp"
-        />
-        <Image 
-          src="/SVVW.png"
-          alt="SV Viktoria Wertheim"
-          width={128}
-          height={28}
-          className="h-7 w-auto object-contain"
-          priority
-          sizes="(min-width: 1024px) 128px, 0px"
-        />
-      </picture>
     </Link>
   )
 }

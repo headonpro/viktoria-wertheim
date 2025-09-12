@@ -70,7 +70,7 @@ export default async function NewsPage() {
     date: article.published_at || new Date().toISOString(),
     author: 'Pressewart', // author field doesn't exist in DB
     category: article.category || 'club',
-    image: article.image_url || '/api/placeholder/800/400',
+    image: article.image_url || '/placeholder.svg',
     views: article.views || 0,
     team: 'Verein' // team field doesn't exist in DB
   }))

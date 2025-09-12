@@ -135,7 +135,7 @@ export default function NewsModal({ article, isOpen, onClose, onViewsUpdate }: N
             {/* Content */}
             <div id="modal-content" className="overflow-y-auto max-h-[calc(90vh-80px)] md:max-h-[calc(90vh-120px)]">
               {/* Image */}
-              {article.image && article.image !== '/api/placeholder/800/400' && (
+              {article.image && article.image !== '/placeholder.svg' && (
                 <div className="h-64 bg-gray-200 dark:bg-viktoria-dark-lighter relative overflow-hidden">
                   <SmartImage
                     src={article.image}
