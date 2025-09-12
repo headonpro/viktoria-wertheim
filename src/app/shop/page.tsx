@@ -169,7 +169,7 @@ export default function ShopPage() {
                               value={email}
                               onChange={(e) => setEmail(e.target.value)}
                               placeholder="Ihre E-Mail-Adresse"
-                              className="flex-1 px-4 py-3 bg-white/90 dark:bg-gray-900/90 backdrop-blur rounded-xl focus:outline-none focus:ring-2 focus:ring-white dark:focus:ring-gray-900 text-gray-900 dark:text-white placeholder-gray-500"
+                              className="flex-1 px-4 py-3 bg-white/90 dark:bg-gray-900/90 backdrop-blur rounded-xl focus:outline-none focus:ring-2 focus:ring-white dark:focus:ring-gray-900 text-gray-900 dark:text-white text-center placeholder-gray-500"
                               required
                             />
                             <button

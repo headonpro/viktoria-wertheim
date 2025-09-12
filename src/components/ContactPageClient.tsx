@@ -172,10 +172,19 @@ export default function ContactPageClient({ contacts, generalInfo, socialMedia }
     return icons[icon] || null
   }
 
+  // Gruppiere Kontakte nach Kategorien
   const groupedContacts = {
-    vorstand: contacts.filter(c => c.department === 'board' || c.role?.includes('Vorsitzender')),
-    sport: contacts.filter(c => c.department === 'sports' || c.role?.includes('Trainer')),
-    jugend: contacts.filter(c => c.department === 'youth')
+    vorstand: contacts.filter(c => 
+      c.role?.includes('Vorsitzender') || 
+      c.role?.includes('Kassierer') || 
+      c.role?.includes('Schriftführer') ||
+      c.department === 'board'
+    ),
+    teams: contacts.filter(c => 
+      c.role?.includes('Trainer') || 
+      c.department === 'sports' ||
+      c.department === 'teams'
+    )
   }
 
   return (
@@ -370,24 +379,32 @@ export default function ContactPageClient({ contacts, generalInfo, socialMedia }
                       </h3>
                     </div>
                     
+                    {/* Tab Navigation */}
                     <div className="border-b border-gray-200 dark:border-gray-700">
-                      <div className="flex overflow-x-auto">
-                        {Object.keys(groupedContacts).map((key) => (
-                          <button
-                            key={key}
-                            onClick={() => setActiveContactTab(key)}
-                            className={`px-4 py-2 text-xs font-semibold whitespace-nowrap transition-colors ${
-                              activeContactTab === key
-                                ? 'border-b-2 border-viktoria-blue dark:border-viktoria-yellow text-viktoria-blue dark:text-viktoria-yellow'
-                                : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
-                            }`}
-                          >
-                            {key.charAt(0).toUpperCase() + key.slice(1)}
-                          </button>
-                        ))}
+                      <div className="flex">
+                        <button
+                          onClick={() => setActiveContactTab('vorstand')}
+                          className={`flex-1 px-4 py-3 text-sm font-semibold transition-colors ${
+                            activeContactTab === 'vorstand'
+                              ? 'border-b-2 border-viktoria-blue dark:border-viktoria-yellow text-viktoria-blue dark:text-viktoria-yellow bg-gray-50 dark:bg-viktoria-dark'
+                              : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-viktoria-dark/50'
+                          }`}
+                        >
+                          Vorstand
+                        </button>
+                        <button
+                          onClick={() => setActiveContactTab('teams')}
+                          className={`flex-1 px-4 py-3 text-sm font-semibold transition-colors ${
+                            activeContactTab === 'teams'
+                              ? 'border-b-2 border-viktoria-blue dark:border-viktoria-yellow text-viktoria-blue dark:text-viktoria-yellow bg-gray-50 dark:bg-viktoria-dark'
+                              : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-viktoria-dark/50'
+                          }`}
+                        >
+                          Teams
+                        </button>
                       </div>
                     </div>
-
+                    
                     <div className="p-4 max-h-96 overflow-y-auto">
                       <div className="space-y-3">
                         {groupedContacts[activeContactTab as keyof typeof groupedContacts]?.map((contact) => (
@@ -411,7 +428,7 @@ export default function ContactPageClient({ contacts, generalInfo, socialMedia }
                         {(!groupedContacts[activeContactTab as keyof typeof groupedContacts] || 
                           groupedContacts[activeContactTab as keyof typeof groupedContacts].length === 0) && (
                           <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">
-                            Keine Kontakte verfügbar
+                            Keine Kontakte in dieser Kategorie verfügbar
                           </p>
                         )}
                       </div>

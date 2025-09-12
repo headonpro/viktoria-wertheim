@@ -41,7 +41,7 @@ export default function Footer() {
           </div>
 
           {/* Newsletter */}
-          <div>
+          <div className="max-w-xs mx-auto">
             <NewsletterSubscribe variant="footer" />
           </div>
 

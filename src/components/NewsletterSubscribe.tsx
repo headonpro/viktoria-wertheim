@@ -110,7 +110,7 @@ export default function NewsletterSubscribe({
               placeholder="Ihre E-Mail-Adresse"
               disabled={status === 'loading'}
               className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded-lg 
-                       text-white placeholder-gray-400 focus:outline-none 
+                       text-white text-center placeholder-gray-400 focus:outline-none 
                        focus:border-viktoria-yellow transition-colors pr-10"
             />
             <IconMail 
