@@ -89,17 +89,17 @@ export default function DatenschutzPage() {
                       Verantwortlich für die Datenverarbeitung:
                     </p>
                     <div className="text-sm space-y-1 text-gray-700 dark:text-gray-300">
-                      <p className="font-medium">SV Viktoria Wertheim 2000 e.V.</p>
-                      <p>Ingrid Scheurich</p>
-                      <p>Haslocher Weg 85</p>
-                      <p>97877 Wertheim</p>
+                      <p className="font-medium">HEADON Kreativagentur</p>
+                      <p>Onur Cirakoglu</p>
+                      <p>Am Vogelsberg 8</p>
+                      <p>97922 Lauda-Königshofen</p>
                       <div className="pt-2">
                         <a 
-                          href="mailto:ingrid-s@web.de" 
+                          href="mailto:datenschutz@headon.pro" 
                           className="inline-flex items-center space-x-2 text-viktoria-blue dark:text-viktoria-yellow hover:underline"
                         >
                           <IconMail size={16} />
-                          <span className="font-medium">ingrid-s@web.de</span>
+                          <span className="font-medium">datenschutz@headon.pro</span>
                         </a>
                       </div>
                     </div>

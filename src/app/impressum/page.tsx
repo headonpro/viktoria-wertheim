@@ -207,12 +207,12 @@ export default function ImpressumPage() {
                       Verantwortlich für den Inhalt
                     </p>
                     <p className="font-semibold text-gray-900 dark:text-white mb-2">
-                      Gregor Scheurich
+                      Christian Först
                     </p>
                     <div className="flex items-start space-x-2 text-sm text-gray-700 dark:text-gray-300">
                       <IconMapPin size={16} className="text-gray-400 mt-0.5 flex-shrink-0" />
                       <div>
-                        <p>Lange Str. 44</p>
+                        <p>Haslocher Weg 85</p>
                         <p>97877 Wertheim</p>
                       </div>
                     </div>
