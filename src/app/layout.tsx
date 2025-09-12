@@ -21,8 +21,33 @@ const goldman = Goldman({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || 'https://viktoria.headon.pro'
+  ),
   title: "SV Viktoria Wertheim - Offizielle Website",
   description: "Die offizielle Website des SV Viktoria Wertheim - Fußballverein seit 1921",
+  openGraph: {
+    title: "SV Viktoria Wertheim",
+    description: "Die offizielle Website des SV Viktoria Wertheim - Fußballverein seit 1921",
+    url: 'https://viktoria.headon.pro',
+    siteName: 'SV Viktoria Wertheim',
+    images: [
+      {
+        url: '/viktorialogo.png',
+        width: 800,
+        height: 600,
+        alt: 'SV Viktoria Wertheim Logo',
+      }
+    ],
+    locale: 'de_DE',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SV Viktoria Wertheim',
+    description: 'Die offizielle Website des SV Viktoria Wertheim - Fußballverein seit 1921',
+    images: ['/viktorialogo.png'],
+  },
 };
 
 export default function RootLayout({

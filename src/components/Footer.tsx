@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { IconMail, IconMapPin, IconBrandInstagram, IconBrandFacebook } from '@tabler/icons-react'
+import NewsletterSubscribe from '@/components/NewsletterSubscribe'
 
 export default function Footer() {
   return (
@@ -10,27 +10,6 @@ export default function Footer() {
         {/* Main Footer Content */}
         <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           
-          {/* Club Info */}
-          <div className="flex flex-col items-center text-center">
-            <div className="flex flex-col items-center mb-4">
-              <Image 
-                src="/viktorialogo.png"
-                alt="SV Viktoria Wertheim Logo"
-                width={72}
-                height={72}
-                className="object-contain mb-3"
-              />
-              <Image 
-                src="/SVVW.png"
-                alt="SV Viktoria Wertheim"
-                width={100}
-                height={24}
-                className="object-contain h-6 w-auto"
-              />
-            </div>
-
-          </div>
-
           {/* Quick Links */}
           <div className="flex flex-col items-center text-center">
             <h4 className="font-semibold text-lg mb-4 text-viktoria-yellow">Schnellzugriff</h4>
@@ -59,6 +38,11 @@ export default function Footer() {
                 <span className="text-sm">info@viktoria-wertheim.de</span>
               </li>
             </ul>
+          </div>
+
+          {/* Newsletter */}
+          <div>
+            <NewsletterSubscribe variant="footer" />
           </div>
 
           {/* Social Media */}

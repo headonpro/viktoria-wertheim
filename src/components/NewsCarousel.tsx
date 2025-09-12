@@ -64,7 +64,7 @@ export default function NewsCarousel({ newsArticles, onNewsClick, isDesktopSideb
                 <div className="space-y-3">
                   <div className="relative h-32 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800 rounded-lg overflow-hidden group-hover:shadow-md transition-all duration-300">
                     <SmartImage
-                      src={article.image_url || '/api/placeholder/400/300'}
+                      src={article.image_url || '/viktorialogo.png'}
                       alt={article.title}
                       className="group-hover:scale-105 transition-transform duration-300"
                     />
