@@ -60,7 +60,7 @@ jobs:
             
             # Build and deploy with Docker
             echo "🐳 Building Docker image..."
-            docker build -t viktoria-frontend-final .
+            docker build --no-cache -t viktoria-frontend-final .
             
             # Stop existing container
             echo "🛑 Stopping existing container..."
