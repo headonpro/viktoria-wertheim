@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { IconStar } from '@tabler/icons-react'
+import { IconStarFilled } from '@tabler/icons-react'
 
 import type { Database } from '@/lib/database.types'
 
@@ -29,7 +29,7 @@ export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorSh
         {/* Premium Sponsors */}
         <div className="mb-6">
           <div className="flex items-center justify-center space-x-2 mb-4">
-            <IconStar size={20} className="text-viktoria-yellow" />
+            <IconStarFilled size={20} className="text-viktoria-yellow" />
             <h3 className="font-bold text-gray-900 dark:text-white text-sm uppercase tracking-wide">Premium Partner</h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -39,23 +39,26 @@ export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorSh
                 className="group relative bg-gradient-to-br from-gray-50 to-white dark:from-viktoria-dark-lighter dark:to-viktoria-dark rounded-lg p-4 border border-gray-100 dark:border-gray-700 transition-all duration-300"
               >
                 <div className="text-center">
-                  {sponsor.name === 'Partnerprogramm in Vorbereitung' ? (
-                    <>
-                      <div className="h-12 sm:h-14 flex items-center justify-center mb-2">
-                        <div className="text-sm sm:text-base font-bold text-gray-600 dark:text-gray-400">
-                          {sponsor.name}
-                        </div>
-                      </div>
-                      {sponsor.description && (
-                        <p className="text-xs text-gray-500 dark:text-gray-500 font-medium">{sponsor.description}</p>
-                      )}
-                    </>
-                  ) : sponsor.website ? (
+                  {sponsor.website ? (
                     <a href={sponsor.website} target="_blank" rel="noopener noreferrer" className="block">
-                      <div className="h-12 sm:h-14 flex items-center justify-center mb-2">
-                        <div className="text-base sm:text-lg font-bold text-gray-800 dark:text-gray-200 group-hover:text-viktoria-blue dark:group-hover:text-viktoria-yellow transition-colors">
-                          {sponsor.name}
-                        </div>
+                      <div className="h-10 sm:h-12 flex items-center justify-center mb-2">
+                        {sponsor.logo_url ? (
+                          <img 
+                            src={sponsor.logo_url} 
+                            alt={sponsor.name}
+                            className={`max-h-full w-auto object-contain transition-all duration-200 hover:scale-105 ${
+                              sponsor.name === 'HEADON Kreativagentur' 
+                                ? 'grayscale brightness-0 dark:grayscale dark:brightness-200' 
+                                : ''
+                            }`}
+                            style={{ maxHeight: '40px' }}
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="text-base sm:text-lg font-bold text-gray-800 dark:text-gray-200 group-hover:text-viktoria-blue dark:group-hover:text-viktoria-yellow transition-colors">
+                            {sponsor.name}
+                          </div>
+                        )}
                       </div>
                       {sponsor.description && (
                         <p className="text-xs text-gray-500 dark:text-gray-400 font-medium hover:text-viktoria-blue dark:hover:text-viktoria-yellow transition-colors">{sponsor.description}</p>
@@ -63,10 +66,20 @@ export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorSh
                     </a>
                   ) : (
                     <>
-                      <div className="h-12 sm:h-14 flex items-center justify-center mb-2">
-                        <div className="text-base sm:text-lg font-bold text-gray-800 dark:text-gray-200">
-                          {sponsor.name}
-                        </div>
+                      <div className="h-10 sm:h-12 flex items-center justify-center mb-2">
+                        {sponsor.logo_url ? (
+                          <img 
+                            src={sponsor.logo_url} 
+                            alt={sponsor.name}
+                            className="max-h-full w-auto object-contain"
+                            style={{ maxHeight: '40px' }}
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="text-base sm:text-lg font-bold text-gray-800 dark:text-gray-200">
+                            {sponsor.name}
+                          </div>
+                        )}
                       </div>
                       {sponsor.description && (
                         <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">{sponsor.description}</p>
@@ -107,7 +120,7 @@ export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorSh
                           alt={sponsor.name}
                           className={`h-12 w-auto object-contain transition-all duration-200 hover:scale-105 ${
                             sponsor.name === 'Zorbas' 
-                              ? 'dark:invert dark:brightness-90' 
+                              ? 'dark:invert dark:brightness-90'
                               : 'invert dark:invert-0'
                           }`}
                           loading="lazy"
@@ -152,7 +165,9 @@ export default function SponsorShowcase({ sponsors, onBecomeSponsor }: SponsorSh
                         alt={sponsor.name}
                         className={`h-10 w-auto object-contain transition-all duration-200 hover:scale-105 ${
                           sponsor.name === 'Zorbas' 
-                            ? 'dark:invert dark:brightness-90' 
+                            ? 'dark:invert dark:brightness-90'
+                            : sponsor.name === 'Zippe'
+                            ? 'grayscale brightness-0 dark:grayscale dark:brightness-200'
                             : 'invert dark:invert-0'
                         }`}
                         loading="lazy"

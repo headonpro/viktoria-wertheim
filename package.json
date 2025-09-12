@@ -51,6 +51,7 @@
     "jsonwebtoken": "^9.0.2",
     "shadcn": "^3.2.1",
     "sharp": "^0.34.3",
+    "svgo": "^4.0.0",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.7",
     "typescript": "^5"
