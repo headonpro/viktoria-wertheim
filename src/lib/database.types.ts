@@ -774,7 +774,10 @@ export type Database = {
       }
     }
     Functions: {
-      [_ in never]: never
+      increment_news_views: {
+        Args: { news_id: string }
+        Returns: number
+      }
     }
     Enums: {
       [_ in never]: never

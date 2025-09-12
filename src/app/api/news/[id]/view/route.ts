@@ -59,46 +59,31 @@ export async function POST(
       })
     }
     
-    // Increment the view counter in the database
+    // Increment the view counter using the secure database function
     const supabase = await createClient()
     
-    // First, get current views
-    const { data: currentData, error: fetchError } = await supabase
-      .from('news')
-      .select('views')
-      .eq('id', newsId)
-      .single()
+    // Call the database function to increment views
+    const { data, error } = await supabase
+      .rpc('increment_news_views', { news_id: newsId })
     
-    if (fetchError) {
-      logger.error('Error fetching news article', {
-        newsId,
-        error: fetchError.message,
-        ip: getClientIp(request.headers)
-      })
-      return NextResponse.json(
-        { error: 'News article not found' },
-        { status: 404 }
-      )
-    }
-    
-    const currentViews = currentData?.views || 0
-    const newViews = currentViews + 1
-    
-    // Update the views
-    const { error: updateError } = await supabase
-      .from('news')
-      .update({ 
-        views: newViews,
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', newsId)
-    
-    if (updateError) {
+    if (error) {
+      // Check if it's a not found error (function returns null for non-existent news)
+      const errorMessage = (error as any)?.message || String(error)
+      if (errorMessage.includes('not found') || !data) {
+        logger.error('News article not found', {
+          newsId,
+          error: errorMessage,
+          ip: getClientIp(request.headers)
+        })
+        return NextResponse.json(
+          { error: 'News article not found' },
+          { status: 404 }
+        )
+      }
+      
       logger.error('Error updating views', {
         newsId,
-        currentViews,
-        newViews,
-        error: updateError.message,
+        error: errorMessage,
         ip: getClientIp(request.headers)
       })
       return NextResponse.json(
@@ -106,6 +91,8 @@ export async function POST(
         { status: 500 }
       )
     }
+    
+    const newViews = data || 0
     
     // Add this article to the viewed list
     viewedList.push(newsId)
