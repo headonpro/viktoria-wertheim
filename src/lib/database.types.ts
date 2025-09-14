@@ -389,6 +389,7 @@ export type Database = {
       }
       news: {
         Row: {
+          author_id: string | null
           category: string | null
           content: string | null
           created_at: string | null
@@ -398,11 +399,14 @@ export type Database = {
           is_featured: boolean | null
           is_published: boolean | null
           published_at: string | null
+          slug: string | null
+          tags: string[] | null
           title: string
           updated_at: string | null
           views: number | null
         }
         Insert: {
+          author_id?: string | null
           category?: string | null
           content?: string | null
           created_at?: string | null
@@ -412,11 +416,14 @@ export type Database = {
           is_featured?: boolean | null
           is_published?: boolean | null
           published_at?: string | null
+          slug?: string | null
+          tags?: string[] | null
           title: string
           updated_at?: string | null
           views?: number | null
         }
         Update: {
+          author_id?: string | null
           category?: string | null
           content?: string | null
           created_at?: string | null
@@ -426,6 +433,8 @@ export type Database = {
           is_featured?: boolean | null
           is_published?: boolean | null
           published_at?: string | null
+          slug?: string | null
+          tags?: string[] | null
           title?: string
           updated_at?: string | null
           views?: number | null
