@@ -3,8 +3,8 @@ import { cookies } from 'next/headers'
 import type { Database } from '@/lib/database.types'
 
 export async function createClient() {
-  const _cookieStore = await cookies()
-  
+  const cookieStore = await cookies()
+
   // Use process.env directly
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
@@ -13,17 +13,20 @@ export async function createClient() {
     supabaseUrl,
     supabaseAnonKey,
     {
-      auth: {
-        persistSession: false,
-        autoRefreshToken: false,
-        detectSessionInUrl: false
-      },
       cookies: {
         getAll() {
-          return []  // Return empty array to avoid cookie issues
+          return cookieStore.getAll()
         },
-        setAll(_cookiesToSet) {
-          // Do nothing - we don't want to set cookies
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set(name, value, options)
+            })
+          } catch (error) {
+            // The `setAll` method was called from a Server Component.
+            // This can be ignored if you have middleware refreshing
+            // user sessions.
+          }
         },
       },
     }
