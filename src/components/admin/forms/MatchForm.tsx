@@ -84,12 +84,17 @@ export default function MatchForm({ initialData, matchId }: MatchFormProps) {
   const loadTeams = async () => {
     setLoadingTeams(true);
     try {
-      // Use API route to fetch teams with service client
-      const response = await fetch('/api/admin/teams');
-      if (!response.ok) {
+      // Fetch teams directly from Supabase
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from('teams')
+        .select('*')
+        .order('name');
+
+      if (error) {
         throw new Error('Failed to fetch teams');
       }
-      const data = await response.json();
+
       setTeams(data || []);
     } catch (error) {
       console.error('Error loading teams:', error);

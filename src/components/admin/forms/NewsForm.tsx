@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -82,6 +83,9 @@ export default function NewsForm({ initialData, newsId }: NewsFormProps) {
     setIsSubmitting(true);
 
     try {
+      // Initialize Supabase client
+      const supabase = createClient();
+
       // Remove fields that don't exist in database
       const { status, ...dbValues } = values;
 
@@ -93,33 +97,24 @@ export default function NewsForm({ initialData, newsId }: NewsFormProps) {
       };
 
       if (newsId) {
-        // Update existing news using API route
-        const response = await fetch(`/api/news/${newsId}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newsData),
-        });
+        // Update existing news directly with Supabase
+        const { error } = await supabase
+          .from('news')
+          .update(newsData)
+          .eq('id', newsId);
 
-        if (!response.ok) {
-          const error = await response.json();
+        if (error) {
           throw new Error(error.message || 'Fehler beim Aktualisieren');
         }
 
         toast.success('Nachricht erfolgreich aktualisiert');
       } else {
-        // Create new news using API route
-        const response = await fetch('/api/news', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(newsData),
-        });
+        // Create new news directly with Supabase
+        const { error } = await supabase
+          .from('news')
+          .insert(newsData);
 
-        if (!response.ok) {
-          const error = await response.json();
+        if (error) {
           throw new Error(error.message || 'Fehler beim Erstellen');
         }
 
@@ -130,7 +125,7 @@ export default function NewsForm({ initialData, newsId }: NewsFormProps) {
       router.refresh();
     } catch (error) {
       console.error('Error saving news:', error);
-      toast.error('Fehler beim Speichern der Nachricht');
+      toast.error(error instanceof Error ? error.message : 'Fehler beim Speichern der Nachricht');
     } finally {
       setIsSubmitting(false);
     }

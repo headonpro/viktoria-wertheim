@@ -54,12 +54,18 @@ export default function SponsorsPage() {
     setLoading(true);
 
     try {
-      // Use API route to fetch sponsors with service client
-      const response = await fetch('/api/admin/sponsors');
-      if (!response.ok) {
+      // Fetch sponsors directly from Supabase
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from('sponsors')
+        .select('*')
+        .order('sort_order')
+        .order('name');
+
+      if (error) {
         throw new Error('Failed to fetch sponsors');
       }
-      const data = await response.json();
+
       setSponsors(data || []);
     } catch (error: any) {
       console.error('Error loading sponsors:', error);

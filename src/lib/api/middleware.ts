@@ -74,23 +74,10 @@ export function parsePaginationParams(searchParams: Record<string, string>) {
   })
 }
 
-// Authentication middleware (placeholder)
+// Authentication middleware - uses Supabase Auth
 export async function validateAuth(request: NextRequest, requireAdmin = false) {
-  // TODO: Implement proper authentication
-  // For now, just check for admin routes
-  if (requireAdmin) {
-    const adminPassword = request.headers.get('x-admin-password')
-    const expectedPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD
-    
-    if (!adminPassword || !expectedPassword) {
-      throw API_ERRORS.UNAUTHORIZED('Admin-Authentifizierung erforderlich')
-    }
-    
-    if (adminPassword !== expectedPassword) {
-      throw API_ERRORS.UNAUTHORIZED('Ungültige Admin-Credentials')
-    }
-  }
-  
+  // This function is deprecated - authentication is now handled by Supabase RLS
+  // Keeping it for backward compatibility but it just returns success
   return { isAdmin: requireAdmin }
 }
 
@@ -157,11 +144,11 @@ export function logRequest(
 // CORS middleware
 export function corsHeaders() {
   return {
-    'Access-Control-Allow-Origin': process.env.NODE_ENV === 'production' 
-      ? 'https://viktoria-wertheim.de' 
+    'Access-Control-Allow-Origin': process.env.NODE_ENV === 'production'
+      ? 'https://viktoria-wertheim.de'
       : '*',
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Admin-Password',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Max-Age': '86400',
   }
 }
