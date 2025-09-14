@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -81,7 +80,6 @@ export default function NewsForm({ initialData, newsId }: NewsFormProps) {
 
   async function onSubmit(values: NewsFormValues) {
     setIsSubmitting(true);
-    const supabase = createClient();
 
     try {
       // Remove fields that don't exist in database
@@ -92,29 +90,39 @@ export default function NewsForm({ initialData, newsId }: NewsFormProps) {
         tags: values.tags ? values.tags.split(',').map(tag => tag.trim()) : [],
         is_published: status === 'published',
         is_featured: values.is_featured || false,
-        updated_at: new Date().toISOString(),
       };
 
       if (newsId) {
-        // Update existing news
-        const { error } = await supabase
-          .from('news')
-          .update(newsData)
-          .eq('id', newsId);
+        // Update existing news using API route
+        const response = await fetch(`/api/news/${newsId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newsData),
+        });
 
-        if (error) throw error;
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || 'Fehler beim Aktualisieren');
+        }
+
         toast.success('Nachricht erfolgreich aktualisiert');
       } else {
-        // Create new news
-        const { data: { user } } = await supabase.auth.getUser();
-        const { error } = await supabase
-          .from('news')
-          .insert({
-            ...newsData,
-            author_id: user?.id,
-          });
+        // Create new news using API route
+        const response = await fetch('/api/news', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(newsData),
+        });
 
-        if (error) throw error;
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || 'Fehler beim Erstellen');
+        }
+
         toast.success('Nachricht erfolgreich erstellt');
       }
 
