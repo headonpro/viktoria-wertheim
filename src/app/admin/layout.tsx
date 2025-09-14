@@ -14,29 +14,23 @@ export default async function AdminLayout({
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {
-    console.log('[Admin Layout] No user found, redirecting to login');
     redirect('/auth/login');
   }
 
-  console.log('[Admin Layout] User found:', user.email);
 
   // Check if user has admin role in profiles table
-  const { data: profile, error: profileError } = await supabase
+  const { data: profile } = await supabase
     .from('profiles')
     .select('role')
     .eq('id', user.id)
     .single();
 
-  console.log('[Admin Layout] Profile check:', { profile, error: profileError });
 
   if (!profile || !profile.role || !['admin', 'super_admin'].includes(profile.role)) {
     // Fallback: Check admin emails for initial setup
     const adminEmails = process.env.ADMIN_EMAILS?.split(',') || [];
-    console.log('[Admin Layout] Admin emails:', adminEmails);
-    console.log('[Admin Layout] User email:', user.email);
 
     if (!adminEmails.includes(user.email || '')) {
-      console.log('[Admin Layout] User not in admin emails, redirecting to home');
       redirect('/');
     }
   }

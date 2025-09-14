@@ -13,17 +13,12 @@ export const metadata: Metadata = {
 export default async function MatchesPage() {
   const supabase = createServiceClient();
 
-  console.log('[MatchesPage] Using service client to fetch matches...');
 
   const { data: matches, error } = await supabase
     .from('matches')
     .select('*')
     .order('match_date', { ascending: false });
 
-  console.log('[MatchesPage] Result:', {
-    matchCount: matches?.length || 0,
-    error: error || null
-  });
 
   if (error) {
     console.error('Error fetching matches:', error);

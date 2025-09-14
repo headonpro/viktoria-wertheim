@@ -12,18 +12,19 @@ export const metadata: Metadata = {
 };
 
 interface EditMatchPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function EditMatchPage({ params }: EditMatchPageProps) {
   const supabase = createServiceClient();
+  const resolvedParams = await params;
 
   const { data: match, error } = await supabase
     .from('matches')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', resolvedParams.id)
     .single();
 
   if (error || !match) {
@@ -63,7 +64,7 @@ export default async function EditMatchPage({ params }: EditMatchPageProps) {
           status: match.status || undefined,
           season: match.season || undefined,
         }}
-        matchId={params.id}
+        matchId={resolvedParams.id}
       />
     </div>
   );
