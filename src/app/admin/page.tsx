@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import { createServiceClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/server';
 import DashboardStats from '@/components/admin/dashboard/DashboardStats';
 import RecentActivity from '@/components/admin/dashboard/RecentActivity';
 import QuickActions from '@/components/admin/dashboard/QuickActions';
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminDashboard() {
-  const supabase = createServiceClient();
+  const supabase = await createClient();
 
   // Fetch dashboard data
   const [

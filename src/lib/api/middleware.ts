@@ -201,16 +201,11 @@ export function createApiHandler<T extends unknown[]>(
 
       // Execute handler
       const result = await handler(request, ..._args)
-      
+
       logRequest(method, url, ip, startTime, 200)
-      
-      return new Response(JSON.stringify(result), {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-          ...corsHeaders(),
-        }
-      })
+
+      // Result is already the data we want to return, not a Response
+      return result
     } catch (error) {
       logRequest(method, url, ip, startTime, 
         error instanceof Error && 'statusCode' in error 

@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { createServiceClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
 import { IconArrowLeft } from '@tabler/icons-react';
 import MatchForm from '@/components/admin/forms/MatchForm';
@@ -18,7 +18,7 @@ interface EditMatchPageProps {
 }
 
 export default async function EditMatchPage({ params }: EditMatchPageProps) {
-  const supabase = createServiceClient();
+  const supabase = await createClient();
   const resolvedParams = await params;
 
   const { data: match, error } = await supabase

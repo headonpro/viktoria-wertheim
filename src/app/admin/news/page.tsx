@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { createServiceClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
 import { IconPlus } from '@tabler/icons-react';
 import NewsDataTable from '@/components/admin/tables/NewsDataTable';
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function NewsPage() {
-  const supabase = createServiceClient();
+  const supabase = await createClient();
 
   const { data: news, error } = await supabase
     .from('news')

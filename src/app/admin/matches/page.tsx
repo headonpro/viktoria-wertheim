@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { createServiceClient } from '@/lib/supabase/server';
+import { createClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
 import { IconPlus } from '@tabler/icons-react';
 import MatchDataTable from '@/components/admin/tables/MatchDataTable';
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function MatchesPage() {
-  const supabase = createServiceClient();
+  const supabase = await createClient();
 
 
   const { data: matches, error } = await supabase
