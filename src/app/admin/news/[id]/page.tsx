@@ -55,15 +55,14 @@ export default async function EditNewsPage({ params }: EditNewsPageProps) {
       <NewsForm
         initialData={{
           title: news.title,
-          slug: undefined,
+          slug: news.slug || undefined,
           excerpt: news.excerpt || undefined,
           content: news.content || undefined,
           image_url: news.image_url || undefined,
           category: news.category || undefined,
-          tags: undefined,
-          status: 'draft' as 'draft' | 'published',
-          seo_title: undefined,
-          seo_description: undefined,
+          tags: news.tags ? news.tags.join(', ') : undefined,
+          status: news.is_published ? 'published' : 'draft',
+          is_featured: news.is_featured || false,
         }}
         newsId={resolvedParams.id}
       />

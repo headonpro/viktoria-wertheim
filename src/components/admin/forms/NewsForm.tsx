@@ -40,6 +40,7 @@ interface NewsFormValues {
   category: string;
   tags?: string;
   status: 'draft' | 'published';
+  is_featured?: boolean;
   seo_title?: string;
   seo_description?: string;
 }
@@ -89,6 +90,8 @@ export default function NewsForm({ initialData, newsId }: NewsFormProps) {
       const newsData = {
         ...values,
         tags: values.tags ? values.tags.split(',').map(tag => tag.trim()) : [],
+        is_published: values.status === 'published',
+        is_featured: values.is_featured || false,
         updated_at: new Date().toISOString(),
       };
 
