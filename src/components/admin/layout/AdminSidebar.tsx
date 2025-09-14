@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   IconDashboard,
   IconNews,
@@ -17,6 +17,8 @@ import {
 } from '@tabler/icons-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import { createClient } from '@/lib/supabase/client';
+import { toast } from 'sonner';
 
 const menuItems = [
   {
@@ -63,7 +65,26 @@ const menuItems = [
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const router = useRouter();
   const [collapsed, setCollapsed] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    const supabase = createClient();
+
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+
+      toast.success('Erfolgreich abgemeldet');
+      router.push('/auth/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+      toast.error('Fehler beim Abmelden');
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
     <div
@@ -128,15 +149,19 @@ export default function AdminSidebar() {
       {/* Logout Button */}
       <div className="p-4 border-t border-gray-200 dark:border-gray-700">
         <button
+          onClick={handleLogout}
+          disabled={isLoggingOut}
           className={cn(
-            'w-full flex items-center px-3 py-2 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors',
+            'w-full flex items-center px-3 py-2 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed',
             collapsed && 'justify-center'
           )}
           title={collapsed ? 'Abmelden' : undefined}
         >
           <IconLogout className="w-5 h-5 flex-shrink-0" />
           {!collapsed && (
-            <span className="ml-3 text-sm font-medium">Abmelden</span>
+            <span className="ml-3 text-sm font-medium">
+              {isLoggingOut ? 'Abmelden...' : 'Abmelden'}
+            </span>
           )}
         </button>
       </div>

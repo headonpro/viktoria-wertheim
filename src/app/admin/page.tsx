@@ -1,11 +1,9 @@
 import { Metadata } from 'next';
-import { createClient } from '@/lib/supabase/server';
+import { createServiceClient } from '@/lib/supabase/server';
 import DashboardStats from '@/components/admin/dashboard/DashboardStats';
 import RecentActivity from '@/components/admin/dashboard/RecentActivity';
 import QuickActions from '@/components/admin/dashboard/QuickActions';
 import SystemHealth from '@/components/admin/dashboard/SystemHealth';
-import AttendanceChart from '@/components/admin/charts/AttendanceChart';
-import RevenueChart from '@/components/admin/charts/RevenueChart';
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard | SV Viktoria Wertheim',
@@ -13,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function AdminDashboard() {
-  const supabase = await createClient();
+  const supabase = createServiceClient();
 
   // Fetch dashboard data
   const [

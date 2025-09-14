@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import {
@@ -32,20 +30,19 @@ import ImageUpload from '@/components/admin/upload/ImageUpload';
 import { IconSend, IconDeviceFloppy, IconEye } from '@tabler/icons-react';
 import { toast } from 'sonner';
 
-const newsFormSchema = z.object({
-  title: z.string().min(1, 'Titel ist erforderlich').max(200),
-  slug: z.string().min(1, 'Slug ist erforderlich').regex(/^[a-z0-9-]+$/, 'Slug darf nur Kleinbuchstaben, Zahlen und Bindestriche enthalten'),
-  excerpt: z.string().min(1, 'Zusammenfassung ist erforderlich').max(500),
-  content: z.string().min(1, 'Inhalt ist erforderlich'),
-  image_url: z.string().optional(),
-  category: z.string().min(1, 'Kategorie ist erforderlich'),
-  tags: z.string().optional(),
-  status: z.enum(['draft', 'published']),
-  seo_title: z.string().optional(),
-  seo_description: z.string().optional(),
-});
-
-type NewsFormValues = z.infer<typeof newsFormSchema>;
+// Form-Typ Definition ohne Zod
+interface NewsFormValues {
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  image_url?: string;
+  category: string;
+  tags?: string;
+  status: 'draft' | 'published';
+  seo_title?: string;
+  seo_description?: string;
+}
 
 interface NewsFormProps {
   initialData?: Partial<NewsFormValues>;
@@ -58,7 +55,6 @@ export default function NewsForm({ initialData, newsId }: NewsFormProps) {
   const [previewMode, setPreviewMode] = useState(false);
 
   const form = useForm<NewsFormValues>({
-    resolver: zodResolver(newsFormSchema),
     defaultValues: {
       title: initialData?.title || '',
       slug: initialData?.slug || '',
@@ -71,6 +67,7 @@ export default function NewsForm({ initialData, newsId }: NewsFormProps) {
       seo_title: initialData?.seo_title || '',
       seo_description: initialData?.seo_description || '',
     },
+    mode: 'onBlur', // Validierung bei Blur
   });
 
   const generateSlug = (title: string) => {

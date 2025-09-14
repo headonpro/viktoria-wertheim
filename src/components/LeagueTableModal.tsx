@@ -69,13 +69,20 @@ export default function LeagueTableModal({ isOpen, onClose, selectedTeam, allSta
         
         // Filter league standings for that league
         if (teamData.league && allStandings) {
-          const standingsData = allStandings.filter(s => s.league === teamData.league)
+          // Get all teams in the same league
+          const teamsInLeague = teams.filter(t => t.league === teamData.league)
+          const teamIdsInLeague = teamsInLeague.map(t => t.id)
+
+          // Filter standings for teams in this league
+          const standingsData = allStandings.filter(s => s.team_id && teamIdsInLeague.includes(s.team_id))
 
           if (standingsData.length > 0) {
             // Map database data to component interface
-            const mappedData: TeamData[] = standingsData.map(row => ({
+            const mappedData: TeamData[] = standingsData.map(row => {
+              const team = teams.find(t => t.id === row.team_id)
+              return {
               position: row.position,
-              team: row.team_name,
+              team: team?.name || 'Unknown Team',
               matches: row.played || 0,
               wins: row.won || 0,
               draws: row.drawn || 0,
@@ -85,12 +92,13 @@ export default function LeagueTableModal({ isOpen, onClose, selectedTeam, allSta
               points: row.points || 0,
               trend: (row.trend === 'up' || row.trend === 'down' || row.trend === 'same') ? row.trend : 'same',
               // Check if this is our team
-              isOwnTeam: row.team_id === actualTeamId || row.team_name.includes('Viktoria Wertheim'),
+              isOwnTeam: row.team_id === actualTeamId || (team?.name || '').includes('Viktoria Wertheim'),
               // Mark promotion/relegation zones based on position
               isPromoted: row.position <= 2,
               isPlayoff: row.position === 3 || row.position === 4,
               isRelegation: row.position >= (standingsData.length - 2)
-            }))
+            }
+            })
             setTableData(mappedData)
           } else {
             setTableData([])

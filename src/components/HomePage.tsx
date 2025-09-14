@@ -11,6 +11,12 @@ type Scorer = Database['public']['Tables']['scorers']['Row']
 type Sponsor = Database['public']['Tables']['sponsors']['Row']
 type LeagueStanding = Database['public']['Tables']['league_standings']['Row']
 
+// Extended type for standings with team_name
+interface EnrichedLeagueStanding extends LeagueStanding {
+  team_name: string
+  league: string
+}
+
 export default async function HomePage() {
   const supabase = await createClient()
   
@@ -79,7 +85,7 @@ export default async function HomePage() {
   }
   
   // Create enriched league standings with team data
-  const enrichedStandings = leagueStandings?.map(standing => {
+  const enrichedStandings: EnrichedLeagueStanding[] = leagueStandings?.map(standing => {
     const team = teams?.find(t => t.id === standing.team_id)
     return {
       ...standing,
@@ -87,7 +93,7 @@ export default async function HomePage() {
       team_name: team?.name || ''
     }
   }) || []
-  
+
   const processedData = {
     teams: teams || [],
     matches: matches || [],

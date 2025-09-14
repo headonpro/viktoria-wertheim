@@ -29,7 +29,7 @@ export default async function AdminLayout({
 
   console.log('[Admin Layout] Profile check:', { profile, error: profileError });
 
-  if (!profile || !['admin', 'super_admin'].includes(profile.role)) {
+  if (!profile || !profile.role || !['admin', 'super_admin'].includes(profile.role)) {
     // Fallback: Check admin emails for initial setup
     const adminEmails = process.env.ADMIN_EMAILS?.split(',') || [];
     console.log('[Admin Layout] Admin emails:', adminEmails);

@@ -8,7 +8,7 @@ type Team = Database['public']['Tables']['teams']['Row']
 type Player = Database['public']['Tables']['players']['Row']
 type Match = Database['public']['Tables']['matches']['Row']
 type YouthTeam = Database['public']['Tables']['youth_teams']['Row']
-type LeagueStanding = Database['public']['Tables']['league_standings']['Row']
+type LeagueStanding = Database['public']['Views']['current_league_table']['Row']
 
 // Define client types
 interface ClientPlayer {
@@ -81,10 +81,8 @@ export default async function TeamsPage() {
         .limit(50),
       supabase.from('youth_teams').select('*').order('age_group'),
       supabase
-        .from('league_standings')
+        .from('current_league_table')
         .select('*')
-        .in('season', ['2024/25', '2025/26']) // Current and upcoming season
-        .order('season', { ascending: false })
         .order('position')
     ])
     
@@ -176,27 +174,15 @@ export default async function TeamsPage() {
   const leagueStatsByTeam: Record<string, LeagueStanding | null> = {}
   if (leagueStandings) {
     teams.forEach(team => {
-      const teamStats = leagueStandings.find(standing => {
-        // Direct team_id match
-        if (standing.team_id === team.id) return true
-        
-        // Exact name match
-        if (standing.team_name === team.name) return true
-        
-        // Handle II vs 2 notation for second team
-        if (team.name === 'SV Viktoria Wertheim II' && 
-            standing.team_name === 'SV Viktoria Wertheim 2') return true
-        
-        // Handle SpG variation for third team (team III is stored as SpG in teams table)
-        if (team.name === 'SpG Vikt. Wertheim 3/Grünenwört' && 
-            standing.team_name === 'SV Viktoria Wertheim III') return true
-            
-        // Also handle numeric variation for SpG team
-        if (team.name === 'SpG Vikt. Wertheim 3/Grünenwört' && 
-            standing.team_name === 'SV Viktoria Wertheim 3') return true
-        
-        return false
-      })
+      // Find matching league standing by team_id or team_name
+      const teamStats = leagueStandings.find(standing =>
+        standing.team_id === team.id ||
+        standing.team_name === team.name ||
+        // Handle variations in team names
+        (team.name === 'SV Viktoria Wertheim II' && standing.team_name === 'SV Viktoria Wertheim 2') ||
+        (team.name === 'SpG Vikt. Wertheim 3/Grünenwört' &&
+         (standing.team_name === 'SV Viktoria Wertheim III' || standing.team_name === 'SV Viktoria Wertheim 3'))
+      )
       leagueStatsByTeam[team.id] = teamStats || null
     })
   }
@@ -211,8 +197,8 @@ export default async function TeamsPage() {
       coach: team.coach || 'Trainer nicht angegeben',
       captain: team.captain || 'Kapitän nicht angegeben',
       training: team.training_schedule || 'Training nach Vereinbarung',
-      position: team.table_position || 0,
-      points: team.points || 0,
+      position: leagueStats?.position || 0,
+      points: leagueStats?.points || 0,
       teamType: team.team_type || 'senior',
       players: playersByTeam[team.id] || [],
       lastResults: matchesByTeam[team.id]?.lastResults || [],

@@ -21,6 +21,12 @@ type Scorer = Database['public']['Tables']['scorers']['Row']
 type Sponsor = Database['public']['Tables']['sponsors']['Row']
 type LeagueStanding = Database['public']['Tables']['league_standings']['Row']
 
+// Extended type for standings with team_name (added by HomePage.tsx)
+interface EnrichedLeagueStanding extends LeagueStanding {
+  team_name: string
+  league: string
+}
+
 interface ProcessedData {
   teams: Team[]
   matches: Match[]
@@ -32,11 +38,11 @@ interface ProcessedData {
     silver: Sponsor[]
   }
   leagueStandings: {
-    'Kreisliga A': LeagueStanding[]
-    'Kreisklasse A': LeagueStanding[]
-    'Kreisklasse B': LeagueStanding[]
+    'Kreisliga A': EnrichedLeagueStanding[]
+    'Kreisklasse A': EnrichedLeagueStanding[]
+    'Kreisklasse B': EnrichedLeagueStanding[]
   }
-  allLeagueStandings: LeagueStanding[]
+  allLeagueStandings: EnrichedLeagueStanding[]
   lastFiveMatches: {
     '1': Match[]
     '2': Match[]

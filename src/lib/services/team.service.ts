@@ -144,7 +144,9 @@ class TeamService extends BaseService<Team> {
   // Get all active teams
   async getActiveTeams(pagination: PaginationParams = {}): Promise<{ data: Team[]; total: number }> {
     try {
-      return await this.findAll(pagination, { is_active: true })
+      // Note: is_active column doesn't exist in production DB yet
+      // Return all teams for now
+      return await this.findAll(pagination)
     } catch (error) {
       logger.error('Error getting active teams', { error })
       throw error

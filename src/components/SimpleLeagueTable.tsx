@@ -7,8 +7,14 @@ import { getTeamAbbreviation } from '@/lib/teams/team-data'
 
 type LeagueStanding = Database['public']['Tables']['league_standings']['Row']
 
+// Extended type for standings with team_name (added by HomePage.tsx)
+interface EnrichedLeagueStanding extends LeagueStanding {
+  team_name: string
+  league?: string
+}
+
 interface SimpleLeagueTableProps {
-  standings: LeagueStanding[]
+  standings: EnrichedLeagueStanding[]
   selectedTeamId?: string
   onShowFullTable?: () => void
 }

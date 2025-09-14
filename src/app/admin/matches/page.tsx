@@ -3,23 +3,30 @@ import Link from 'next/link';
 import { createServiceClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
 import { IconPlus } from '@tabler/icons-react';
-import NewsDataTable from '@/components/admin/tables/NewsDataTable';
+import MatchDataTable from '@/components/admin/tables/MatchDataTable';
 
 export const metadata: Metadata = {
-  title: 'Nachrichten verwalten | Admin Dashboard',
-  description: 'Verwalten Sie alle Nachrichten und Artikel',
+  title: 'Spiele verwalten | Admin Dashboard',
+  description: 'Verwalten Sie alle Spiele und Ergebnisse',
 };
 
-export default async function NewsPage() {
+export default async function MatchesPage() {
   const supabase = createServiceClient();
 
-  const { data: news, error } = await supabase
-    .from('news')
+  console.log('[MatchesPage] Using service client to fetch matches...');
+
+  const { data: matches, error } = await supabase
+    .from('matches')
     .select('*')
-    .order('created_at', { ascending: false });
+    .order('match_date', { ascending: false });
+
+  console.log('[MatchesPage] Result:', {
+    matchCount: matches?.length || 0,
+    error: error || null
+  });
 
   if (error) {
-    console.error('Error fetching news:', error);
+    console.error('Error fetching matches:', error);
   }
 
   return (
@@ -28,24 +35,24 @@ export default async function NewsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Nachrichten verwalten
+            Spiele verwalten
           </h1>
           <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            Erstellen, bearbeiten und verwalten Sie alle Nachrichten
+            Erstellen, bearbeiten und verwalten Sie alle Spiele
           </p>
         </div>
         <div className="mt-4 sm:mt-0">
-          <Link href="/admin/news/new">
+          <Link href="/admin/matches/new">
             <Button>
               <IconPlus className="w-4 h-4 mr-2" />
-              Neue Nachricht
+              Neues Spiel
             </Button>
           </Link>
         </div>
       </div>
 
-      {/* News Table */}
-      <NewsDataTable news={news || []} />
+      {/* Matches Table */}
+      <MatchDataTable matches={matches || []} />
     </div>
   );
 }

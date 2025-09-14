@@ -7,36 +7,6 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "13.0.4"
-  }
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       contacts: {
@@ -78,39 +48,6 @@ export type Database = {
         }
         Relationships: []
       }
-      content_generation_log: {
-        Row: {
-          created_at: string | null
-          error_message: string | null
-          generated_content_id: string | null
-          generated_content_type: string | null
-          id: string
-          status: string | null
-          trigger_data: Json | null
-          trigger_type: string
-        }
-        Insert: {
-          created_at?: string | null
-          error_message?: string | null
-          generated_content_id?: string | null
-          generated_content_type?: string | null
-          id?: string
-          status?: string | null
-          trigger_data?: Json | null
-          trigger_type: string
-        }
-        Update: {
-          created_at?: string | null
-          error_message?: string | null
-          generated_content_id?: string | null
-          generated_content_type?: string | null
-          id?: string
-          status?: string | null
-          trigger_data?: Json | null
-          trigger_type?: string
-        }
-        Relationships: []
-      }
       league_standings: {
         Row: {
           drawn: number | null
@@ -118,12 +55,14 @@ export type Database = {
           goals_against: number | null
           goals_for: number | null
           id: string
+          league: string | null
           lost: number | null
           played: number | null
           points: number | null
           position: number
           season: string | null
           team_id: string | null
+          team_name: string
           trend: string | null
           updated_at: string | null
           won: number | null
@@ -134,12 +73,14 @@ export type Database = {
           goals_against?: number | null
           goals_for?: number | null
           id?: string
+          league?: string | null
           lost?: number | null
           played?: number | null
           points?: number | null
           position: number
           season?: string | null
           team_id?: string | null
+          team_name: string
           trend?: string | null
           updated_at?: string | null
           won?: number | null
@@ -150,112 +91,21 @@ export type Database = {
           goals_against?: number | null
           goals_for?: number | null
           id?: string
+          league?: string | null
           lost?: number | null
           played?: number | null
           points?: number | null
           position?: number
           season?: string | null
           team_id?: string | null
+          team_name?: string
           trend?: string | null
           updated_at?: string | null
           won?: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "fk_league_standings_team"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "team_statistics_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_league_standings_team"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "teams"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      match_events: {
-        Row: {
-          created_at: string | null
-          description: string | null
-          event_time: number | null
-          event_type: string
-          id: string
-          match_id: string | null
-          player_id: string | null
-          team_id: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          description?: string | null
-          event_time?: number | null
-          event_type: string
-          id?: string
-          match_id?: string | null
-          player_id?: string | null
-          team_id?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          description?: string | null
-          event_time?: number | null
-          event_type?: string
-          id?: string
-          match_id?: string | null
-          player_id?: string | null
-          team_id?: string | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "match_events_match_id_fkey"
-            columns: ["match_id"]
-            isOneToOne: false
-            referencedRelation: "match_results_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "match_events_match_id_fkey"
-            columns: ["match_id"]
-            isOneToOne: false
-            referencedRelation: "matches"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "match_events_match_id_fkey"
-            columns: ["match_id"]
-            isOneToOne: false
-            referencedRelation: "recent_matches"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "match_events_match_id_fkey"
-            columns: ["match_id"]
-            isOneToOne: false
-            referencedRelation: "upcoming_matches"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "match_events_player_id_fkey"
-            columns: ["player_id"]
-            isOneToOne: false
-            referencedRelation: "players"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "match_events_team_id_fkey"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "team_statistics_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "match_events_team_id_fkey"
+            foreignKeyName: "league_standings_team_id_fkey"
             columns: ["team_id"]
             isOneToOne: false
             referencedRelation: "teams"
@@ -277,7 +127,6 @@ export type Database = {
           match_date: string
           match_time: string | null
           match_type: string | null
-          season: string | null
           status: string | null
           updated_at: string | null
         }
@@ -294,7 +143,6 @@ export type Database = {
           match_date: string
           match_time?: string | null
           match_type?: string | null
-          season?: string | null
           status?: string | null
           updated_at?: string | null
         }
@@ -311,34 +159,19 @@ export type Database = {
           match_date?: string
           match_time?: string | null
           match_type?: string | null
-          season?: string | null
           status?: string | null
           updated_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "fk_matches_away_team"
-            columns: ["away_team_id"]
-            isOneToOne: false
-            referencedRelation: "team_statistics_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_matches_away_team"
+            foreignKeyName: "matches_away_team_id_fkey"
             columns: ["away_team_id"]
             isOneToOne: false
             referencedRelation: "teams"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "fk_matches_home_team"
-            columns: ["home_team_id"]
-            isOneToOne: false
-            referencedRelation: "team_statistics_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_matches_home_team"
+            foreignKeyName: "matches_home_team_id_fkey"
             columns: ["home_team_id"]
             isOneToOne: false
             referencedRelation: "teams"
@@ -385,63 +218,6 @@ export type Database = {
           title?: string
           updated_at?: string | null
           views?: number | null
-        }
-        Relationships: []
-      }
-      news_templates: {
-        Row: {
-          conditions: Json | null
-          content_template: string
-          created_at: string | null
-          id: string
-          template_type: string
-          title_template: string
-        }
-        Insert: {
-          conditions?: Json | null
-          content_template: string
-          created_at?: string | null
-          id?: string
-          template_type: string
-          title_template: string
-        }
-        Update: {
-          conditions?: Json | null
-          content_template?: string
-          created_at?: string | null
-          id?: string
-          template_type?: string
-          title_template?: string
-        }
-        Relationships: []
-      }
-      newsletter_history: {
-        Row: {
-          content: string
-          created_at: string | null
-          id: string
-          recipient_count: number | null
-          sent_at: string | null
-          sent_by: string | null
-          subject: string
-        }
-        Insert: {
-          content: string
-          created_at?: string | null
-          id?: string
-          recipient_count?: number | null
-          sent_at?: string | null
-          sent_by?: string | null
-          subject: string
-        }
-        Update: {
-          content?: string
-          created_at?: string | null
-          id?: string
-          recipient_count?: number | null
-          sent_at?: string | null
-          sent_by?: string | null
-          subject?: string
         }
         Relationships: []
       }
@@ -508,71 +284,13 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_players_team"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "team_statistics_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_players_team"
+            foreignKeyName: "players_team_id_fkey"
             columns: ["team_id"]
             isOneToOne: false
             referencedRelation: "teams"
             referencedColumns: ["id"]
           },
         ]
-      }
-      profiles: {
-        Row: {
-          avatar_url: string | null
-          created_at: string | null
-          email: string | null
-          full_name: string | null
-          id: string
-          role: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          avatar_url?: string | null
-          created_at?: string | null
-          email?: string | null
-          full_name?: string | null
-          id: string
-          role?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          avatar_url?: string | null
-          created_at?: string | null
-          email?: string | null
-          full_name?: string | null
-          id?: string
-          role?: string | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      schema_migrations: {
-        Row: {
-          applied_at: string | null
-          checksum: string | null
-          description: string | null
-          version: string
-        }
-        Insert: {
-          applied_at?: string | null
-          checksum?: string | null
-          description?: string | null
-          version: string
-        }
-        Update: {
-          applied_at?: string | null
-          checksum?: string | null
-          description?: string | null
-          version?: string
-        }
-        Relationships: []
       }
       scorers: {
         Row: {
@@ -613,14 +331,14 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_scorers_team"
-            columns: ["team_id"]
+            foreignKeyName: "scorers_player_id_fkey"
+            columns: ["player_id"]
             isOneToOne: false
-            referencedRelation: "team_statistics_view"
+            referencedRelation: "players"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "fk_scorers_team"
+            foreignKeyName: "scorers_team_id_fkey"
             columns: ["team_id"]
             isOneToOne: false
             referencedRelation: "teams"
@@ -664,66 +382,19 @@ export type Database = {
         }
         Relationships: []
       }
-      team_form: {
-        Row: {
-          form_points: number | null
-          form_string: string | null
-          id: string
-          recent_goals_against: number | null
-          recent_goals_for: number | null
-          season: string | null
-          team_id: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          form_points?: number | null
-          form_string?: string | null
-          id?: string
-          recent_goals_against?: number | null
-          recent_goals_for?: number | null
-          season?: string | null
-          team_id?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          form_points?: number | null
-          form_string?: string | null
-          id?: string
-          recent_goals_against?: number | null
-          recent_goals_for?: number | null
-          season?: string | null
-          team_id?: string | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "team_form_team_id_fkey"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "team_statistics_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "team_form_team_id_fkey"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "teams"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       teams: {
         Row: {
           captain: string | null
           coach: string | null
           created_at: string | null
           id: string
-          is_own_team: boolean | null
           league: string | null
           name: string
-          season: string
+          points: number | null
+          season: string | null
           short_name: string | null
-          team_type: string
+          table_position: number | null
+          team_type: string | null
           training_schedule: string | null
           updated_at: string | null
         }
@@ -732,12 +403,13 @@ export type Database = {
           coach?: string | null
           created_at?: string | null
           id?: string
-          is_own_team?: boolean | null
           league?: string | null
           name: string
-          season?: string
+          points?: number | null
+          season?: string | null
           short_name?: string | null
-          team_type: string
+          table_position?: number | null
+          team_type?: string | null
           training_schedule?: string | null
           updated_at?: string | null
         }
@@ -746,12 +418,13 @@ export type Database = {
           coach?: string | null
           created_at?: string | null
           id?: string
-          is_own_team?: boolean | null
           league?: string | null
           name?: string
-          season?: string
+          points?: number | null
+          season?: string | null
           short_name?: string | null
-          team_type?: string
+          table_position?: number | null
+          team_type?: string | null
           training_schedule?: string | null
           updated_at?: string | null
         }
@@ -787,6 +460,99 @@ export type Database = {
           name?: string
           player_count?: number | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      content_generation_log: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          generated_content_id: string | null
+          generated_content_type: string | null
+          id: string
+          status: string | null
+          trigger_data: Json | null
+          trigger_type: string
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          generated_content_id?: string | null
+          generated_content_type?: string | null
+          id?: string
+          status?: string | null
+          trigger_data?: Json | null
+          trigger_type: string
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          generated_content_id?: string | null
+          generated_content_type?: string | null
+          id?: string
+          status?: string | null
+          trigger_data?: Json | null
+          trigger_type?: string
+        }
+        Relationships: []
+      }
+      team_form: {
+        Row: {
+          form_points: number | null
+          form_string: string | null
+          id: string
+          recent_goals_against: number | null
+          recent_goals_for: number | null
+          season: string | null
+          team_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          form_points?: number | null
+          form_string?: string | null
+          id?: string
+          recent_goals_against?: number | null
+          recent_goals_for?: number | null
+          season?: string | null
+          team_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          form_points?: number | null
+          form_string?: string | null
+          id?: string
+          recent_goals_against?: number | null
+          recent_goals_for?: number | null
+          season?: string | null
+          team_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      news_templates: {
+        Row: {
+          conditions: Json | null
+          content_template: string
+          created_at: string | null
+          id: string
+          template_type: string
+          title_template: string
+        }
+        Insert: {
+          conditions?: Json | null
+          content_template: string
+          created_at?: string | null
+          id?: string
+          template_type: string
+          title_template: string
+        }
+        Update: {
+          conditions?: Json | null
+          content_template?: string
+          created_at?: string | null
+          id?: string
+          template_type?: string
+          title_template?: string
         }
         Relationships: []
       }
@@ -834,140 +600,6 @@ export type Database = {
         }
         Relationships: []
       }
-      current_league_table: {
-        Row: {
-          drawn: number | null
-          form_points_last_5: number | null
-          form_string: string | null
-          goal_difference: number | null
-          goals_against: number | null
-          goals_for: number | null
-          id: string | null
-          league: string | null
-          lost: number | null
-          played: number | null
-          points: number | null
-          position: number | null
-          season: string | null
-          short_name: string | null
-          table_zone: string | null
-          team_id: string | null
-          team_name: string | null
-          trend: string | null
-          updated_at: string | null
-          won: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_league_standings_team"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "team_statistics_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_league_standings_team"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "teams"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      league_standings_view: {
-        Row: {
-          avg_goals_per_game: number | null
-          drawn: number | null
-          goal_difference: number | null
-          goals_against: number | null
-          goals_for: number | null
-          id: string | null
-          league: string | null
-          lost: number | null
-          played: number | null
-          points: number | null
-          position: number | null
-          season: string | null
-          short_name: string | null
-          table_zone: string | null
-          team_id: string | null
-          team_name: string | null
-          team_type: string | null
-          trend: string | null
-          updated_at: string | null
-          win_percentage: number | null
-          won: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_league_standings_team"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "team_statistics_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_league_standings_team"
-            columns: ["team_id"]
-            isOneToOne: false
-            referencedRelation: "teams"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      match_results_view: {
-        Row: {
-          away_score: number | null
-          away_team: string | null
-          away_team_id: string | null
-          away_team_name: string | null
-          created_at: string | null
-          goal_difference: number | null
-          home_score: number | null
-          home_team: string | null
-          home_team_id: string | null
-          home_team_name: string | null
-          id: string | null
-          location: string | null
-          match_date: string | null
-          match_time: string | null
-          match_type: string | null
-          result_type: string | null
-          status: string | null
-          updated_at: string | null
-          winner: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_matches_away_team"
-            columns: ["away_team_id"]
-            isOneToOne: false
-            referencedRelation: "team_statistics_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_matches_away_team"
-            columns: ["away_team_id"]
-            isOneToOne: false
-            referencedRelation: "teams"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_matches_home_team"
-            columns: ["home_team_id"]
-            isOneToOne: false
-            referencedRelation: "team_statistics_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_matches_home_team"
-            columns: ["home_team_id"]
-            isOneToOne: false
-            referencedRelation: "teams"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       recent_matches: {
         Row: {
           away_score: number | null
@@ -989,58 +621,20 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_matches_away_team"
-            columns: ["away_team_id"]
-            isOneToOne: false
-            referencedRelation: "team_statistics_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_matches_away_team"
+            foreignKeyName: "matches_away_team_id_fkey"
             columns: ["away_team_id"]
             isOneToOne: false
             referencedRelation: "teams"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "fk_matches_home_team"
-            columns: ["home_team_id"]
-            isOneToOne: false
-            referencedRelation: "team_statistics_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_matches_home_team"
+            foreignKeyName: "matches_home_team_id_fkey"
             columns: ["home_team_id"]
             isOneToOne: false
             referencedRelation: "teams"
             referencedColumns: ["id"]
           },
         ]
-      }
-      team_statistics_view: {
-        Row: {
-          avg_goals_conceded: number | null
-          avg_goals_per_game: number | null
-          current_points: number | null
-          current_position: number | null
-          draw_percentage: number | null
-          goal_difference: number | null
-          goals_against: number | null
-          goals_for: number | null
-          id: string | null
-          league: string | null
-          loss_percentage: number | null
-          matches_drawn: number | null
-          matches_lost: number | null
-          matches_played: number | null
-          matches_won: number | null
-          name: string | null
-          short_name: string | null
-          team_type: string | null
-          win_percentage: number | null
-        }
-        Relationships: []
       }
       top_scorers_view: {
         Row: {
@@ -1060,14 +654,14 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_scorers_team"
-            columns: ["team_id"]
+            foreignKeyName: "scorers_player_id_fkey"
+            columns: ["player_id"]
             isOneToOne: false
-            referencedRelation: "team_statistics_view"
+            referencedRelation: "players"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "fk_scorers_team"
+            foreignKeyName: "scorers_team_id_fkey"
             columns: ["team_id"]
             isOneToOne: false
             referencedRelation: "teams"
@@ -1096,28 +690,14 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "fk_matches_away_team"
-            columns: ["away_team_id"]
-            isOneToOne: false
-            referencedRelation: "team_statistics_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_matches_away_team"
+            foreignKeyName: "matches_away_team_id_fkey"
             columns: ["away_team_id"]
             isOneToOne: false
             referencedRelation: "teams"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "fk_matches_home_team"
-            columns: ["home_team_id"]
-            isOneToOne: false
-            referencedRelation: "team_statistics_view"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "fk_matches_home_team"
+            foreignKeyName: "matches_home_team_id_fkey"
             columns: ["home_team_id"]
             isOneToOne: false
             referencedRelation: "teams"
@@ -1125,82 +705,78 @@ export type Database = {
           },
         ]
       }
+      current_league_table: {
+        Row: {
+          drawn: number | null
+          form_points_last_5: number | null
+          form_string: string | null
+          goal_difference: number | null
+          goals_against: number | null
+          goals_for: number | null
+          id: string | null
+          league: string | null
+          lost: number | null
+          played: number | null
+          points: number | null
+          position: number | null
+          season: string | null
+          table_zone: string | null
+          team_id: string | null
+          team_name: string | null
+          trend: string | null
+          updated_at: string | null
+          won: number | null
+        }
+        Relationships: []
+      }
+      team_statistics_view: {
+        Row: {
+          avg_goals_per_game: number | null
+          current_points: number | null
+          current_position: number | null
+          goal_difference: number | null
+          goals_against: number | null
+          goals_for: number | null
+          id: string | null
+          name: string | null
+          played: number | null
+          games_played: number | null
+          wins: number | null
+          draws: number | null
+          losses: number | null
+          win_percentage: number | null
+        }
+        Relationships: []
+      }
+      match_results_view: {
+        Row: {
+          away_score: number | null
+          away_team: string | null
+          away_team_id: string | null
+          away_team_name: string | null
+          created_at: string | null
+          home_score: number | null
+          home_team: string | null
+          home_team_id: string | null
+          home_team_name: string | null
+          id: string | null
+          location: string | null
+          match_date: string | null
+          match_time: string | null
+          match_type: string | null
+          result_type: string | null
+          season: string | null
+          status: string | null
+          updated_at: string | null
+          winner: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
-      batch_update_standings: {
-        Args: { p_season?: string; p_updates: string }
-        Returns: {
-          result: string
-          team_name: string
-        }[]
-      }
-      calculate_league_table: {
-        Args: { p_season?: string }
-        Returns: {
-          drawn: number
-          goal_difference: number
-          goals_against: number
-          goals_for: number
-          league: string
-          lost: number
-          played: number
-          points: number
-          table_position: number
-          team_id: string
-          team_name: string
-          won: number
-        }[]
-      }
-      calculate_team_form: {
-        Args: { target_season?: string; target_team_id: string }
-        Returns: undefined
-      }
-      get_team_standings: {
-        Args: { p_league?: string; p_season?: string }
-        Returns: {
-          drawn: number
-          goal_difference: number
-          goals_against: number
-          goals_for: number
-          league: string
-          lost: number
-          played: number
-          points: number
-          position: number
-          short_name: string
-          team_id: string
-          team_name: string
-          team_type: string
-          trend: string
-          won: number
-        }[]
-      }
       increment_news_views: {
         Args: { news_id: string }
         Returns: number
-      }
-      recalculate_all_league_standings: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      update_team_form: {
-        Args: { p_team_id: string }
-        Returns: undefined
-      }
-      update_team_standings: {
-        Args: {
-          p_drawn: number
-          p_goals_against: number
-          p_goals_for: number
-          p_lost: number
-          p_played: number
-          p_points: number
-          p_position: number
-          p_season?: string
-          p_team_name: string
-          p_won: number
-        }
-        Returns: string
       }
     }
     Enums: {
@@ -1330,10 +906,8 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {},
   },
 } as const
+
