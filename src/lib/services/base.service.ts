@@ -4,7 +4,7 @@ import { API_ERRORS } from '@/lib/api/errors'
 import { PaginationParams } from '@/lib/api/types'
 import logger from '@/lib/logger'
 
-export abstract class BaseService<T = any> {
+export abstract class BaseService<T = unknown> {
   protected tableName: string
   
   constructor(tableName: string) {
@@ -23,7 +23,7 @@ export abstract class BaseService<T = any> {
   // Generic find all with pagination
   async findAll(
     pagination: PaginationParams = {},
-    filters: Record<string, any> = {}
+    filters: Record<string, unknown> = {}
   ): Promise<{ data: T[]; total: number }> {
     try {
       const supabase = await this.getSupabaseClient()
@@ -180,7 +180,7 @@ export abstract class BaseService<T = any> {
   }
 
   // Generic count
-  async count(filters: Record<string, any> = {}): Promise<number> {
+  async count(filters: Record<string, unknown> = {}): Promise<number> {
     try {
       const supabase = await this.getSupabaseClient()
       let query = supabase.from(this.tableName as any).select('*', { count: 'exact', head: true })

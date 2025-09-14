@@ -3,7 +3,7 @@ import { createServiceClient } from '@/lib/supabase/server';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SettingsForm from '@/components/admin/forms/SettingsForm';
-import { IconSettings, IconUsers, IconMail, IconGlobe, IconDatabase } from '@tabler/icons-react';
+import { IconGlobe, IconDatabase } from '@tabler/icons-react';
 
 export const metadata: Metadata = {
   title: 'Einstellungen | Admin Dashboard',

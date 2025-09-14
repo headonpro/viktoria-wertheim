@@ -16,7 +16,6 @@ export async function GET() {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
 
-    console.log('API: Members fetched:', data?.length || 0);
     return NextResponse.json(data || []);
   } catch (error) {
     console.error('API: Unexpected error:', error);

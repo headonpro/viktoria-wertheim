@@ -7,13 +7,7 @@ export default async function DebugMembersPage() {
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-  console.log('Debug Info:', {
-    hasUrl: !!supabaseUrl,
-    hasServiceKey: !!supabaseServiceKey,
-    hasAnonKey: !!supabaseAnonKey,
-    serviceKeyLength: supabaseServiceKey?.length,
-    serviceKeyStart: supabaseServiceKey?.substring(0, 20)
-  });
+  // Debug info available in rendered output below
 
   // Test 1: Service Client
   const serviceClient = createSupabaseClient<Database>(

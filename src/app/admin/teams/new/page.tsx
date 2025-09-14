@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import TeamForm from '@/components/admin/forms/TeamForm';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const metadata: Metadata = {
   title: 'Neues Team erstellen | Admin Dashboard',

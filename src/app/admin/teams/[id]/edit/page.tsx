@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { createServiceClient } from '@/lib/supabase/server';
 import TeamForm from '@/components/admin/forms/TeamForm';
-import { Card } from '@/components/ui/card';
 
 export const metadata: Metadata = {
   title: 'Team bearbeiten | Admin Dashboard',

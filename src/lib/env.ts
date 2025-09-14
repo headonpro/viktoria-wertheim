@@ -151,7 +151,7 @@ export const env = {
 if (typeof window === 'undefined' && process.env.NODE_ENV === 'development') {
   try {
     getEnv()
-    console.log('✅ Environment variables validated successfully')
+    // Environment variables validated successfully
   } catch {
     // Error will be logged by getEnv() in development
   }

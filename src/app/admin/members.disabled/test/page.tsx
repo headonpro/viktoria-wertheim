@@ -11,18 +11,12 @@ export default async function TestMembersPage() {
     // Use service client for admin operations to bypass RLS
     const supabase = createServiceClient();
 
-    console.log('Test: Service client created');
 
     // Simple fetch without any order
     const { data, error } = await supabase
       .from('members')
       .select('*');
 
-    console.log('Test result:', {
-      hasData: !!data,
-      dataLength: data?.length,
-      error: error?.message || 'none'
-    });
 
     return (
       <div className="p-6">
