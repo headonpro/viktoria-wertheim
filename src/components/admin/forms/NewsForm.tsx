@@ -41,8 +41,6 @@ interface NewsFormValues {
   tags?: string;
   status: 'draft' | 'published';
   is_featured?: boolean;
-  seo_title?: string;
-  seo_description?: string;
 }
 
 interface NewsFormProps {
@@ -65,8 +63,7 @@ export default function NewsForm({ initialData, newsId }: NewsFormProps) {
       category: initialData?.category || 'news',
       tags: initialData?.tags || '',
       status: initialData?.status || 'draft',
-      seo_title: initialData?.seo_title || '',
-      seo_description: initialData?.seo_description || '',
+      is_featured: initialData?.is_featured || false,
     },
     mode: 'onBlur', // Validierung bei Blur
   });
@@ -87,10 +84,13 @@ export default function NewsForm({ initialData, newsId }: NewsFormProps) {
     const supabase = createClient();
 
     try {
+      // Remove fields that don't exist in database
+      const { status, ...dbValues } = values;
+
       const newsData = {
-        ...values,
+        ...dbValues,
         tags: values.tags ? values.tags.split(',').map(tag => tag.trim()) : [],
-        is_published: values.status === 'published',
+        is_published: status === 'published',
         is_featured: values.is_featured || false,
         updated_at: new Date().toISOString(),
       };
@@ -229,56 +229,6 @@ export default function NewsForm({ initialData, newsId }: NewsFormProps) {
                           </TabsContent>
                         </Tabs>
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </CardContent>
-            </Card>
-
-            {/* SEO Settings */}
-            <Card>
-              <CardHeader>
-                <CardTitle>SEO-Einstellungen</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="seo_title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>SEO-Titel</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="SEO-optimierter Titel..."
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Leer lassen, um den Haupttitel zu verwenden
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="seo_description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>SEO-Beschreibung</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="SEO-optimierte Beschreibung..."
-                          className="resize-none"
-                          rows={3}
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Leer lassen, um die Zusammenfassung zu verwenden
-                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
