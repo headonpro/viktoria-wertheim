@@ -12,31 +12,6 @@ export type Database = {
   __InternalSupabase: {
     PostgrestVersion: "13.0.4"
   }
-  graphql_public: {
-    Tables: {
-      [_ in never]: never
-    }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      graphql: {
-        Args: {
-          extensions?: Json
-          operationName?: string
-          query?: string
-          variables?: Json
-        }
-        Returns: Json
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
-  }
   public: {
     Tables: {
       contacts: {
@@ -346,6 +321,72 @@ export type Database = {
           },
         ]
       }
+      members: {
+        Row: {
+          city: string | null
+          country: string | null
+          created_at: string | null
+          date_of_birth: string | null
+          email: string | null
+          first_name: string
+          house_number: string | null
+          id: string
+          joined_date: string | null
+          last_name: string
+          member_number: string | null
+          membership_status: string | null
+          membership_type: string | null
+          notes: string | null
+          phone: string | null
+          postal_code: string | null
+          profile_id: string | null
+          street: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          date_of_birth?: string | null
+          email?: string | null
+          first_name: string
+          house_number?: string | null
+          id?: string
+          joined_date?: string | null
+          last_name: string
+          member_number?: string | null
+          membership_status?: string | null
+          membership_type?: string | null
+          notes?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          profile_id?: string | null
+          street?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          date_of_birth?: string | null
+          email?: string | null
+          first_name?: string
+          house_number?: string | null
+          id?: string
+          joined_date?: string | null
+          last_name?: string
+          member_number?: string | null
+          membership_status?: string | null
+          membership_type?: string | null
+          notes?: string | null
+          phone?: string | null
+          postal_code?: string | null
+          profile_id?: string | null
+          street?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       news: {
         Row: {
           category: string | null
@@ -355,6 +396,7 @@ export type Database = {
           id: string
           image_url: string | null
           is_featured: boolean | null
+          is_published: boolean | null
           published_at: string | null
           title: string
           updated_at: string | null
@@ -368,6 +410,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_featured?: boolean | null
+          is_published?: boolean | null
           published_at?: string | null
           title: string
           updated_at?: string | null
@@ -381,6 +424,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           is_featured?: boolean | null
+          is_published?: boolean | null
           published_at?: string | null
           title?: string
           updated_at?: string | null
@@ -1330,9 +1374,6 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
-  graphql_public: {
-    Enums: {},
-  },
   public: {
     Enums: {},
   },

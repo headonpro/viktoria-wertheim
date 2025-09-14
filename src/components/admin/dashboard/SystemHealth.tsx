@@ -18,7 +18,7 @@ interface SystemMetric {
 }
 
 export default async function SystemHealth() {
-  const supabase = createServiceClient();
+  const supabase = await createServiceClient();
 
   // Fetch database statistics
   const [

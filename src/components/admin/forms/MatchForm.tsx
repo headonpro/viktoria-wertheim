@@ -82,30 +82,43 @@ export default function MatchForm({ initialData, matchId }: MatchFormProps) {
   }, []);
 
   const loadTeams = async () => {
-    const supabase = createClient();
-    const { data, error } = await supabase
-      .from('teams')
-      .select('id, name, is_own_team')
-      .order('name');
-
-    if (error) {
+    setLoadingTeams(true);
+    try {
+      // Use API route to fetch teams with service client
+      const response = await fetch('/api/admin/teams');
+      if (!response.ok) {
+        throw new Error('Failed to fetch teams');
+      }
+      const data = await response.json();
+      setTeams(data || []);
+    } catch (error) {
       console.error('Error loading teams:', error);
       toast.error('Fehler beim Laden der Teams');
-    } else {
-      setTeams(data || []);
+    } finally {
+      setLoadingTeams(false);
     }
-    setLoadingTeams(false);
   };
 
   const handleTeamSelect = (teamId: string, isHome: boolean) => {
-    const team = teams.find(t => t.id === teamId);
-    if (team) {
+    if (teamId === 'manual') {
+      // Clear team ID for manual entry
       if (isHome) {
-        form.setValue('home_team_id', teamId);
-        form.setValue('home_team', team.name);
+        form.setValue('home_team_id', undefined);
+        form.setValue('home_team', '');
       } else {
-        form.setValue('away_team_id', teamId);
-        form.setValue('away_team', team.name);
+        form.setValue('away_team_id', undefined);
+        form.setValue('away_team', '');
+      }
+    } else {
+      const team = teams.find(t => t.id === teamId);
+      if (team) {
+        if (isHome) {
+          form.setValue('home_team_id', teamId);
+          form.setValue('home_team', team.name);
+        } else {
+          form.setValue('away_team_id', teamId);
+          form.setValue('away_team', team.name);
+        }
       }
     }
   };
@@ -186,7 +199,7 @@ export default function MatchForm({ initialData, matchId }: MatchFormProps) {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="">Manuell eingeben</SelectItem>
+                            <SelectItem value="manual">Manuell eingeben</SelectItem>
                             {teams.map((team) => (
                               <SelectItem key={team.id} value={team.id}>
                                 {team.name} {team.is_own_team && '(Eigenes Team)'}
@@ -216,7 +229,7 @@ export default function MatchForm({ initialData, matchId }: MatchFormProps) {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="">Manuell eingeben</SelectItem>
+                            <SelectItem value="manual">Manuell eingeben</SelectItem>
                             {teams.map((team) => (
                               <SelectItem key={team.id} value={team.id}>
                                 {team.name} {team.is_own_team && '(Eigenes Team)'}

@@ -3,7 +3,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart } from '@tremor/react';
 
-const chartData = [
+interface RevenueChartProps {
+  data?: any[];
+}
+
+const defaultData = [
   {
     name: 'Mitgliedsbeiträge',
     'Einnahmen': 12500,
@@ -34,7 +38,8 @@ const dataFormatter = (number: number) => {
   return `€ ${Intl.NumberFormat('de').format(number).toString()}`;
 };
 
-export default function RevenueChart() {
+export default function RevenueChart({ data }: RevenueChartProps) {
+  const chartData = data && data.length > 0 ? data : defaultData;
   return (
     <Card>
       <CardHeader>

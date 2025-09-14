@@ -42,6 +42,7 @@ export default function RichTextEditor({ content, onChange }: RichTextEditorProp
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
     },
+    immediatelyRender: false, // Prevent SSR hydration mismatches
   });
 
   if (!editor) {

@@ -43,7 +43,7 @@ const typeConfig = {
 };
 
 export default async function RecentActivity() {
-  const supabase = createServiceClient();
+  const supabase = await createServiceClient();
   const activities: Activity[] = [];
 
   // Fetch recent news

@@ -3,24 +3,24 @@ import Link from 'next/link';
 import { createServiceClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
 import { IconPlus } from '@tabler/icons-react';
-import NewsDataTable from '@/components/admin/tables/NewsDataTable';
+// import MemberDataTable from '@/components/admin/tables/MemberDataTable';
 
 export const metadata: Metadata = {
-  title: 'Nachrichten verwalten | Admin Dashboard',
-  description: 'Verwalten Sie alle Nachrichten und Artikel',
+  title: 'Mitglieder verwalten | Admin Dashboard',
+  description: 'Verwalten Sie alle Vereinsmitglieder',
 };
 
-export default async function NewsPage() {
+export default async function MembersPage() {
   // Use service client for admin operations to bypass RLS
   const supabase = createServiceClient();
 
-  const { data: news, error } = await supabase
-    .from('news')
+  const { data: members, error } = await supabase
+    .from('members')
     .select('*')
-    .order('created_at', { ascending: false });
+    .order('last_name', { ascending: true });
 
   if (error) {
-    console.error('Error fetching news:', error);
+    console.error('Error fetching members:', error);
   }
 
   return (
@@ -29,24 +29,25 @@ export default async function NewsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Nachrichten verwalten
+            Mitglieder verwalten
           </h1>
           <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            Erstellen, bearbeiten und verwalten Sie alle Nachrichten
+            Verwalten Sie alle Vereinsmitglieder
           </p>
         </div>
         <div className="mt-4 sm:mt-0">
-          <Link href="/admin/news/new">
+          <Link href="/admin/members/new">
             <Button>
               <IconPlus className="w-4 h-4 mr-2" />
-              Neue Nachricht
+              Neues Mitglied
             </Button>
           </Link>
         </div>
       </div>
 
-      {/* News Table */}
-      <NewsDataTable news={news || []} />
+      {/* Members Table */}
+      {/* <MemberDataTable members={members || []} /> */}
+      <div>Members-Tabelle temporär deaktiviert</div>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/server';
+import { createServiceClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
 import { IconPlus } from '@tabler/icons-react';
 import MatchDataTable from '@/components/admin/tables/MatchDataTable';
@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 };
 
 export default async function MatchesPage() {
-  const supabase = await createClient();
-
+  // Use service client for admin operations to bypass RLS
+  const supabase = createServiceClient();
 
   const { data: matches, error } = await supabase
     .from('matches')

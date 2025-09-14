@@ -3,7 +3,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AreaChart } from '@tremor/react';
 
-const chartData = [
+interface AttendanceChartProps {
+  data?: any[];
+}
+
+const defaultData = [
   {
     date: 'Jan',
     '1. Mannschaft': 450,
@@ -46,7 +50,8 @@ const dataFormatter = (number: number) => {
   return Intl.NumberFormat('de').format(number).toString();
 };
 
-export default function AttendanceChart() {
+export default function AttendanceChart({ data }: AttendanceChartProps) {
+  const chartData = data && data.length > 0 ? data : defaultData;
   return (
     <Card>
       <CardHeader>

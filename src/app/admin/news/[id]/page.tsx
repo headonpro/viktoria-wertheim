@@ -4,31 +4,31 @@ import { notFound } from 'next/navigation';
 import { createServiceClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
 import { IconArrowLeft } from '@tabler/icons-react';
-import MatchForm from '@/components/admin/forms/MatchForm';
+import NewsForm from '@/components/admin/forms/NewsForm';
 
 export const metadata: Metadata = {
-  title: 'Spiel bearbeiten | Admin Dashboard',
-  description: 'Bearbeiten Sie ein bestehendes Spiel',
+  title: 'Nachricht bearbeiten | Admin Dashboard',
+  description: 'Bearbeiten Sie eine bestehende Nachricht',
 };
 
-interface EditMatchPageProps {
+interface EditNewsPageProps {
   params: Promise<{
     id: string;
   }>;
 }
 
-export default async function EditMatchPage({ params }: EditMatchPageProps) {
+export default async function EditNewsPage({ params }: EditNewsPageProps) {
   // Use service client for admin operations to bypass RLS
   const supabase = createServiceClient();
   const resolvedParams = await params;
 
-  const { data: match, error } = await supabase
-    .from('matches')
+  const { data: news, error } = await supabase
+    .from('news')
     .select('*')
     .eq('id', resolvedParams.id)
     .single();
 
-  if (error || !match) {
+  if (error || !news) {
     notFound();
   }
 
@@ -36,36 +36,36 @@ export default async function EditMatchPage({ params }: EditMatchPageProps) {
     <div className="space-y-6">
       {/* Page Header */}
       <div className="flex items-center space-x-4">
-        <Link href="/admin/matches">
+        <Link href="/admin/news">
           <Button variant="ghost" size="icon">
             <IconArrowLeft className="w-4 h-4" />
           </Button>
         </Link>
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Spiel bearbeiten
+            Nachricht bearbeiten
           </h1>
           <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
-            {match.home_team} vs. {match.away_team}
+            {news.title}
           </p>
         </div>
       </div>
 
-      {/* Match Form */}
-      <MatchForm
+      {/* News Form */}
+      <NewsForm
         initialData={{
-          ...match,
-          home_team_id: match.home_team_id || undefined,
-          away_team_id: match.away_team_id || undefined,
-          home_score: match.home_score || undefined,
-          away_score: match.away_score || undefined,
-          match_time: match.match_time || undefined,
-          location: match.location || undefined,
-          match_type: match.match_type || undefined,
-          status: match.status || undefined,
-          season: match.season || undefined,
+          title: news.title,
+          slug: undefined,
+          excerpt: news.excerpt || undefined,
+          content: news.content || undefined,
+          image_url: news.image_url || undefined,
+          category: news.category || undefined,
+          tags: undefined,
+          status: 'draft' as 'draft' | 'published',
+          seo_title: undefined,
+          seo_description: undefined,
         }}
-        matchId={resolvedParams.id}
+        newsId={resolvedParams.id}
       />
     </div>
   );
