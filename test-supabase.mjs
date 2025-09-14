@@ -1,5 +1,5 @@
 // Test script to verify Supabase connection
-const { createClient } = require('@supabase/supabase-js');
+import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = 'https://vbumolcclqrhfqiofvcz.supabase.co';
 const supabaseServiceKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZidW1vbGNjbHFyaGZxaW9mdmN6Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NjM3MDY3NCwiZXhwIjoyMDcxOTQ2Njc0fQ.oXtr3Nlg4YWFWRvpTUPqYBosnBMoKrnhIs99Hn_1lNQ';
