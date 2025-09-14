@@ -47,17 +47,19 @@ import {
 interface NewsItem {
   id: string;
   title: string;
-  slug?: string;
+  slug?: string | null;
   status?: 'draft' | 'published';
   views?: number | null;
   created_at?: string | null;
   published_at?: string | null;
-  author_id?: string;
+  author_id?: string | null;
   category?: string | null;
   content?: string | null;
   excerpt?: string | null;
   image_url?: string | null;
   is_featured?: boolean | null;
+  is_published?: boolean | null;
+  tags?: string[] | null;
   updated_at?: string | null;
 }
 
