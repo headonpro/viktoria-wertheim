@@ -66,7 +66,12 @@ export default function SponsorsPage() {
         throw new Error('Failed to fetch sponsors');
       }
 
-      setSponsors(data || []);
+      setSponsors((data || []).map(sponsor => ({
+        ...sponsor,
+        is_active: sponsor.is_active ?? false,
+        created_at: sponsor.created_at ?? undefined,
+        updated_at: sponsor.updated_at ?? undefined
+      })));
     } catch (error: any) {
       console.error('Error loading sponsors:', error);
       toast.error('Fehler beim Laden der Sponsoren', {

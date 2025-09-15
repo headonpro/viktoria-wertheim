@@ -95,7 +95,10 @@ export default function MatchForm({ initialData, matchId }: MatchFormProps) {
         throw new Error('Failed to fetch teams');
       }
 
-      setTeams(data || []);
+      setTeams((data || []).map(team => ({
+        ...team,
+        is_own_team: team.is_own_team ?? false
+      })));
     } catch (error) {
       console.error('Error loading teams:', error);
       toast.error('Fehler beim Laden der Teams');

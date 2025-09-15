@@ -190,7 +190,11 @@ export default function PlayerTable({ teamId, players: initialPlayers, onPlayers
 
       if (error) throw error;
 
-      setPlayers(prev => [...prev, data]);
+      setPlayers(prev => [...prev, {
+        ...data,
+        is_captain: data.is_captain ?? false,
+        is_active: data.is_active ?? true
+      }]);
       toast.success('Spieler hinzugefügt');
       setIsAddDialogOpen(false);
       setNewPlayer({
