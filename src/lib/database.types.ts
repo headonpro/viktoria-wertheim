@@ -1232,6 +1232,14 @@ export type Database = {
         Args: { news_id: string }
         Returns: number
       }
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      is_admin_email: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       recalculate_all_league_standings: {
         Args: Record<PropertyKey, never>
         Returns: undefined

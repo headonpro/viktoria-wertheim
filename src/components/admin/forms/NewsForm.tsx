@@ -60,7 +60,7 @@ export default function NewsForm({ initialData, newsId }: NewsFormProps) {
       excerpt: initialData?.excerpt || '',
       content: initialData?.content || '',
       image_url: initialData?.image_url || '',
-      category: initialData?.category || 'news',
+      category: initialData?.category || 'general',  // Geändert von 'news' zu 'general'
       tags: initialData?.tags || '',
       status: initialData?.status || 'draft',
       is_featured: initialData?.is_featured || false,
@@ -295,10 +295,12 @@ export default function NewsForm({ initialData, newsId }: NewsFormProps) {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="news">Nachrichten</SelectItem>
-                          <SelectItem value="match-report">Spielbericht</SelectItem>
-                          <SelectItem value="announcement">Ankündigung</SelectItem>
-                          <SelectItem value="event">Veranstaltung</SelectItem>
+                          <SelectItem value="general">Allgemein</SelectItem>
+                          <SelectItem value="match_report">Spielbericht</SelectItem>
+                          <SelectItem value="transfers">Transfers</SelectItem>
+                          <SelectItem value="youth">Jugend</SelectItem>
+                          <SelectItem value="training">Training</SelectItem>
+                          <SelectItem value="club_news">Vereinsnachrichten</SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
