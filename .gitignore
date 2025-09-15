@@ -1,13 +1,17 @@
 # Dependencies
 node_modules/
 .pnpm-store/
+.yarn/
+.npm/
 
 # Production
 .next/
 dist/
 build/
+out/
 tsconfig.tsbuildinfo
 next-env.d.ts
+*.tsbuildinfo
 
 # Environment
 .env
@@ -55,14 +59,23 @@ pnpm-debug.log*
 *~
 .claude/
 .spec-workflow/
+.serena/
+.cursor/
+*.sublime-*
 
 # OS
 .DS_Store
 Thumbs.db
+desktop.ini
+*.lnk
 
 # Test & Coverage
 coverage/
 .nyc_output/
+*.lcov
+test-results/
+playwright-report/
+playwright/.cache/
 
 # Other service configs (not needed for main app)
 excalidraw.yml
@@ -81,6 +94,14 @@ update-secrets.sh
 # Temp files
 tmp/
 temp/
+*.tmp
+*.temp
+.turbo/
+.cache/
+.parcel-cache/
+.vercel/
+.sst/
+.output/
 
 # Data Export Files (CSV, JSON exports from DB)
 *_export.csv
@@ -98,3 +119,34 @@ migrate_*.sql
 final_migration.*
 local_data.sql
 local_schema.sql
+
+# Supabase local
+.supabase/
+supabase/.branches/
+supabase/.temp/
+
+# AI/LLM Development Tools
+.continue/
+.codeium/
+.tabnine/
+.copilot/
+
+# Bundle Analysis
+.next/analyze/
+stats.html
+bundle-stats.json
+
+# Performance & Monitoring
+.lighthouseci/
+lighthouse-results/
+
+# Package Manager Locks (uncomment if you want to ignore)
+# pnpm-lock.yaml
+# package-lock.json
+# yarn.lock
+
+# Debug
+debug/
+*.heap
+*.cpuprofile
+*.heapsnapshot

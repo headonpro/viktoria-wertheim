@@ -23,6 +23,7 @@ export default function ImageUpload({
 }: ImageUploadProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(value || null);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -35,13 +36,31 @@ export default function ImageUpload({
         return;
       }
 
+      // Check file type
+      const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+      if (!validTypes.includes(file.type)) {
+        toast.error('Ungültiger Dateityp. Erlaubt sind: JPG, PNG, GIF, WebP');
+        return;
+      }
+
       setIsUploading(true);
+      setUploadProgress(0);
       const supabase = createClient();
 
       try {
+        // Check auth status first
+        const { data: { user }, error: authError } = await supabase.auth.getUser();
+        if (authError || !user) {
+          throw new Error('Sie müssen angemeldet sein, um Bilder hochzuladen');
+        }
+
         // Create unique filename
-        const fileExt = file.name.split('.').pop();
+        const fileExt = file.name.split('.').pop()?.toLowerCase();
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+        
+        console.log('Uploading to bucket:', bucket);
+        console.log('File name:', fileName);
+        console.log('File size:', file.size);
 
         // Upload to Supabase Storage
         const { data, error } = await supabase.storage
@@ -51,21 +70,35 @@ export default function ImageUpload({
             upsert: false,
           });
 
-        if (error) throw error;
+        if (error) {
+          console.error('Upload error details:', error);
+          if (error.message?.includes('not found')) {
+            throw new Error(`Storage bucket "${bucket}" existiert nicht`);
+          } else if (error.message?.includes('policy')) {
+            throw new Error('Keine Berechtigung zum Upload. Bitte melden Sie sich erneut an.');
+          } else {
+            throw error;
+          }
+        }
 
         // Get public URL
         const { data: { publicUrl } } = supabase.storage
           .from(bucket)
           .getPublicUrl(data.path);
 
+        console.log('Upload successful, public URL:', publicUrl);
+        
         setPreview(publicUrl);
         onChange(publicUrl);
+        setUploadProgress(100);
         toast.success('Bild erfolgreich hochgeladen');
       } catch (error) {
         console.error('Upload error:', error);
-        toast.error('Fehler beim Hochladen des Bildes');
+        const errorMessage = error instanceof Error ? error.message : 'Unbekannter Fehler beim Hochladen';
+        toast.error(errorMessage);
       } finally {
         setIsUploading(false);
+        setTimeout(() => setUploadProgress(0), 1000);
       }
     },
     [bucket, maxSize, onChange]
@@ -83,6 +116,7 @@ export default function ImageUpload({
   const removeImage = () => {
     setPreview(null);
     onChange('');
+    toast.info('Bild entfernt');
   };
 
   return (
@@ -95,6 +129,7 @@ export default function ImageUpload({
               alt="Preview"
               fill
               className="object-cover"
+              unoptimized // Wichtig für externe URLs
             />
           </div>
           <Button
@@ -103,6 +138,7 @@ export default function ImageUpload({
             size="icon"
             className="absolute top-2 right-2"
             onClick={removeImage}
+            disabled={isUploading}
           >
             <IconX className="w-4 h-4" />
           </Button>
