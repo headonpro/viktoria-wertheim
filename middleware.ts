@@ -144,18 +144,21 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // Refresh session if expired
-  await supabase.auth.getUser()
+  // CRITICAL: Get user and refresh session
+  const { data: { user }, error } = await supabase.auth.getUser()
+
+  // If there's an auth error, log it for debugging
+  if (error) {
+    console.error('Middleware auth error:', error.message)
+  }
 
   // Protected routes
   const protectedPaths = ['/admin', '/api/admin']
-  const isProtectedPath = protectedPaths.some(path => 
+  const isProtectedPath = protectedPaths.some(path =>
     request.nextUrl.pathname.startsWith(path)
   )
 
   if (isProtectedPath) {
-    const { data: { user } } = await supabase.auth.getUser()
-    
     if (!user && !request.nextUrl.pathname.startsWith('/auth/login')) {
       const redirectUrl = new URL('/auth/login', request.url)
       redirectUrl.searchParams.set('redirectTo', request.nextUrl.pathname)
@@ -163,6 +166,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
+  // IMPORTANT: Return the response with updated cookies
   return response
 }
 
