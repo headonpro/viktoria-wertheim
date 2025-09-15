@@ -86,6 +86,12 @@ export default function NewsForm({ initialData, newsId }: NewsFormProps) {
       // Initialize Supabase client
       const supabase = createClient();
 
+      // DEBUG: Check current user
+      const { data: { user } } = await supabase.auth.getUser();
+      console.log('Current user:', user);
+      console.log('User email:', user?.email);
+      console.log('User ID:', user?.id);
+
       // Remove fields that don't exist in database
       const { status, ...dbValues } = values;
 
