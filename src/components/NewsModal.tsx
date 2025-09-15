@@ -4,6 +4,7 @@ import React, { useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { IconX, IconCalendar, IconUser, IconEye } from '@tabler/icons-react'
 import SmartImage from '@/components/SmartImage'
+import { createClient } from '@/lib/supabase/client'
 
 interface NewsArticle {
   id: string | number
@@ -32,24 +33,26 @@ export default function NewsModal({ article, isOpen, onClose, onViewsUpdate }: N
   // Track view when modal opens
   const trackView = useCallback(async () => {
     if (!article || hasTrackedView) return
-    
+
     try {
-      const response = await fetch(`/api/news/${article.id}/view`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      
-      if (response.ok) {
-        const data = await response.json()
-        setDisplayViews(data.views)
-        setHasTrackedView(true)
-        
-        // Notify parent component about the new view count
-        if (onViewsUpdate) {
-          onViewsUpdate(article.id, data.views)
-        }
+      // Use Supabase directly to increment views
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .rpc('increment_news_views', { news_id: article.id })
+
+      if (error) {
+        console.error('Error incrementing views:', error)
+        return
+      }
+
+      // Update local state with new view count
+      const newViews = data || (article.views + 1)
+      setDisplayViews(newViews)
+      setHasTrackedView(true)
+
+      // Notify parent component about the new view count
+      if (onViewsUpdate) {
+        onViewsUpdate(article.id, newViews)
       }
     } catch (error) {
       console.error('Error tracking view:', error)
