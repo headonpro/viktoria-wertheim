@@ -9,6 +9,8 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import Link from 'next/link';
+import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
+import { Separator } from '@/components/ui/separator';
 
 export default function SignupPage() {
   const [email, setEmail] = useState('');
@@ -98,6 +100,19 @@ export default function SignupPage() {
               {isLoading ? 'Registrierung läuft...' : 'Registrieren'}
             </Button>
           </form>
+
+          <div className="relative my-4">
+            <div className="absolute inset-0 flex items-center">
+              <Separator />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-white dark:bg-gray-950 px-2 text-muted-foreground">
+                Oder
+              </span>
+            </div>
+          </div>
+
+          <GoogleLoginButton redirectTo="/admin" />
 
           <div className="mt-4 text-center text-sm">
             <Link href="/auth/login" className="text-blue-600 hover:text-blue-500">
