@@ -38,7 +38,7 @@ export default function NewsModal({ article, isOpen, onClose, onViewsUpdate }: N
       // Use Supabase directly to increment views
       const supabase = createClient()
       const { data, error } = await supabase
-        .rpc('increment_news_views', { news_id: article.id })
+        .rpc('increment_news_views', { news_id: String(article.id) })
 
       if (error) {
         console.error('Error incrementing views:', error)
