@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Goldman } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { getSiteUrl, getCanonicalUrl } from "@/config/domains";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -21,15 +22,16 @@ const goldman = Goldman({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_APP_URL || 'https://viktoria.headon.pro'
-  ),
+  metadataBase: new URL(getSiteUrl()),
   title: "SV Viktoria Wertheim - Offizielle Website",
   description: "Die offizielle Website des SV Viktoria Wertheim - Fußballverein seit 1921",
+  alternates: {
+    canonical: getCanonicalUrl(),
+  },
   openGraph: {
     title: "SV Viktoria Wertheim",
     description: "Die offizielle Website des SV Viktoria Wertheim - Fußballverein seit 1921",
-    url: 'https://viktoria.headon.pro',
+    url: getCanonicalUrl(),
     siteName: 'SV Viktoria Wertheim',
     images: [
       {

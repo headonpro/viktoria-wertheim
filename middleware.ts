@@ -1,9 +1,30 @@
 import { type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
+import { isValidDomain, DOMAIN_CONFIG } from '@/config/domains'
 
 export async function middleware(request: NextRequest) {
-  // Let Supabase handle the session update and response
-  return await updateSession(request)
+  const url = request.nextUrl.clone()
+  const hostname = request.headers.get('host') || ''
+
+  // Validate domain and log if unknown domain is accessed
+  if (!isValidDomain(hostname) && process.env.NODE_ENV === 'production') {
+    console.warn(`Access from unknown domain: ${hostname}`)
+  }
+
+  // Let Supabase handle the session update first
+  const response = await updateSession(request)
+
+  // Add SEO-friendly headers for both domains
+  response.headers.set('X-Robots-Tag', 'index, follow')
+  response.headers.set('X-Content-Type-Options', 'nosniff')
+  response.headers.set('X-Frame-Options', 'SAMEORIGIN')
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
+
+  // Add canonical link header for SEO (helps search engines identify the primary domain)
+  const canonicalUrl = `${DOMAIN_CONFIG.canonical}${url.pathname}${url.search}`
+  response.headers.set('Link', `<${canonicalUrl}>; rel="canonical"`)
+
+  return response
 }
 
 export const config = {
