@@ -6,7 +6,7 @@ import type { Database } from '@/lib/database.types'
 
 type Team = Database['public']['Tables']['teams']['Row']
 type Player = Database['public']['Tables']['players']['Row']
-type Match = Database['public']['Tables']['matches']['Row']
+type DatabaseMatch = Database['public']['Tables']['matches']['Row']
 type YouthTeam = Database['public']['Tables']['youth_teams']['Row']
 type LeagueStanding = Database['public']['Views']['current_league_table']['Row']
 
@@ -33,6 +33,9 @@ interface ClientNextMatch {
   location: string
 }
 
+// Add Match type for the NextMatchCard component
+type Match = Database['public']['Tables']['matches']['Row']
+
 interface ClientTeam {
   id: string
   name: string
@@ -46,6 +49,7 @@ interface ClientTeam {
   players: ClientPlayer[]
   lastResults?: ClientMatch[]
   nextMatch?: ClientNextMatch | null
+  nextMatchData?: Match | null
   leagueStats?: {
     played: number
     won: number
@@ -66,7 +70,7 @@ export default async function TeamsPage() {
   
   let teams: Team[] = []
   let players: Player[] = []
-  let matches: Match[] = []
+  let matches: DatabaseMatch[] = []
   let youthTeams: YouthTeam[] = []
   let leagueStandings: LeagueStanding[] = []
   
@@ -77,7 +81,7 @@ export default async function TeamsPage() {
       supabase.from('players').select('*').order('number'),
       supabase.from('matches')
         .select('*')
-        .order('match_date', { ascending: false })
+        .order('match_date', { ascending: true })
         .limit(50),
       supabase.from('youth_teams').select('*').order('age_group'),
       supabase
@@ -122,22 +126,20 @@ export default async function TeamsPage() {
   }
   
   // Group matches by team (for last results and next match)
-  const matchesByTeam: Record<string, { lastResults: ClientMatch[], nextMatch: ClientNextMatch | null }> = {}
+  const matchesByTeam: Record<string, { lastResults: ClientMatch[], nextMatch: ClientNextMatch | null, nextMatchData: Match | null }> = {}
   if (teams && matches) {
     teams.forEach(team => {
       const teamMatches = matches.filter(match => 
         match.home_team_id === team.id || match.away_team_id === team.id
       )
       
-      const now = new Date()
       const pastMatches = teamMatches
         .filter(m => m.status === 'completed')
         .sort((a, b) => new Date(b.match_date).getTime() - new Date(a.match_date).getTime())
         .slice(0, 3)
       
-      const futureMatches = teamMatches
-        .filter(m => new Date(m.match_date) >= now)
-        .sort((a, b) => new Date(a.match_date).getTime() - new Date(b.match_date).getTime())
+      // Find next scheduled match (same logic as HomePage)
+      const nextScheduledMatch = teamMatches.find(m => m.status === 'scheduled')
       
       matchesByTeam[team.id] = {
         lastResults: pastMatches.map(match => {
@@ -158,14 +160,15 @@ export default async function TeamsPage() {
             type
           }
         }),
-        nextMatch: futureMatches[0] ? {
-          opponent: futureMatches[0].home_team_id === team.id 
-            ? futureMatches[0].away_team 
-            : futureMatches[0].home_team,
-          date: futureMatches[0].match_date,
-          time: futureMatches[0].match_time || 'TBD',
-          location: futureMatches[0].home_team_id === team.id ? 'Heimspiel' : 'Auswärtsspiel'
-        } : null
+        nextMatch: nextScheduledMatch ? {
+          opponent: nextScheduledMatch.home_team_id === team.id
+            ? nextScheduledMatch.away_team
+            : nextScheduledMatch.home_team,
+          date: nextScheduledMatch.match_date,
+          time: nextScheduledMatch.match_time || 'TBD',
+          location: nextScheduledMatch.home_team_id === team.id ? 'Heimspiel' : 'Auswärtsspiel'
+        } : null,
+        nextMatchData: nextScheduledMatch || null
       }
     })
   }
@@ -203,6 +206,7 @@ export default async function TeamsPage() {
       players: playersByTeam[team.id] || [],
       lastResults: matchesByTeam[team.id]?.lastResults || [],
       nextMatch: matchesByTeam[team.id]?.nextMatch || null,
+      nextMatchData: matchesByTeam[team.id]?.nextMatchData || null,
       leagueStats: leagueStats ? {
         played: leagueStats.played || 0,
         won: leagueStats.won || 0,
@@ -214,7 +218,7 @@ export default async function TeamsPage() {
     }
   })
   
-  return <TeamsPageClient 
+  return <TeamsPageClient
     teams={teamsData}
     youthTeams={youthTeams || []}
   />

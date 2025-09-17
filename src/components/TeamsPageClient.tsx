@@ -4,7 +4,11 @@ import React, { useState } from 'react'
 import PageLayout from '@/components/PageLayout'
 import AnimatedSection from '@/components/AnimatedSection'
 import TeamStatistics from '@/components/TeamStatistics'
-import { IconUsers, IconCalendar, IconMapPin, IconClock } from '@tabler/icons-react'
+import NextMatchCard from '@/components/shared/NextMatchCard'
+import { IconUsers } from '@tabler/icons-react'
+import type { Database } from '@/lib/database.types'
+
+type DatabaseMatch = Database['public']['Tables']['matches']['Row']
 
 interface Player {
   id: string
@@ -41,6 +45,7 @@ interface Team {
   players: Player[]
   lastResults?: Match[]
   nextMatch?: NextMatch | null
+  nextMatchData?: DatabaseMatch | null
   leagueStats?: {
     played: number
     won: number
@@ -310,43 +315,9 @@ export default function TeamsPageClient({ teams, youthTeams }: TeamsPageClientPr
             {/* Sidebar */}
             <div className="space-y-6">
               {/* Next Match */}
-              {!isYouthSelected && currentTeam.nextMatch && (
+              {!isYouthSelected && (
                 <AnimatedSection animation="slideUp" immediate={true}>
-                  <div className="bg-white dark:bg-viktoria-dark-light rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                    <div className="bg-gradient-to-r from-viktoria-blue to-viktoria-blue-light dark:from-viktoria-yellow dark:to-yellow-600 px-4 py-3">
-                      <h3 className="text-white dark:text-gray-900 font-bold text-sm uppercase tracking-wider text-center">
-                        Nächstes Spiel
-                      </h3>
-                    </div>
-                    <div className="p-4 sm:p-5">
-                      <div className="space-y-3">
-                        <p className="font-bold text-lg text-gray-900 dark:text-white text-center">
-                          vs. {currentTeam.nextMatch.opponent}
-                        </p>
-                        <div className="space-y-2 pt-2 border-t border-gray-100 dark:border-gray-700">
-                          <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-                            <IconCalendar size={16} className="mr-2 text-viktoria-blue dark:text-viktoria-yellow" />
-                            <span className="font-medium">
-                              {new Date(currentTeam.nextMatch.date).toLocaleDateString('de-DE', { 
-                                weekday: 'short', 
-                                day: '2-digit', 
-                                month: '2-digit', 
-                                year: 'numeric' 
-                              })}
-                            </span>
-                          </div>
-                          <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-                            <IconClock size={16} className="mr-2 text-viktoria-blue dark:text-viktoria-yellow" />
-                            <span className="font-medium">{currentTeam.nextMatch.time}</span>
-                          </div>
-                          <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-                            <IconMapPin size={16} className="mr-2 text-viktoria-blue dark:text-viktoria-yellow" />
-                            <span className="font-medium">{currentTeam.nextMatch.location}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <NextMatchCard match={currentTeam.nextMatchData || null} />
                 </AnimatedSection>
               )}
 

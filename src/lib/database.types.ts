@@ -99,6 +99,7 @@ export type Database = {
           position: number
           season: string | null
           team_id: string | null
+          team_name: string | null
           trend: string | null
           updated_at: string | null
           won: number | null
@@ -115,6 +116,7 @@ export type Database = {
           position: number
           season?: string | null
           team_id?: string | null
+          team_name?: string | null
           trend?: string | null
           updated_at?: string | null
           won?: number | null
@@ -131,6 +133,7 @@ export type Database = {
           position?: number
           season?: string | null
           team_id?: string | null
+          team_name?: string | null
           trend?: string | null
           updated_at?: string | null
           won?: number | null
@@ -810,6 +813,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          id: string
+          role: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          role?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          role?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       youth_teams: {
         Row: {
           age_group: string | null
@@ -906,6 +936,49 @@ export type Database = {
           table_zone: string | null
           team_id: string | null
           team_name: string | null
+          trend: string | null
+          updated_at: string | null
+          won: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_league_standings_team"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "team_statistics_view"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fk_league_standings_team"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      league_standings_detailed: {
+        Row: {
+          captain: string | null
+          coach: string | null
+          drawn: number | null
+          goal_difference: number | null
+          goals_against: number | null
+          goals_for: number | null
+          id: string | null
+          is_own_team: boolean | null
+          league_category: string | null
+          league_name: string | null
+          lost: number | null
+          played: number | null
+          points: number | null
+          position: number | null
+          season: string | null
+          team_id: string | null
+          team_name: string | null
+          team_short_name: string | null
+          team_type: string | null
+          team_type_display: string | null
           trend: string | null
           updated_at: string | null
           won: number | null
@@ -1208,6 +1281,14 @@ export type Database = {
         Args: { target_season?: string; target_team_id: string }
         Returns: undefined
       }
+      current_user_has_role: {
+        Args: { role_name: string }
+        Returns: boolean
+      }
+      get_jwt_email: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       get_team_standings: {
         Args: { p_league?: string; p_season?: string }
         Returns: {
@@ -1228,6 +1309,10 @@ export type Database = {
           won: number
         }[]
       }
+      has_role: {
+        Args: { role_name: string; user_uuid: string }
+        Returns: boolean
+      }
       increment_news_views: {
         Args: { news_id: string }
         Returns: number
@@ -1237,6 +1322,10 @@ export type Database = {
         Returns: boolean
       }
       is_admin_email: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
+      is_admin_or_email: {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
